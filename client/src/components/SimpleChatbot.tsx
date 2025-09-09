@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 interface Message {
   id: string;
@@ -118,12 +117,13 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       {/* Input */}
       <div className="p-4 border-t border-border">
         <div className="flex gap-2">
-          <Input
+          <input
+            type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             placeholder="Fragen Sie mich was..."
-            className="flex-1"
+            className="flex-1 px-3 py-2 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             disabled={isLoading}
           />
           <Button

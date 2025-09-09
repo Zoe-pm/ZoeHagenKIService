@@ -17,9 +17,9 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       const chatContainer = document.getElementById('n8n-chat-container');
       if (chatContainer) {
         chatContainer.innerHTML = '';
-        
+
         console.log('Initializing n8n chat with same config as ZoesChatbot...');
-        
+
         // @ts-ignore - Using exact same config as ZoesChatbot
         createChat({
           webhookUrl: 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat',
@@ -40,7 +40,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
             }
           } as any
         });
-        
+
         chatInitialized.current = true;
       }
     } else if (!isOpen) {
@@ -51,7 +51,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-24 right-6 z-40 w-80 h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden">
+    <div className="fixed bottom-20 right-4 z-40 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden">
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center">
         <div>
@@ -80,7 +80,7 @@ export function ChatbotButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full button-gradient shadow-lg hover:scale-110 transition-transform"
+      className="fixed bottom-4 right-4 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
       aria-label="Chat öffnen"
       data-testid="chatbot-toggle"
     >

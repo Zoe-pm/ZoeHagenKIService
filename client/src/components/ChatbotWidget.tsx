@@ -37,17 +37,46 @@ export default function ChatbotWidget() {
     setInputText('');
     setIsLoading(true);
 
-    // Simulate bot response - in real implementation this would call the actual chatbot API
-    setTimeout(() => {
-      const botMessage: Message = {
+    // Call the chatbot API
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: inputText }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: data.response || 'Entschuldigung, ich konnte keine Antwort generieren.',
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, botMessage]);
+      } else {
+        const errorData = await response.json();
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: errorData.message || 'Entschuldigung, es gab ein Problem mit meiner Antwort.',
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
+    } catch (error) {
+      const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'Vielen Dank für Ihre Nachricht! Unsere KI-Lösungen können Ihnen dabei helfen, Ihren Kundenservice zu optimieren. Möchten Sie mehr über unsere Chatbot-, Voicebot-, Avatar- oder Wissenslösungen erfahren?',
+        text: 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte versuchen Sie es später erneut.',
         sender: 'bot',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

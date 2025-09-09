@@ -1,0 +1,343 @@
+npm install @n8n/chat @tanstack/react-query react-hook-form wouter zod drizzle-orm drizzle-zod express
+
+import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
+
+// Message schema for chatbot
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull(),
+  sender: text("sender").notNull(),
+  text: text("text").notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).pick({
+  sessionId: true,
+  sender: true,
+  text: true,
+});
+
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type Message = typeof messages.$inferSelect;
+
+import type { InsertMessage, Message } from "../shared/schema.ts";
+
+export interface IStorage {
+  createMessage(message: InsertMessage): Promise<Message>;
+  getMessagesBySessionId(sessionId: string): Promise<Message[]>;
+}
+
+export class MemStorage implements IStorage {
+  private messages: Map<number, Message>;
+  private messageCurrentId: number;
+
+  constructor() {
+    this.messages = new Map();
+    this.messageCurrentId = 1;
+  }
+  
+  async createMessage(insertMessage: InsertMessage): Promise<Message> {
+    const id = this.messageCurrentId++;
+    const timestamp = new Date();
+    const message: Message = { 
+      ...insertMessage, 
+      id, 
+      timestamp 
+    };
+    this.messages.set(id, message);
+    return message;
+  }
+  
+  async getMessagesBySessionId(sessionId: string): Promise<Message[]> {
+    return Array.from(this.messages.values())
+      .filter(message => message.sessionId === sessionId)
+      .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+  }
+}
+
+import express from "express";
+import crypto from "crypto";
+import { insertMessageSchema } from "../shared/schema.ts";
+import type { IStorage } from "./storage.ts";
+
+function generateBotResponse(message: string): string {
+  const lowercaseMessage = message.toLowerCase();
+  
+  // Simple response logic based on keywords
+  if (lowercaseMessage.includes("hello") || lowercaseMessage.includes("hi")) {
+    return "Hello! How can I help you with your printing needs today?";
+  } else if (lowercaseMessage.includes("price") || lowercaseMessage.includes("cost")) {
+    return "I'd be happy to provide pricing information. What type of service are you interested in?";
+  } else if (lowercaseMessage.includes("contact")) {
+    return "You can reach us at (555) 123-4567 or email hello@example.com";
+  }
+  
+  const defaultResponses = [
+    "Thank you for your message. How can I assist you further?",
+    "I understand. Is there anything specific you'd like to know?",
+    "That's something we can definitely help with. Would you like more information?"
+  ];
+  
+  return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+}
+
+export function setupRoutes(app: express.Application, storage: IStorage) {
+  // Get chat history
+  app.get("/api/chat", async (req, res) => {
+    try {
+      const sessionId = req.headers["x-session-id"] as string || crypto.randomUUID();
+      const messages = await storage.getMessagesBySessionId(sessionId);
+      
+      if (messages.length === 0) {
+        const welcomeMessage = {
+          sessionId,
+          sender: "bot",
+          text: "Hi there! How can I help you today?"
+        };
+        await storage.createMessage(welcomeMessage);
+        const updatedMessages = await storage.getMessagesBySessionId(sessionId);
+        
+        return res.json({ 
+          sessionId,
+          messages: updatedMessages.map(msg => ({
+            id: msg.id.toString(),
+            sender: msg.sender,
+            text: msg.text,
+            timestamp: msg.timestamp.toISOString()
+          }))
+        });
+      }
+      
+      res.json({ 
+        sessionId,
+        messages: messages.map(msg => ({
+          id: msg.id.toString(),
+          sender: msg.sender,
+          text: msg.text,
+          timestamp: msg.timestamp.toISOString()
+        }))
+      });
+    } catch (error) {
+      console.error("Error fetching chat messages:", error);
+      res.status(500).json({ message: "Failed to fetch chat messages" });
+    }
+  });
+
+  // Send message and get bot response
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message, sessionId: clientSessionId } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ message: "Message is required" });
+      }
+      
+      const sessionId = clientSessionId || 
+                        (req.headers["x-session-id"] as string) || 
+                        crypto.randomUUID();
+      
+      // Save user message
+      const userMessageData = {
+        sessionId,
+        sender: "user",
+        text: message
+      };
+      
+      try {
+        insertMessageSchema.parse(userMessageData);
+      } catch (error) {
+        return res.status(400).json({ message: "Invalid message format" });
+      }
+      
+      await storage.createMessage(userMessageData);
+      
+      // Generate and save bot response
+      const botResponse = generateBotResponse(message);
+      const botMessageData = {
+        sessionId,
+        sender: "bot",
+        text: botResponse
+      };
+      
+      const botMessage = await storage.createMessage(botMessageData);
+      
+      res.json({
+        id: botMessage.id.toString(),
+        sender: botMessage.sender,
+        text: botMessage.text,
+        timestamp: botMessage.timestamp.toISOString(),
+        sessionId
+      });
+    } catch (error) {
+      console.error("Error handling chat message:", error);
+      res.status(500).json({ message: "Failed to process message" });
+    }
+  });
+}
+
+import { QueryClient } from "@tanstack/react-query";
+
+export async function apiRequest(
+  method: string,
+  url: string,
+  data?: unknown | undefined,
+): Promise<Response> {
+  const res = await fetch(url, {
+    method,
+    headers: data ? { "Content-Type": "application/json" } : {},
+    body: data ? JSON.stringify(data) : undefined,
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const text = (await res.text()) || res.statusText;
+    throw new Error(`${res.status}: ${text}`);
+  }
+  return res;
+}
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+      retry: false,
+    },
+    mutations: {
+      retry: false,
+    },
+  },
+});
+
+import { useState, useEffect, useCallback } from "react";
+import { apiRequest } from "../lib/queryClient";
+
+interface Message {
+  id: string;
+  sender: 'user' | 'bot';
+  text: string;
+  timestamp: string;
+}
+
+export default function useChatbot() {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "1",
+      sender: "bot",
+      text: "Hi there! How can I help you today?",
+      timestamp: new Date().toISOString()
+    }
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Get chat history when component mounts
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch("/api/chat");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.messages.length > 0) {
+            setMessages(data.messages);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch chat history:", error);
+      }
+    };
+
+    fetchMessages();
+  }, []);
+
+  const sendMessage = useCallback(async (message: string = input) => {
+    if (!message.trim()) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      sender: "user",
+      text: message,
+      timestamp: new Date().toISOString()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      const response = await apiRequest("POST", "/api/chat", { message });
+      const botMessage: Message = await response.json();
+      
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [input]);
+
+  return {
+    messages,
+    input,
+    isLoading,
+    setInput,
+    sendMessage,
+  };
+}
+
+export default function ChatWidget() {
+  return <div id="n8n-chat" />;
+}
+
+import { useEffect } from 'react';
+import { createChat } from '@n8n/chat';
+
+function App() {
+  useEffect(() => {
+    createChat({
+      webhookUrl: 'YOUR_N8N_WEBHOOK_URL_HERE', // Replace with your N8N webhook URL
+      target: '#n8n-chat',
+      mode: 'floating',
+      defaultLanguage: 'en',
+      initialMessages: [
+        'I can answer questions about our services'
+      ],
+      i18n: {
+        en: {
+          title: "Chat Assistant",
+          subtitle: "24/7 Support",
+          footer: 'How can I help you?',
+          getStarted: 'Ask me anything!',
+          inputPlaceholder: 'Type your message...',
+        }
+      }
+    });
+  }, []);
+
+  return (
+    <div>
+      {/* Your app content */}
+      <ChatWidget />
+    </div>
+  );
+}
+
+import express from 'express';
+import { MemStorage } from './storage';
+import { setupRoutes } from './routes';
+
+const app = express();
+const storage = new MemStorage();
+
+app.use(express.json());
+setupRoutes(app, storage);
+
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+
+<QueryClientProvider client={queryClient}>
+  <App />
+</QueryClientProvider>

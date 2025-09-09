@@ -1,9 +1,3 @@
-Du hast zwei Bugs:
-  1.	In CSS heißt es @import, nicht import.
-  2.	.gradient-text nutzt hsl(var(--primary)), aber --primary ist ein Hex-Wert – nimm einfach var(--primary).
-
-Hier ist die korrigierte Datei:
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;

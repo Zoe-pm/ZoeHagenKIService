@@ -1,5 +1,6 @@
 import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
 import VoiceDemo from "@/components/VoiceDemo";
@@ -12,9 +13,9 @@ import SEOHelmet from "@/components/SEOHelmet";
 const products = [
   {
     id: "chatbot",
-    title: "Chatbot",
-    description: "24/7 Website-Assistent für Kundenfragen, Terminbuchung und Produktberatung. Sofort einsatzbereit.",
-    features: ["Live-Chat Integration", "FAQ-Automatisierung", "Lead-Qualifizierung"],
+    title: "Chatbot – Antworten ohne Suchen",
+    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads, vereinbart Termine und reduziert Standardanfragen.",
+    features: ["Sofortige Antworten", "Lead-Generierung", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
@@ -22,19 +23,19 @@ const products = [
   },
   {
     id: "voicebot",
-    title: "Voicebot", 
-    description: "Intelligente Telefonzentrale mit natürlicher Spracherkennung für professionellen Kundenservice.",
-    features: ["Anruf-Routing", "Terminvereinbarung", "24/7 Erreichbarkeit"],
+    title: "Voicebot – sprechen statt tippen", 
+    description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische, fundierte Antworten erhalten. Nimmt Anrufe entgegen, generiert Leads und vereinbart Termine.",
+    features: ["Natürliche Sprache", "Anruf-Entgegennahme", "Lead-Generierung"],
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
-    buttonText: "15-Min Gespräch"
+    buttonText: "Jetzt anrufen"
   },
   {
     id: "avatar",
-    title: "Avatar",
-    description: "Digitaler Berater mit Gesicht für FAQ und Standardfragen. Antwortet auf vordefinierte Themen.",
-    features: ["Visuelle Präsenz", "FAQ-Spezialist", "Einfache Einrichtung"],
+    title: "Avatar – Service mit Gesicht",
+    description: "Wie ein Voicebot, nur persönlicher: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen und einen starken ersten Eindruck.",
+    features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck"],
     icon: <UserCircle className="text-accent" />,
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-accent to-primary",
@@ -42,9 +43,9 @@ const products = [
   },
   {
     id: "wissensbot",
-    title: "Wissensbot",
-    description: "Komplexer Unternehmens-Assistent mit tiefem Prozessverständnis. Braucht Interviews und individuelle Entwicklung.",
-    features: ["Prozess-Integration", "Interview-Phase nötig", "Aufwendige Anpassung"],
+    title: "Wissensbot – Wissen, das bleibt",
+    description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Wechsel im Team. Erleichtert Onboarding und macht Prozesse stabil.",
+    features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität"],
     icon: <Brain className="text-primary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
@@ -82,19 +83,49 @@ export default function Home() {
 
       {/* Hero Section */}
       <main id="main-content">
-        <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
+        <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 fade-in" data-testid="hero-title">
-                <span className="gradient-text">
-                  KI-Assistenten
-                </span>
-                <br />für Ihr Unternehmen
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6 fade-in" data-testid="hero-subtitle">
-                Vier professionelle KI-Lösungen für modernen Kundenservice. 
-                DSGVO-konform, schnelle Integration.
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+              <div className="text-center lg:text-left">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
+                  <span className="gradient-text">
+                    KI mit Herz & Hirn
+                  </span>
+                  <br />
+                  <span className="text-foreground">– sicher, einfach, persönlich.</span>
+                </h1>
+                <p className="text-xl text-muted-foreground mb-8 fade-in" data-testid="hero-subtitle">
+                  Digitale Helfer, die Service sofort leichter machen – ohne Technik-Wissen, DSGVO-konform und mit vollem Support durch uns.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-8 py-4 text-lg"
+                    onClick={() => scrollToSection('kontakt')}
+                    data-testid="cta-primary"
+                  >
+                    Jetzt Erstgespräch buchen
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="border-accent text-accent hover:bg-accent hover:text-accent-foreground px-8 py-4 text-lg"
+                    onClick={() => scrollToSection('demo')}
+                    data-testid="cta-secondary"
+                  >
+                    Live-Demo ansehen
+                  </Button>
+                </div>
+              </div>
+              <div className="relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  alt="Person im Dialog mit KI-Avatar auf Bildschirm - moderne Mensch-Maschine-Interaktion" 
+                  className="rounded-2xl shadow-2xl w-full" 
+                  data-testid="hero-image"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent rounded-2xl"></div>
+              </div>
             </div>
 
             {/* Four Products Above-the-Fold */}

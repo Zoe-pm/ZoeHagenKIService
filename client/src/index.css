@@ -3,6 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* n8n Chat Customization */
+#n8n-chat {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Anpassung der n8n Chat-Farben an das Website-Design */
+.n8n-chat {
+  --chat-color-primary: #5DADE2;
+  --chat-color-primary-shade-50: #4a9fd8;
+  --chat-color-secondary: #A7C7E7;
+  --chat-color-white: #F9F8F6;
+  --chat-color-light-gray: #F9F8F6;
+  --chat-color-medium-gray: #D9D4CC;
+  --chat-color-dark-gray: #3A3A3A;
+  --chat-border-radius: 12px;
+}
+
 :root {
   /* Neue Farbpalette */
   --pastel-blue: #A7C7E7;

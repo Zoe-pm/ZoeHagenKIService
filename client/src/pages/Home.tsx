@@ -62,6 +62,18 @@ export default function Home() {
     }
   };
 
+  const handleProductButtonClick = (productId: string) => {
+    if (productId === 'chatbot') {
+      // Open the n8n chatbot
+      if (window.openChatbot) {
+        window.openChatbot();
+      }
+    } else {
+      // For other products, scroll to contact section
+      scrollToSection('kontakt');
+    }
+  };
+
   return (
     <div className="min-h-screen" data-testid="home-page">
       <SEOHelmet 
@@ -117,7 +129,7 @@ export default function Home() {
                 <ProductCard
                   key={product.id}
                   {...product}
-                  onButtonClick={() => scrollToSection('kontakt')}
+                  onButtonClick={() => handleProductButtonClick(product.id)}
                 />
               ))}
             </section>

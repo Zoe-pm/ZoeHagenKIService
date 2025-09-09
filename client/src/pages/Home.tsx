@@ -1,4 +1,4 @@
-import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones } from "lucide-react";
+import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones, CheckCircle, Users, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
@@ -129,7 +129,7 @@ export default function Home() {
             </div>
 
             {/* Four Products Above-the-Fold */}
-            <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12" data-testid="products-section">
+            <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-16" data-testid="products-section">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -138,50 +138,160 @@ export default function Home() {
                 />
               ))}
             </section>
+
+            {/* Trust Boosters */}
+            <section className="py-8 px-4 sm:px-6 lg:px-8" data-testid="trust-boosters-section">
+              <div className="max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="p-3 rounded-full bg-primary/10 border border-primary/20">
+                      <Shield className="w-8 h-8 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">DSGVO-konform</h3>
+                      <p className="text-sm text-muted-foreground">Vollständig EU-konform und datenschutzsicher</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="p-3 rounded-full bg-secondary/10 border border-secondary/20">
+                      <Zap className="w-8 h-8 text-secondary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">Einfache Implementierung</h3>
+                      <p className="text-sm text-muted-foreground">In 30 Tagen live ohne Technik-Wissen</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="p-3 rounded-full bg-accent/10 border border-accent/20">
+                      <Users className="w-8 h-8 text-accent" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">Laufender Support</h3>
+                      <p className="text-sm text-muted-foreground">Persönliche Betreuung und Updates</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </section>
 
         <VoiceDemo />
 
-        <ComparisonTable />
-
-        <Timeline />
-
-        {/* About Section */}
-        <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="about-section">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div>
+        {/* Visual Showcase */}
+        <section id="demo" className="py-16 px-4 sm:px-6 lg:px-8" data-testid="visual-showcase-section">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">So sieht das im Einsatz aus</h2>
+              <p className="text-muted-foreground">Echte Anwendungen unserer KI-Assistenten in verschiedenen Unternehmen</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="relative group">
                 <img 
-                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                  alt="Mensch-Maschine-Interaktion: Person arbeitet mit KI-Interface am Computer" 
-                  className="rounded-lg shadow-2xl" 
-                  loading="lazy"
-                  data-testid="about-image"
+                  src="https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                  alt="Mitarbeiter nutzt Chatbot am Computer für Kundensupport" 
+                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Website-Chatbot</h3>
+                  <p className="text-sm opacity-90">24/7 Kundensupport ohne Pausen</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-3xl font-bold mb-4" data-testid="about-title">Ihre KI-Partner</h2>
-                <p className="text-muted-foreground mb-6" data-testid="about-description">
-                  Spezialisiert auf professionelle KI-Assistenten. 200+ erfolgreiche Implementierungen, 
-                  maßgeschneiderte Lösungen für jeden Anwendungsfall.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                  <div className="text-center">
-                    <Shield className="text-accent text-2xl mx-auto mb-2" />
-                    <span className="text-sm">DSGVO-konform</span>
-                  </div>
-                  <div className="text-center">
-                    <Settings className="text-accent text-2xl mx-auto mb-2" />
-                    <span className="text-sm">Einfache Integration</span>
-                  </div>
-                  <div className="text-center">
-                    <Headphones className="text-accent text-2xl mx-auto mb-2" />
-                    <span className="text-sm">24/7 Support</span>
-                  </div>
+              
+              <div className="relative group">
+                <img 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                  alt="Geschäftsfrau führt Telefonat mit Voicebot-Unterstützung" 
+                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Voicebot-Zentrale</h3>
+                  <p className="text-sm opacity-90">Intelligente Anrufweiterleitung</p>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <img 
+                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                  alt="Avatar-Interface auf Tablet zeigt menschliches Gesicht" 
+                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Avatar-Beratung</h3>
+                  <p className="text-sm opacity-90">Persönlicher Kundenberater</p>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <img 
+                  src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                  alt="Team nutzt Wissensbot für Onboarding neuer Mitarbeiter" 
+                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Wissensbot-Training</h3>
+                  <p className="text-sm opacity-90">Schnelles Mitarbeiter-Onboarding</p>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <img 
+                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                  alt="Büro mit mehreren Bildschirmen zeigt KI-Dashboard" 
+                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">KI-Dashboard</h3>
+                  <p className="text-sm opacity-90">Zentrale Steuerung aller Bots</p>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <img 
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+                  alt="Teammeetung zur Integration von KI-Systemen" 
+                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Integration & Support</h3>
+                  <p className="text-sm opacity-90">Persönliche Betreuung durch unser Team</p>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Central Call-to-Action */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8" data-testid="central-cta-section">
+          <div className="max-w-4xl mx-auto text-center">
+            <Card className="glass border-primary/20">
+              <CardContent className="p-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  Lassen Sie uns gemeinsam herausfinden, welche Lösung zu Ihnen passt.
+                </h2>
+                <p className="text-xl text-muted-foreground mb-8">
+                  Wir übernehmen die Einrichtung – Sie profitieren vom Ergebnis.
+                </p>
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-12 py-6 text-xl"
+                  onClick={() => scrollToSection('kontakt')}
+                  data-testid="central-cta-button"
+                >
+                  Jetzt Erstgespräch buchen
+                </Button>
+                <p className="text-sm text-muted-foreground mt-4">
+                  15 Minuten unverbindliches Gespräch • Keine Technik-Kenntnisse nötig
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 

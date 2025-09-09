@@ -9,8 +9,7 @@ import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
-import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
-import { useState } from "react";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
 const products = [
   {
@@ -56,7 +55,6 @@ const products = [
 ];
 
 export default function Home() {
-  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -66,22 +64,8 @@ export default function Home() {
   };
 
   const handleProductButtonClick = (productId: string) => {
-    if (productId === 'chatbot') {
-      console.log('Demo testen clicked - opening chatbot');
-      setIsChatbotOpen(true);
-    } else {
-      // For other products, scroll to contact section
-      scrollToSection('kontakt');
-    }
-  };
-
-  const openChatbot = () => {
-    console.log('Chat button clicked - opening chatbot');
-    setIsChatbotOpen(true);
-  };
-
-  const closeChatbot = () => {
-    setIsChatbotOpen(false);
+    // For all products, scroll to contact section
+    scrollToSection('kontakt');
   };
 
   return (
@@ -190,9 +174,7 @@ export default function Home() {
       </main>
 
       <Footer />
-      {/* Chatbot Components */}
-      <SimpleChatbot isOpen={isChatbotOpen} onClose={closeChatbot} />
-      <ChatbotButton onClick={openChatbot} />
+      <ChatbotWidget />
     </div>
   );
 }

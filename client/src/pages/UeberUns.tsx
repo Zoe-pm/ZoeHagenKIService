@@ -1,12 +1,10 @@
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
-import { useState } from "react";
+import ChatbotWidget from "@/components/ChatbotWidget";
 import zoeImage from "@assets/Zoe_Website_1757416756555.jpg";
 
 export default function UeberUns() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
   return (
     <>
       <SEOHelmet 
@@ -165,8 +163,7 @@ export default function UeberUns() {
         </section>
       </main>
       
-      <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      <ChatbotButton onClick={() => setIsChatOpen(true)} />
+      <ChatbotWidget />
       
       <Footer />
     </>

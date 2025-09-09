@@ -1,6 +1,7 @@
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ChatbotWidget from "@/components/ChatbotWidget";
 import zoeImage from "@assets/Zoe_Website_1757416756555.jpg";
 
 export default function UeberUns() {
@@ -163,6 +164,7 @@ export default function UeberUns() {
       </main>
       
       <Footer />
+      <ChatbotWidget />
     </>
   );
 }

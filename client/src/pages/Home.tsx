@@ -9,6 +9,7 @@ import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
 const products = [
   {
@@ -167,6 +168,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <ChatbotWidget />
     </div>
   );
 }

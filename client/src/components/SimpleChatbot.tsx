@@ -47,9 +47,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: messageToSend,
-          timestamp: new Date().toISOString(),
-          source: 'website-chatbot'
+          message: messageToSend
         }),
       });
 

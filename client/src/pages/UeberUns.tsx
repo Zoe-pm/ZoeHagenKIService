@@ -28,7 +28,7 @@ export default function UeberUns() {
               />
             </div>
             <div className="text-center lg:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-primary" data-testid="main-title">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white" data-testid="main-title">
                 KI mit Herz & Hirn – von Menschen für Menschen
               </h1>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed" data-testid="intro-text">

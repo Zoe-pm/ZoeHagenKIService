@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <div className="min-h-screen" data-testid="home-page">
       <SEOHelmet 
-        title="KI-Assistenten für Ihr Unternehmen | Chatbot, Voicebot, Avatar & Wissensbot"
+        title="Smarter Support – digital, menschlich, effizient | Chatbot, Voicebot, Avatar & Wissensbot"
         description="Professionelle KI-Lösungen: Chatbot, Voicebot, Avatar und Wissensbot für besseren Kundenservice. DSGVO-konform, einfache Integration, 30 Tage Setup."
         keywords="KI Assistenten, Chatbot, Voicebot, Avatar, Wissensbot, KI Kundenservice, DSGVO konform"
       />

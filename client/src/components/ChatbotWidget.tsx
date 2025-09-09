@@ -32,8 +32,17 @@ export default function ChatbotWidget() {
   useEffect(() => {
     // Create global function to open chatbot
     window.openChatbot = () => {
+      console.log('Opening chatbot via global function');
       setIsOpen(true);
     };
+    
+    // Also ensure it's available immediately
+    if (typeof window !== 'undefined') {
+      (window as any).openChatbot = () => {
+        console.log('Opening chatbot via window global');
+        setIsOpen(true);
+      };
+    }
     
     return () => {
       if (typeof window !== 'undefined' && window.openChatbot) {

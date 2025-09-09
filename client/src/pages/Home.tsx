@@ -10,6 +10,7 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
 import ChatbotWidget from "@/components/ChatbotWidget";
+import { useState, useEffect } from "react";
 
 const products = [
   {
@@ -55,6 +56,20 @@ const products = [
 ];
 
 export default function Home() {
+  const [isChatbotReady, setIsChatbotReady] = useState(false);
+  
+  useEffect(() => {
+    // Check if chatbot is ready
+    const checkChatbot = () => {
+      if (typeof window.openChatbot === 'function') {
+        setIsChatbotReady(true);
+      } else {
+        setTimeout(checkChatbot, 100);
+      }
+    };
+    checkChatbot();
+  }, []);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -64,9 +79,16 @@ export default function Home() {
 
   const handleProductButtonClick = (productId: string) => {
     if (productId === 'chatbot') {
-      // Open the n8n chatbot
+      console.log('Demo testen clicked, chatbot ready:', isChatbotReady);
+      // Try multiple ways to open the chatbot
       if (window.openChatbot) {
         window.openChatbot();
+      } else {
+        // Fallback: trigger click on chatbot button
+        const chatButton = document.querySelector('[data-testid="chatbot-toggle"]') as HTMLButtonElement;
+        if (chatButton) {
+          chatButton.click();
+        }
       }
     } else {
       // For other products, scroll to contact section

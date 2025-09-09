@@ -53,63 +53,42 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
-      // Try to send to real n8n webhook first
-      let botResponse = '';
-      
-      try {
-        const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: messageToSend,
-            timestamp: new Date().toISOString(),
-            source: 'website-chatbot'
-          }),
-        });
+      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: messageToSend,
+          timestamp: new Date().toISOString(),
+          source: 'website-chatbot'
+        }),
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.response) {
-            botResponse = data.response;
-          } else if (data && data.message) {
-            botResponse = data.message;
-          } else if (data && typeof data === 'string') {
-            botResponse = data;
-          }
-        }
-      } catch (webhookError) {
-        console.log('Webhook not available, using fallback responses');
-      }
-      
-      // Fallback to smart responses if webhook fails
-      if (!botResponse) {
-        botResponse = 'Vielen Dank für Ihre Nachricht! ';
+      if (response.ok) {
+        const data = await response.json();
+        let botResponse = '';
         
-        const input = messageToSend.toLowerCase();
-        if (input.includes('preis') || input.includes('kosten') || input.includes('tarif')) {
-          botResponse += 'Gerne besprechen wir mit Ihnen individuelle Preise. Kontaktieren Sie uns unter +49 01719862773 für ein persönliches Angebot.';
-        } else if (input.includes('termin') || input.includes('beratung') || input.includes('gespräch')) {
-          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie uns an: +49 01719862773 oder schreiben Sie an zoe-kiconsulting@pm.me';
-        } else if (input.includes('chatbot') || input.includes('voicebot') || input.includes('avatar') || input.includes('wissensbot')) {
-          botResponse += 'Unsere KI-Assistenten können Ihr Unternehmen in vielen Bereichen unterstützen. Welcher Bereich interessiert Sie am meisten?';
-        } else if (input.includes('hallo') || input.includes('hi') || input.includes('guten tag')) {
-          botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
-        } else if (input.includes('funktionen') || input.includes('features') || input.includes('können')) {
-          botResponse += 'Unsere KI-Lösungen bieten 24/7 Kundensupport, automatische Antworten, Wissensdatenbanken und vieles mehr. Was interessiert Sie besonders?';
+        if (data && data.response) {
+          botResponse = data.response;
+        } else if (data && data.message) {
+          botResponse = data.message;
+        } else if (data && typeof data === 'string') {
+          botResponse = data;
         } else {
-          botResponse += 'Ich leite Ihre Anfrage gerne an unser Team weiter. Für schnelle Hilfe rufen Sie uns an: +49 01719862773';
+          throw new Error('Invalid response format from webhook');
         }
-      }
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: botResponse,
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: botResponse,
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, botMessage]);
+      } else {
+        throw new Error(`Webhook responded with status: ${response.status}`);
+      }
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage: Message = {

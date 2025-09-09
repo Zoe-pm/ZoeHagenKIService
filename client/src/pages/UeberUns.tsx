@@ -13,7 +13,7 @@ export default function UeberUns() {
       
       <Navigation />
       
-      <main className="bg-[#FCFCFD] text-[#1B1F23] min-h-screen pt-24">
+      <main className="bg-[#FCFCFD] text-[#1B1F23] min-h-screen pt-20">
         {/* Hero */}
         <section className="mx-auto max-w-6xl px-4 pt-10 pb-8" data-testid="hero-section">
           <div className="grid gap-8 lg:grid-cols-2 items-center">

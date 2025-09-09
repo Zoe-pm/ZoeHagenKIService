@@ -17,7 +17,7 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="glass fixed top-10 left-0 right-0 z-40" role="navigation" aria-label="Hauptnavigation">
+      <nav className="glass fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-background/80" role="navigation" aria-label="Hauptnavigation">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
@@ -39,20 +39,9 @@ export default function Navigation() {
                     >
                       Produkte
                     </button>
-                    <button 
-                      onClick={() => scrollToSection('vergleich')}
-                      className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
-                      data-testid="nav-vergleich"
-                    >
-                      Vergleich
-                    </button>
-                    <button 
-                      onClick={() => scrollToSection('implementation')}
-                      className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
-                      data-testid="nav-implementation"
-                    >
-                      Umsetzung
-                    </button>
+                    <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
+                      Über uns
+                    </Link>
                     <button 
                       onClick={() => scrollToSection('kontakt')}
                       className="bg-gradient-to-r from-primary to-secondary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring"
@@ -66,7 +55,7 @@ export default function Navigation() {
                     <Link href="/" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-home">
                       Startseite
                     </Link>
-                    <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
+                    <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns-alt">
                       Über uns
                     </Link>
                     <Link href="/#kontakt" className="bg-gradient-to-r from-primary to-secondary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-beratung-alt">
@@ -94,7 +83,7 @@ export default function Navigation() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="glass fixed top-24 left-0 right-0 z-30 md:hidden" data-testid="mobile-menu">
+        <div className="glass fixed top-16 left-0 right-0 z-30 md:hidden backdrop-blur-md bg-background/95" data-testid="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {location === "/" ? (
               <>
@@ -105,20 +94,9 @@ export default function Navigation() {
                 >
                   Produkte
                 </button>
-                <button 
-                  onClick={() => scrollToSection('vergleich')}
-                  className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium w-full text-left"
-                  data-testid="mobile-nav-vergleich"
-                >
-                  Vergleich
-                </button>
-                <button 
-                  onClick={() => scrollToSection('implementation')}
-                  className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium w-full text-left"
-                  data-testid="mobile-nav-implementation"
-                >
-                  Umsetzung
-                </button>
+                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns">
+                  Über uns
+                </Link>
                 <button 
                   onClick={() => scrollToSection('kontakt')}
                   className="bg-gradient-to-r from-primary to-secondary text-primary-foreground block px-3 py-2 rounded-md text-base font-medium w-full text-left"
@@ -132,7 +110,7 @@ export default function Navigation() {
                 <Link href="/" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-home">
                   Startseite
                 </Link>
-                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns">
+                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns-alt">
                   Über uns
                 </Link>
                 <Link href="/#kontakt" className="bg-gradient-to-r from-primary to-secondary text-primary-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-beratung-alt">

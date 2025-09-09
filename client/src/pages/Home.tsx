@@ -9,8 +9,8 @@ import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
-import ChatbotWidget from "@/components/ChatbotWidget";
-import { useState, useEffect } from "react";
+import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
+import { useState } from "react";
 
 const products = [
   {
@@ -56,19 +56,7 @@ const products = [
 ];
 
 export default function Home() {
-  const [isChatbotReady, setIsChatbotReady] = useState(false);
-  
-  useEffect(() => {
-    // Check if chatbot is ready
-    const checkChatbot = () => {
-      if (typeof window.openChatbot === 'function') {
-        setIsChatbotReady(true);
-      } else {
-        setTimeout(checkChatbot, 100);
-      }
-    };
-    checkChatbot();
-  }, []);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -79,21 +67,21 @@ export default function Home() {
 
   const handleProductButtonClick = (productId: string) => {
     if (productId === 'chatbot') {
-      console.log('Demo testen clicked, chatbot ready:', isChatbotReady);
-      // Try multiple ways to open the chatbot
-      if (window.openChatbot) {
-        window.openChatbot();
-      } else {
-        // Fallback: trigger click on chatbot button
-        const chatButton = document.querySelector('[data-testid="chatbot-toggle"]') as HTMLButtonElement;
-        if (chatButton) {
-          chatButton.click();
-        }
-      }
+      console.log('Demo testen clicked - opening chatbot');
+      setIsChatbotOpen(true);
     } else {
       // For other products, scroll to contact section
       scrollToSection('kontakt');
     }
+  };
+
+  const openChatbot = () => {
+    console.log('Chat button clicked - opening chatbot');
+    setIsChatbotOpen(true);
+  };
+
+  const closeChatbot = () => {
+    setIsChatbotOpen(false);
   };
 
   return (
@@ -202,7 +190,9 @@ export default function Home() {
       </main>
 
       <Footer />
-      <ChatbotWidget />
+      {/* Chatbot Components */}
+      <SimpleChatbot isOpen={isChatbotOpen} onClose={closeChatbot} />
+      <ChatbotButton onClick={openChatbot} />
     </div>
   );
 }

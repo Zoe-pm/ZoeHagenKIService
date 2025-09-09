@@ -99,17 +99,7 @@
   }
   
   .gradient-text {
-    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
-    background-size: 200% 200%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientShift 3s ease infinite;
-  }
-  
-  @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    color: hsl(var(--primary));
   }
   
   @keyframes pulse {

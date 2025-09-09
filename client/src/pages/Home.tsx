@@ -17,7 +17,7 @@ const products = [
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads und reduziert Standardanfragen.",
     features: ["Sofortige Antworten", "Lead-Generierung", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
     buttonText: "Demo testen"
   },
@@ -37,7 +37,7 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck"],
     icon: <UserCircle className="text-accent" />,
-    image: "https://images.unsplash.com/photo-1494790108755-2616c179c3e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben"
   },
@@ -85,8 +85,8 @@ export default function Home() {
       <main id="main-content">
         <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
-              <div className="text-center lg:text-left">
+            <div className="text-center mb-12">
+              <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
                   <span className="gradient-text">
                     KI mit Herz & Hirn
@@ -97,7 +97,7 @@ export default function Home() {
                 <p className="text-xl text-muted-foreground mb-8 fade-in" data-testid="hero-subtitle">
                   Unsere digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button 
                     size="lg" 
                     className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-8 py-4 text-lg"
@@ -116,15 +116,6 @@ export default function Home() {
                     Live-Demo ansehen
                   </Button>
                 </div>
-              </div>
-              <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                  alt="Person im Dialog mit KI-Avatar auf Bildschirm - moderne Mensch-Maschine-Interaktion" 
-                  className="rounded-2xl shadow-2xl w-full" 
-                  data-testid="hero-image"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent rounded-2xl"></div>
               </div>
             </div>
 

@@ -47,7 +47,7 @@ const products = [
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität"],
     icon: <Brain className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
     buttonText: "Beratung buchen"
   }
@@ -106,15 +106,6 @@ export default function Home() {
                   >
                     Jetzt Erstgespräch buchen
                   </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    className="border-white text-white hover:bg-white hover:text-anthracite px-8 py-4 text-lg"
-                    onClick={() => scrollToSection('demo')}
-                    data-testid="cta-secondary"
-                  >
-                    Live-Demo ansehen
-                  </Button>
                 </div>
               </div>
             </div>
@@ -145,96 +136,6 @@ export default function Home() {
 
         <VoiceDemo />
 
-        {/* Visual Showcase */}
-        <section id="demo" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="visual-showcase-section">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">So sieht das im Einsatz aus</h2>
-              <p className="text-muted-foreground">Echte Anwendungen unserer KI-Assistenten in verschiedenen Unternehmen</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="relative group">
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                  alt="Mitarbeiter nutzt Chatbot am Computer für Kundensupport" 
-                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Website-Chatbot</h3>
-                  <p className="text-sm opacity-90">24/7 Kundensupport ohne Pausen</p>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <img 
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                  alt="Geschäftsfrau führt Telefonat mit Voicebot-Unterstützung" 
-                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Voicebot-Zentrale</h3>
-                  <p className="text-sm opacity-90">Intelligente Anrufweiterleitung</p>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <img 
-                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                  alt="Avatar-Interface auf Tablet zeigt menschliches Gesicht" 
-                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Avatar-Beratung</h3>
-                  <p className="text-sm opacity-90">Persönlicher Kundenberater</p>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <img 
-                  src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                  alt="Team nutzt Wissensbot für Onboarding neuer Mitarbeiter" 
-                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Wissensbot-Training</h3>
-                  <p className="text-sm opacity-90">Schnelles Mitarbeiter-Onboarding</p>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <img 
-                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                  alt="Büro mit mehreren Bildschirmen zeigt KI-Dashboard" 
-                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">KI-Dashboard</h3>
-                  <p className="text-sm opacity-90">Zentrale Steuerung aller Bots</p>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <img 
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                  alt="Teammeetung zur Integration von KI-Systemen" 
-                  className="rounded-lg shadow-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Integration & Support</h3>
-                  <p className="text-sm opacity-90">Persönliche Betreuung durch unser Team</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Central Call-to-Action */}
         <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="central-cta-section">
           <div className="max-w-4xl mx-auto text-center">
@@ -248,7 +149,7 @@ export default function Home() {
                 </p>
                 <Button 
                   size="lg" 
-                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-12 py-6 text-xl"
+                  className="button-gradient px-12 py-6 text-xl"
                   onClick={() => scrollToSection('kontakt')}
                   data-testid="central-cta-button"
                 >

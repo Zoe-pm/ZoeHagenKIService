@@ -60,7 +60,7 @@
 
   body {
     @apply font-sans antialiased text-foreground;
-    background: var(--cream-light);
+    background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--light-blue) 50%, var(--soft-green) 100%);
     color: var(--anthracite);
     min-height: 100vh;
   }

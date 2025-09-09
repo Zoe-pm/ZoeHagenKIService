@@ -65,8 +65,9 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         }),
       });
 
+      const data = await response.json();
+      
       if (response.ok) {
-        const data = await response.json();
         let botResponse = '';
         
         if (data && data.response) {
@@ -76,7 +77,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         } else if (data && typeof data === 'string') {
           botResponse = data;
         } else {
-          throw new Error('Invalid response format from webhook');
+          botResponse = JSON.stringify(data);
         }
 
         const botMessage: Message = {
@@ -87,7 +88,9 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
-        throw new Error(`Webhook responded with status: ${response.status}`);
+        // Show the actual error from n8n
+        const errorText = data?.message || data?.error || JSON.stringify(data) || `HTTP ${response.status} Error`;
+        throw new Error(`n8n Workflow Error (${response.status}): ${errorText}`);
       }
     } catch (error) {
       console.error('Chat error:', error);

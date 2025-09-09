@@ -37,7 +37,7 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck"],
     icon: <UserCircle className="text-accent" />,
-    image: "https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "/images/avatar.jpg",
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben"
   },

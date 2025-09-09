@@ -169,7 +169,6 @@ export default function UeberUns() {
       <ChatbotButton onClick={() => setIsChatOpen(true)} />
       
       <Footer />
-      <ChatbotWidget />
     </>
   );
 }

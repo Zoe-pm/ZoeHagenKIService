@@ -17,7 +17,7 @@ const products = [
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads und reduziert Standardanfragen.",
     features: ["Sofortige Antworten", "Lead-Generierung", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
     buttonText: "Demo testen"
   },
@@ -27,7 +27,7 @@ const products = [
     description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt Anrufe entgegen und vereinbart Termine.",
     features: ["Natürliche Sprache", "Anruf-Entgegennahme", "Lead-Generierung"],
     icon: <Mic className="text-secondary" />,
-    image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
     buttonText: "Jetzt anrufen"
   },
@@ -37,7 +37,7 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck"],
     icon: <UserCircle className="text-accent" />,
-    image: "https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1494790108755-2616c179c3e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben"
   },
@@ -47,7 +47,7 @@ const products = [
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität"],
     icon: <Brain className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
     buttonText: "Beratung buchen"
   }
@@ -92,7 +92,7 @@ export default function Home() {
                     KI mit Herz & Hirn
                   </span>
                   <br />
-                  <span className="text-foreground">– sichere, digitale Teammitglieder für Ihren Service.</span>
+                  <span className="text-foreground text-2xl md:text-3xl">– sichere, digitale Teammitglieder für Ihren Service.</span>
                 </h1>
                 <p className="text-xl text-muted-foreground mb-8 fade-in" data-testid="hero-subtitle">
                   Unsere digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.

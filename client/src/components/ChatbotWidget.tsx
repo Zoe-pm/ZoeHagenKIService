@@ -58,25 +58,54 @@ export default function ChatbotWidget() {
     setIsLoading(true);
 
     try {
-      // Simulate sending to n8n webhook
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Try to send to real n8n webhook first
+      let botResponse = '';
       
-      // Smart responses based on user input
-      let botResponse = 'Vielen Dank für Ihre Nachricht! ';
+      try {
+        const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageToSend,
+            timestamp: new Date().toISOString(),
+            source: 'website-chatbot'
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.response) {
+            botResponse = data.response;
+          } else if (data && data.message) {
+            botResponse = data.message;
+          } else if (data && typeof data === 'string') {
+            botResponse = data;
+          }
+        }
+      } catch (webhookError) {
+        console.log('Webhook not available, using fallback responses');
+      }
       
-      const input = messageToSend.toLowerCase();
-      if (input.includes('preis') || input.includes('kosten') || input.includes('tarif')) {
-        botResponse += 'Gerne besprechen wir mit Ihnen individuelle Preise. Kontaktieren Sie uns unter +49 01719862773 für ein persönliches Angebot.';
-      } else if (input.includes('termin') || input.includes('beratung') || input.includes('gespräch')) {
-        botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie uns an: +49 01719862773 oder schreiben Sie an zoe-kiconsulting@pm.me';
-      } else if (input.includes('chatbot') || input.includes('voicebot') || input.includes('avatar') || input.includes('wissensbot')) {
-        botResponse += 'Unsere KI-Assistenten können Ihr Unternehmen in vielen Bereichen unterstützen. Welcher Bereich interessiert Sie am meisten?';
-      } else if (input.includes('hallo') || input.includes('hi') || input.includes('guten tag')) {
-        botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
-      } else if (input.includes('funktionen') || input.includes('features') || input.includes('können')) {
-        botResponse += 'Unsere KI-Lösungen bieten 24/7 Kundensupport, automatische Antworten, Wissensdatenbanken und vieles mehr. Was interessiert Sie besonders?';
-      } else {
-        botResponse += 'Ich leite Ihre Anfrage gerne an unser Team weiter. Für schnelle Hilfe rufen Sie uns an: +49 01719862773';
+      // Fallback to smart responses if webhook fails
+      if (!botResponse) {
+        botResponse = 'Vielen Dank für Ihre Nachricht! ';
+        
+        const input = messageToSend.toLowerCase();
+        if (input.includes('preis') || input.includes('kosten') || input.includes('tarif')) {
+          botResponse += 'Gerne besprechen wir mit Ihnen individuelle Preise. Kontaktieren Sie uns unter +49 01719862773 für ein persönliches Angebot.';
+        } else if (input.includes('termin') || input.includes('beratung') || input.includes('gespräch')) {
+          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie uns an: +49 01719862773 oder schreiben Sie an zoe-kiconsulting@pm.me';
+        } else if (input.includes('chatbot') || input.includes('voicebot') || input.includes('avatar') || input.includes('wissensbot')) {
+          botResponse += 'Unsere KI-Assistenten können Ihr Unternehmen in vielen Bereichen unterstützen. Welcher Bereich interessiert Sie am meisten?';
+        } else if (input.includes('hallo') || input.includes('hi') || input.includes('guten tag')) {
+          botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
+        } else if (input.includes('funktionen') || input.includes('features') || input.includes('können')) {
+          botResponse += 'Unsere KI-Lösungen bieten 24/7 Kundensupport, automatische Antworten, Wissensdatenbanken und vieles mehr. Was interessiert Sie besonders?';
+        } else {
+          botResponse += 'Ich leite Ihre Anfrage gerne an unser Team weiter. Für schnelle Hilfe rufen Sie uns an: +49 01719862773';
+        }
       }
 
       const botMessage: Message = {

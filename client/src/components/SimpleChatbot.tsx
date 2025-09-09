@@ -53,15 +53,13 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: messageToSend,
-          timestamp: new Date().toISOString(),
-          source: 'website-chatbot'
+          message: messageToSend
         }),
       });
 

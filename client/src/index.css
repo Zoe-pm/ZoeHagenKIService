@@ -4,38 +4,38 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(220, 30%, 8%);
-  --foreground: hsl(220, 10%, 95%);
-  --card: hsl(220, 30%, 12%);
-  --card-foreground: hsl(220, 10%, 90%);
-  --popover: hsl(220, 30%, 12%);
-  --popover-foreground: hsl(220, 10%, 90%);
-  --primary: hsl(263, 70%, 62%);
-  --primary-foreground: hsl(220, 10%, 98%);
-  --secondary: hsl(320, 65%, 60%);
-  --secondary-foreground: hsl(220, 10%, 98%);
-  --muted: hsl(220, 20%, 20%);
-  --muted-foreground: hsl(220, 10%, 70%);
-  --accent: hsl(188, 78%, 45%);
-  --accent-foreground: hsl(220, 10%, 98%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(220, 10%, 98%);
-  --border: hsl(220, 20%, 25%);
-  --input: hsl(220, 25%, 16%);
-  --ring: hsl(263, 70%, 62%);
-  --chart-1: hsl(263, 70%, 62%);
-  --chart-2: hsl(320, 65%, 60%);
-  --chart-3: hsl(188, 78%, 45%);
-  --chart-4: hsl(35, 80%, 55%);
-  --chart-5: hsl(120, 60%, 50%);
-  --sidebar: hsl(220, 30%, 12%);
-  --sidebar-foreground: hsl(220, 10%, 90%);
-  --sidebar-primary: hsl(263, 70%, 62%);
-  --sidebar-primary-foreground: hsl(220, 10%, 98%);
-  --sidebar-accent: hsl(220, 20%, 20%);
-  --sidebar-accent-foreground: hsl(220, 10%, 90%);
-  --sidebar-border: hsl(220, 20%, 25%);
-  --sidebar-ring: hsl(263, 70%, 62%);
+  --background: hsl(24, 20%, 12%);
+  --foreground: hsl(20, 15%, 92%);
+  --card: hsl(26, 25%, 16%);
+  --card-foreground: hsl(20, 12%, 88%);
+  --popover: hsl(26, 25%, 16%);
+  --popover-foreground: hsl(20, 12%, 88%);
+  --primary: hsl(340, 45%, 65%);
+  --primary-foreground: hsl(20, 15%, 98%);
+  --secondary: hsl(15, 50%, 70%);
+  --secondary-foreground: hsl(20, 15%, 98%);
+  --muted: hsl(24, 18%, 22%);
+  --muted-foreground: hsl(20, 10%, 75%);
+  --accent: hsl(45, 40%, 75%);
+  --accent-foreground: hsl(24, 20%, 12%);
+  --destructive: hsl(0, 62%, 65%);
+  --destructive-foreground: hsl(20, 15%, 98%);
+  --border: hsl(24, 15%, 28%);
+  --input: hsl(26, 20%, 18%);
+  --ring: hsl(340, 45%, 65%);
+  --chart-1: hsl(340, 45%, 65%);
+  --chart-2: hsl(15, 50%, 70%);
+  --chart-3: hsl(45, 40%, 75%);
+  --chart-4: hsl(320, 35%, 60%);
+  --chart-5: hsl(30, 45%, 65%);
+  --sidebar: hsl(26, 25%, 16%);
+  --sidebar-foreground: hsl(20, 12%, 88%);
+  --sidebar-primary: hsl(340, 45%, 65%);
+  --sidebar-primary-foreground: hsl(20, 15%, 98%);
+  --sidebar-accent: hsl(24, 18%, 22%);
+  --sidebar-accent-foreground: hsl(20, 12%, 88%);
+  --sidebar-border: hsl(24, 15%, 28%);
+  --sidebar-ring: hsl(340, 45%, 65%);
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
@@ -43,25 +43,25 @@
 }
 
 .dark {
-  --background: hsl(220, 30%, 8%);
-  --foreground: hsl(220, 10%, 95%);
-  --card: hsl(220, 30%, 12%);
-  --card-foreground: hsl(220, 10%, 90%);
-  --popover: hsl(220, 30%, 12%);
-  --popover-foreground: hsl(220, 10%, 90%);
-  --primary: hsl(263, 70%, 62%);
-  --primary-foreground: hsl(220, 10%, 98%);
-  --secondary: hsl(320, 65%, 60%);
-  --secondary-foreground: hsl(220, 10%, 98%);
-  --muted: hsl(220, 20%, 20%);
-  --muted-foreground: hsl(220, 10%, 70%);
-  --accent: hsl(188, 78%, 45%);
-  --accent-foreground: hsl(220, 10%, 98%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(220, 10%, 98%);
-  --border: hsl(220, 20%, 25%);
-  --input: hsl(220, 25%, 16%);
-  --ring: hsl(263, 70%, 62%);
+  --background: hsl(24, 20%, 12%);
+  --foreground: hsl(20, 15%, 92%);
+  --card: hsl(26, 25%, 16%);
+  --card-foreground: hsl(20, 12%, 88%);
+  --popover: hsl(26, 25%, 16%);
+  --popover-foreground: hsl(20, 12%, 88%);
+  --primary: hsl(340, 45%, 65%);
+  --primary-foreground: hsl(20, 15%, 98%);
+  --secondary: hsl(15, 50%, 70%);
+  --secondary-foreground: hsl(20, 15%, 98%);
+  --muted: hsl(24, 18%, 22%);
+  --muted-foreground: hsl(20, 10%, 75%);
+  --accent: hsl(45, 40%, 75%);
+  --accent-foreground: hsl(24, 20%, 12%);
+  --destructive: hsl(0, 62%, 65%);
+  --destructive-foreground: hsl(20, 15%, 98%);
+  --border: hsl(24, 15%, 28%);
+  --input: hsl(26, 20%, 18%);
+  --ring: hsl(340, 45%, 65%);
 }
 
 @layer base {
@@ -71,7 +71,7 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    background: linear-gradient(135deg, hsl(220, 30%, 8%) 0%, hsl(263, 30%, 12%) 50%, hsl(220, 25%, 10%) 100%);
+    background: linear-gradient(135deg, hsl(24, 20%, 12%) 0%, hsl(26, 25%, 16%) 50%, hsl(22, 18%, 14%) 100%);
     min-height: 100vh;
   }
 }

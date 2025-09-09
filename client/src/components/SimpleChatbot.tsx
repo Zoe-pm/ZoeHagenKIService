@@ -40,6 +40,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
 
     // Try to send to n8n webhook first
     try {
+      console.log('Sending to n8n webhook:', messageToSend);
       const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
         method: 'POST',
         headers: {
@@ -52,32 +53,64 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         }),
       });
 
+      console.log('Response status:', response.status);
       let botResponse = '';
       
       if (response.ok) {
         const data = await response.json();
+        console.log('Response data:', data);
+        
+        // Try multiple possible response formats
         if (data && data.response) {
           botResponse = data.response;
         } else if (data && data.message) {
           botResponse = data.message;
-        } else if (data && typeof data === 'string') {
+        } else if (data && data.reply) {
+          botResponse = data.reply;
+        } else if (data && data.answer) {
+          botResponse = data.answer;
+        } else if (data && data.text) {
+          botResponse = data.text;
+        } else if (typeof data === 'string') {
           botResponse = data;
+        } else if (data && data.body) {
+          botResponse = data.body;
+        } else if (data && Array.isArray(data) && data.length > 0) {
+          botResponse = data[0].message || data[0].text || data[0].response || JSON.stringify(data[0]);
+        } else {
+          console.log('Unexpected response format:', data);
+          // If we get an error from n8n workflow
+          if (data && data.message && data.message.includes('Error')) {
+            console.log('N8N Workflow Error detected:', data.message);
+            botResponse = '';
+          } else {
+            botResponse = '';
+          }
         }
+      } else {
+        console.log('Response not ok:', response.statusText);
       }
+      
+      console.log('Final botResponse:', botResponse);
       
       // Fallback to smart responses if webhook fails or returns nothing
       if (!botResponse) {
+        console.log('Using fallback response for:', messageToSend);
         botResponse = 'Vielen Dank für Ihre Nachricht! ';
         
         const input = messageToSend.toLowerCase();
-        if (input.includes('preis') || input.includes('kosten')) {
-          botResponse += 'Gerne besprechen wir individuelle Preise mit Ihnen. Kontaktieren Sie uns: +49 01719862773';
-        } else if (input.includes('termin') || input.includes('beratung')) {
-          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie an: +49 01719862773';
-        } else if (input.includes('hallo') || input.includes('hi')) {
+        if (input.includes('preis') || input.includes('kosten') || input.includes('tarif')) {
+          botResponse += 'Gerne besprechen wir mit Ihnen individuelle Preise. Kontaktieren Sie uns unter +49 01719862773 für ein persönliches Angebot.';
+        } else if (input.includes('termin') || input.includes('beratung') || input.includes('gespräch')) {
+          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie uns an: +49 01719862773 oder schreiben Sie an zoe-kiconsulting@pm.me';
+        } else if (input.includes('chatbot') || input.includes('voicebot') || input.includes('avatar') || input.includes('wissensbot')) {
+          botResponse += 'Unsere KI-Assistenten können Ihr Unternehmen in vielen Bereichen unterstützen. Welcher Bereich interessiert Sie am meisten?';
+        } else if (input.includes('hallo') || input.includes('hi') || input.includes('guten tag')) {
           botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
+        } else if (input.includes('funktionen') || input.includes('features') || input.includes('können')) {
+          botResponse += 'Unsere KI-Lösungen bieten 24/7 Kundensupport, automatische Antworten, Wissensdatenbanken und vieles mehr. Was interessiert Sie besonders?';
         } else {
-          botResponse += 'Für weitere Informationen rufen Sie uns gerne an: +49 01719862773';
+          botResponse += 'Ich leite Ihre Anfrage gerne an unser Team weiter. Für schnelle Hilfe rufen Sie uns an: +49 01719862773';
         }
       }
 

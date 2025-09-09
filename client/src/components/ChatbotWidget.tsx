@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ interface Message {
 
 declare global {
   interface Window {
-    openChatbot: () => void;
+    openChatbot?: () => void;
   }
 }
 
@@ -30,24 +31,18 @@ export default function ChatbotWidget() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Create global function to open chatbot
-    window.openChatbot = () => {
+    if (typeof window === 'undefined') return;
+
+    const open = () => {
       console.log('Opening chatbot via global function');
       setIsOpen(true);
     };
-    
-    // Also ensure it's available immediately
-    if (typeof window !== 'undefined') {
-      (window as any).openChatbot = () => {
-        console.log('Opening chatbot via window global');
-        setIsOpen(true);
-      };
-    }
-    
+
+    (window as any).openChatbot = open;
+
     return () => {
-      if (typeof window !== 'undefined' && window.openChatbot) {
-        window.openChatbot = undefined as any;
-      }
+      // sauber entfernen
+      delete (window as any).openChatbot;
     };
   }, []);
 
@@ -67,53 +62,63 @@ export default function ChatbotWidget() {
     setIsLoading(true);
 
     try {
-      // Try to send to real n8n webhook first
       let botResponse = '';
-      
+
+      // 1) Versuch: echter n8n-Webhook
       try {
         const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: messageToSend,
             timestamp: new Date().toISOString(),
             source: 'website-chatbot'
-          }),
+          })
         });
 
         if (response.ok) {
-          const data = await response.json();
-          if (data && data.response) {
+          const ct = response.headers.get('content-type') ?? '';
+          let data: any = null;
+          if (ct.includes('application/json')) {
+            data = await response.json();
+          } else {
+            const text = await response.text();
+            try {
+              data = JSON.parse(text);
+            } catch {
+              data = text;
+            }
+          }
+
+          if (data && typeof data === 'object' && 'response' in data) {
             botResponse = data.response;
-          } else if (data && data.message) {
+          } else if (data && typeof data === 'object' && 'message' in data) {
             botResponse = data.message;
-          } else if (data && typeof data === 'string') {
+          } else if (typeof data === 'string') {
             botResponse = data;
           }
         }
       } catch (webhookError) {
-        console.log('Webhook not available, using fallback responses');
+        console.log('Webhook nicht erreichbar, nutze Fallback-Antworten');
       }
-      
-      // Fallback to smart responses if webhook fails
+
+      // 2) Fallback: einfache Regelantworten
       if (!botResponse) {
         botResponse = 'Vielen Dank für Ihre Nachricht! ';
-        
         const input = messageToSend.toLowerCase();
+
         if (input.includes('preis') || input.includes('kosten') || input.includes('tarif')) {
-          botResponse += 'Gerne besprechen wir mit Ihnen individuelle Preise. Kontaktieren Sie uns unter +49 01719862773 für ein persönliches Angebot.';
+          botResponse += 'Gerne besprechen wir mit Ihnen individuelle Preise. Kontaktieren Sie uns unter +49 171 9862773 für ein persönliches Angebot.';
         } else if (input.includes('termin') || input.includes('beratung') || input.includes('gespräch')) {
-          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie uns an: +49 01719862773 oder schreiben Sie an zoe-kiconsulting@pm.me';
+          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie an: +49 171 9862773 oder schreiben Sie an zoe-kiconsulting@pm.me';
         } else if (input.includes('chatbot') || input.includes('voicebot') || input.includes('avatar') || input.includes('wissensbot')) {
-          botResponse += 'Unsere KI-Assistenten können Ihr Unternehmen in vielen Bereichen unterstützen. Welcher Bereich interessiert Sie am meisten?';
+          botResponse += 'Unsere KI-Assistenten unterstützen in Support, Vertrieb und Onboarding. Welcher Bereich interessiert Sie am meisten?';
         } else if (input.includes('hallo') || input.includes('hi') || input.includes('guten tag')) {
           botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
         } else if (input.includes('funktionen') || input.includes('features') || input.includes('können')) {
-          botResponse += 'Unsere KI-Lösungen bieten 24/7 Kundensupport, automatische Antworten, Wissensdatenbanken und vieles mehr. Was interessiert Sie besonders?';
+          botResponse += 'Unsere Lösungen bieten 24/7 Support, automatische Antworten, Wissensdatenbanken u.v.m. Was interessiert Sie besonders?';
         } else {
-          botResponse += 'Ich leite Ihre Anfrage gerne an unser Team weiter. Für schnelle Hilfe rufen Sie uns an: +49 01719862773';
+          botResponse += 'Ich leite Ihre Anfrage gerne an unser Team weiter. Für schnelle Hilfe: +49 171 9862773';
         }
       }
 
@@ -128,7 +133,7 @@ export default function ChatbotWidget() {
       console.error('Chat error:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773',
+        text: 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 171 9862773',
         sender: 'bot',
         timestamp: new Date()
       };
@@ -138,10 +143,8 @@ export default function ChatbotWidget() {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSendMessage();
-    }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') handleSendMessage();
   };
 
   return (
@@ -150,7 +153,7 @@ export default function ChatbotWidget() {
       <Button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full button-gradient shadow-lg hover:scale-110 transition-transform"
-        aria-label={isOpen ? "Chat schließen" : "Chat öffnen"}
+        aria-label={isOpen ? 'Chat schließen' : 'Chat öffnen'}
         data-testid="chatbot-toggle"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
@@ -158,7 +161,10 @@ export default function ChatbotWidget() {
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-80 max-h-[calc(100vh-8rem)] h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden" data-testid="chatbot-window">
+        <div
+          className="fixed bottom-24 right-6 z-40 w-80 max-h-[calc(100vh-8rem)] h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden"
+          data-testid="chatbot-window"
+        >
           {/* Header */}
           <div className="button-gradient p-4 text-white">
             <div className="flex items-center gap-2">
@@ -206,7 +212,7 @@ export default function ChatbotWidget() {
               <Input
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 placeholder="Fragen Sie mich was..."
                 className="flex-1"
                 disabled={isLoading}

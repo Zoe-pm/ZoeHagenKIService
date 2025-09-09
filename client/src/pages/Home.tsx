@@ -14,40 +14,40 @@ const products = [
   {
     id: "chatbot",
     title: "Chatbot – Antworten ohne Suchen",
-    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads, vereinbart Termine und reduziert Standardanfragen.",
+    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads und reduziert Standardanfragen.",
     features: ["Sofortige Antworten", "Lead-Generierung", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
     buttonText: "Demo testen"
   },
   {
     id: "voicebot",
     title: "Voicebot – sprechen statt tippen", 
-    description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische, fundierte Antworten erhalten. Nimmt Anrufe entgegen, generiert Leads und vereinbart Termine.",
+    description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt Anrufe entgegen und vereinbart Termine.",
     features: ["Natürliche Sprache", "Anruf-Entgegennahme", "Lead-Generierung"],
     icon: <Mic className="text-secondary" />,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
     buttonText: "Jetzt anrufen"
   },
   {
     id: "avatar",
     title: "Avatar – Service mit Gesicht",
-    description: "Wie ein Voicebot, nur persönlicher: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen und einen starken ersten Eindruck.",
+    description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck"],
     icon: <UserCircle className="text-accent" />,
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1494790108755-2616c179c3e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben"
   },
   {
     id: "wissensbot",
     title: "Wissensbot – Wissen, das bleibt",
-    description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Wechsel im Team. Erleichtert Onboarding und macht Prozesse stabil.",
+    description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität"],
     icon: <Brain className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
     buttonText: "Beratung buchen"
   }
@@ -83,9 +83,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <main id="main-content">
-        <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
+        <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
               <div className="text-center lg:text-left">
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
                   <span className="gradient-text">
@@ -129,7 +129,7 @@ export default function Home() {
             </div>
 
             {/* Four Products Above-the-Fold */}
-            <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-16" data-testid="products-section">
+            <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8" data-testid="products-section">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -155,7 +155,7 @@ export default function Home() {
         <VoiceDemo />
 
         {/* Visual Showcase */}
-        <section id="demo" className="py-16 px-4 sm:px-6 lg:px-8" data-testid="visual-showcase-section">
+        <section id="demo" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="visual-showcase-section">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">So sieht das im Einsatz aus</h2>
@@ -245,7 +245,7 @@ export default function Home() {
         </section>
 
         {/* Central Call-to-Action */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8" data-testid="central-cta-section">
+        <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="central-cta-section">
           <div className="max-w-4xl mx-auto text-center">
             <Card className="glass border-primary/20">
               <CardContent className="p-12">

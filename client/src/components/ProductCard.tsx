@@ -59,7 +59,7 @@ export default function ProductCard({
         </div>
         
         <Button
-          className={`w-full ${gradient} text-white py-3 px-4 font-medium hover:opacity-90 transition-opacity`}
+          className="w-full button-gradient py-3 px-4 font-medium"
           onClick={onButtonClick}
           data-testid={`product-button-${id}`}
         >

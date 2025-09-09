@@ -218,7 +218,7 @@ export default function ContactForm() {
                   
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground py-3 px-6 font-medium hover:opacity-90 transition-opacity"
+                    className="w-full button-gradient py-3 px-6 font-medium"
                     disabled={isSubmitting}
                     data-testid="contact-form-submit"
                   >
@@ -269,7 +269,7 @@ export default function ContactForm() {
                 </h3>
                 <div className="space-y-3">
                   <Button
-                    className="w-full bg-gradient-to-r from-secondary to-accent text-secondary-foreground py-3 px-4 font-medium hover:opacity-90 transition-opacity"
+                    className="w-full button-gradient py-3 px-4 font-medium"
                     onClick={() => handleQuickAction("15-Min Demo")}
                     data-testid="quick-action-demo"
                   >
@@ -277,7 +277,7 @@ export default function ContactForm() {
                     15-Min Demo vereinbaren
                   </Button>
                   <Button
-                    className="w-full bg-gradient-to-r from-accent to-primary text-accent-foreground py-3 px-4 font-medium hover:opacity-90 transition-opacity"
+                    className="w-full button-gradient py-3 px-4 font-medium"
                     onClick={() => handleQuickAction("Produktbroschüre")}
                     data-testid="quick-action-brochure"
                   >
@@ -285,7 +285,7 @@ export default function ContactForm() {
                     Produktbroschüre laden
                   </Button>
                   <Button
-                    className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground py-3 px-4 font-medium hover:opacity-90 transition-opacity"
+                    className="w-full button-gradient py-3 px-4 font-medium"
                     onClick={() => handleQuickAction("ROI-Rechner")}
                     data-testid="quick-action-calculator"
                   >

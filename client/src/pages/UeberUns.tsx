@@ -39,7 +39,7 @@ export default function UeberUns() {
                 <a
                   href="/#kontakt"
                   role="button"
-                  className="inline-flex items-center rounded-md bg-gradient-to-r from-primary to-secondary px-6 py-3 text-white hover:opacity-90 transition-opacity shadow-lg"
+                  className="inline-flex items-center rounded-md button-gradient px-6 py-3 font-medium shadow-lg"
                   data-testid="contact-cta"
                 >
                   Jetzt Kontakt aufnehmen
@@ -146,7 +146,7 @@ export default function UeberUns() {
             <a
               href="/#kontakt"
               role="button"
-              className="inline-flex items-center rounded-md bg-gradient-to-r from-accent to-primary px-6 py-3 text-white hover:opacity-90 transition-opacity shadow-lg"
+              className="inline-flex items-center rounded-md button-gradient px-6 py-3 font-medium shadow-lg"
               data-testid="consultation-cta"
             >
               Erstgespräch vereinbaren

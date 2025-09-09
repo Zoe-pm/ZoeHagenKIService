@@ -83,24 +83,24 @@ export default function Home() {
 
       {/* Hero Section */}
       <main id="main-content">
-        <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
+        <section className="hero-gradient pt-24 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
-                  <span className="gradient-text">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in text-white" data-testid="hero-title">
+                  <span>
                     KI mit Herz & Hirn
                   </span>
                   <br />
-                  <span className="text-foreground text-2xl md:text-3xl">– sichere, digitale Teammitglieder für Ihren Service.</span>
+                  <span className="text-2xl md:text-3xl">– sichere, digitale Teammitglieder für Ihren Service.</span>
                 </h1>
-                <p className="text-xl text-muted-foreground mb-8 fade-in" data-testid="hero-subtitle">
+                <p className="text-xl text-white/90 mb-8 fade-in" data-testid="hero-subtitle">
                   Unsere digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button 
                     size="lg" 
-                    className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-8 py-4 text-lg"
+                    className="button-gradient px-8 py-4 text-lg font-semibold"
                     onClick={() => scrollToSection('kontakt')}
                     data-testid="cta-primary"
                   >
@@ -109,7 +109,7 @@ export default function Home() {
                   <Button 
                     size="lg" 
                     variant="outline"
-                    className="border-accent text-accent hover:bg-accent hover:text-accent-foreground px-8 py-4 text-lg"
+                    className="border-white text-white hover:bg-white hover:text-anthracite px-8 py-4 text-lg"
                     onClick={() => scrollToSection('demo')}
                     data-testid="cta-secondary"
                   >

@@ -4,65 +4,54 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(225, 25%, 8%);
-  --foreground: hsl(220, 15%, 96%);
-  --card: hsl(225, 30%, 12%);
-  --card-foreground: hsl(220, 15%, 92%);
-  --popover: hsl(225, 30%, 12%);
-  --popover-foreground: hsl(220, 15%, 92%);
-  --primary: hsl(260, 85%, 68%);
-  --primary-foreground: hsl(220, 15%, 98%);
-  --secondary: hsl(315, 75%, 72%);
-  --secondary-foreground: hsl(220, 15%, 98%);
-  --muted: hsl(225, 20%, 18%);
-  --muted-foreground: hsl(220, 12%, 78%);
-  --accent: hsl(185, 85%, 65%);
-  --accent-foreground: hsl(225, 25%, 8%);
+  /* Neue Farbpalette */
+  --pastel-blue: #A7C7E7;
+  --light-blue: #5DADE2;
+  --soft-green: #58B58E;
+  --cream-light: #F9F8F6;
+  --cream-strong: #D9D4CC;
+  --anthracite: #3A3A3A;
+  
+  /* Theme Variablen */
+  --background: #F9F8F6;
+  --foreground: #3A3A3A;
+  --card: #F9F8F6;
+  --card-foreground: #3A3A3A;
+  --popover: #F9F8F6;
+  --popover-foreground: #3A3A3A;
+  --primary: #5DADE2;
+  --primary-foreground: #3A3A3A;
+  --secondary: #A7C7E7;
+  --secondary-foreground: #3A3A3A;
+  --muted: #D9D4CC;
+  --muted-foreground: #3A3A3A;
+  --accent: #58B58E;
+  --accent-foreground: #3A3A3A;
   --destructive: hsl(0, 75%, 65%);
-  --destructive-foreground: hsl(220, 15%, 98%);
-  --border: hsl(225, 18%, 22%);
-  --input: hsl(225, 25%, 14%);
-  --ring: hsl(260, 85%, 68%);
-  --chart-1: hsl(260, 85%, 68%);
-  --chart-2: hsl(315, 75%, 72%);
-  --chart-3: hsl(185, 85%, 65%);
-  --chart-4: hsl(45, 85%, 70%);
-  --chart-5: hsl(120, 65%, 60%);
-  --sidebar: hsl(225, 30%, 12%);
-  --sidebar-foreground: hsl(220, 15%, 92%);
-  --sidebar-primary: hsl(260, 85%, 68%);
-  --sidebar-primary-foreground: hsl(220, 15%, 98%);
-  --sidebar-accent: hsl(225, 20%, 18%);
-  --sidebar-accent-foreground: hsl(220, 15%, 92%);
-  --sidebar-border: hsl(225, 18%, 22%);
-  --sidebar-ring: hsl(260, 85%, 68%);
+  --destructive-foreground: #F9F8F6;
+  --border: #D9D4CC;
+  --input: #F9F8F6;
+  --ring: #5DADE2;
+  --chart-1: #5DADE2;
+  --chart-2: #A7C7E7;
+  --chart-3: #58B58E;
+  --chart-4: #D9D4CC;
+  --chart-5: #F9F8F6;
+  --sidebar: #F9F8F6;
+  --sidebar-foreground: #3A3A3A;
+  --sidebar-primary: #5DADE2;
+  --sidebar-primary-foreground: #3A3A3A;
+  --sidebar-accent: #D9D4CC;
+  --sidebar-accent-foreground: #3A3A3A;
+  --sidebar-border: #D9D4CC;
+  --sidebar-ring: #5DADE2;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: 0.75rem;
 }
 
-.dark {
-  --background: hsl(225, 25%, 8%);
-  --foreground: hsl(220, 15%, 96%);
-  --card: hsl(225, 30%, 12%);
-  --card-foreground: hsl(220, 15%, 92%);
-  --popover: hsl(225, 30%, 12%);
-  --popover-foreground: hsl(220, 15%, 92%);
-  --primary: hsl(260, 85%, 68%);
-  --primary-foreground: hsl(220, 15%, 98%);
-  --secondary: hsl(315, 75%, 72%);
-  --secondary-foreground: hsl(220, 15%, 98%);
-  --muted: hsl(225, 20%, 18%);
-  --muted-foreground: hsl(220, 12%, 78%);
-  --accent: hsl(185, 85%, 65%);
-  --accent-foreground: hsl(225, 25%, 8%);
-  --destructive: hsl(0, 75%, 65%);
-  --destructive-foreground: hsl(220, 15%, 98%);
-  --border: hsl(225, 18%, 22%);
-  --input: hsl(225, 25%, 14%);
-  --ring: hsl(260, 85%, 68%);
-}
+/* Dark mode entfernt - nur helles Theme verwendet */
 
 @layer base {
   * {
@@ -70,23 +59,48 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
-    background: linear-gradient(135deg, hsl(225, 25%, 8%) 0%, hsl(260, 30%, 10%) 25%, hsl(225, 30%, 12%) 50%, hsl(315, 25%, 10%) 75%, hsl(225, 25%, 8%) 100%);
+    @apply font-sans antialiased text-foreground;
+    background: var(--cream-light);
+    color: var(--anthracite);
     min-height: 100vh;
   }
 }
 
 @layer components {
   .glass {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(217, 212, 204, 0.3);
+    box-shadow: 0 4px 6px rgba(58, 58, 58, 0.1);
   }
   
   .gradient-border {
-    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent)) padding-box,
-                linear-gradient(45deg, var(--primary), var(--secondary), var(--accent)) border-box;
+    background: linear-gradient(135deg, var(--pastel-blue), var(--light-blue), var(--soft-green)) padding-box,
+                linear-gradient(135deg, var(--pastel-blue), var(--light-blue), var(--soft-green)) border-box;
     border: 2px solid transparent;
+  }
+  
+  /* Hero/Header Verlauf */
+  .hero-gradient {
+    background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--light-blue) 50%, var(--soft-green) 100%);
+  }
+  
+  /* Button Verlauf */
+  .button-gradient {
+    background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--light-blue) 50%, var(--soft-green) 100%);
+    color: var(--anthracite);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .button-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(93, 173, 226, 0.3);
+  }
+  
+  /* Footer Verlauf */
+  .footer-gradient {
+    background: linear-gradient(180deg, var(--cream-strong) 0%, var(--cream-light) 100%);
   }
   
   .voice-pulse {

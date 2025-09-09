@@ -10,8 +10,8 @@ export default function Datenschutz() {
   return (
     <div className="min-h-screen" data-testid="datenschutz-page">
       <SEOHelmet 
-        title="Datenschutzerklärung - KI-Assistenten GmbH"
-        description="Datenschutzerklärung der KI-Assistenten GmbH. Erfahren Sie, wie wir Ihre personenbezogenen Daten verarbeiten und schützen."
+        title="Datenschutzerklärung - Zoë Hagen KI Consulting"
+        description="Datenschutzerklärung von Zoë Hagen KI Consulting. Erfahren Sie, wie wir Ihre personenbezogenen Daten verarbeiten und schützen."
       />
       
       <AccessibilityBanner />
@@ -80,13 +80,13 @@ export default function Datenschutz() {
                     Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
                   </p>
                   <div className="space-y-2 mb-4">
-                    <p><strong>KI-Assistenten GmbH</strong></p>
-                    <p>Dr. Max Mustermann</p>
-                    <p>Musterstraße 123</p>
-                    <p>12345 Berlin</p>
+                    <p><strong>Zoë Hagen KI Consulting</strong></p>
+                    <p>Zoë Hagen</p>
+                    <p>[Straße und Hausnummer]</p>
+                    <p>[PLZ und Ort]</p>
                     <p>Deutschland</p>
-                    <p><strong>Telefon:</strong> +49 (0) 123 456 789</p>
-                    <p><strong>E-Mail:</strong> datenschutz@ki-assistenten.de</p>
+                    <p><strong>Telefon:</strong> 01719862773</p>
+                    <p><strong>E-Mail:</strong> zoe-kiconsulting@pm.me</p>
                   </div>
                   <p>
                     Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen 
@@ -99,16 +99,9 @@ export default function Datenschutz() {
                     3. Datenschutzbeauftragter
                   </h2>
                   <p className="mb-4">
-                    Wir haben für unser Unternehmen einen Datenschutzbeauftragten bestellt.
+                    Als kleines Unternehmen haben wir keinen gesonderten Datenschutzbeauftragten bestellt. 
+                    Für Datenschutzanfragen wenden Sie sich direkt an uns über die oben genannten Kontaktdaten.
                   </p>
-                  <div className="space-y-2">
-                    <p><strong>Externe Datenschutzbeauftragte:</strong></p>
-                    <p>Datenschutz-Experten GmbH</p>
-                    <p>Frau Dr. Maria Datenschutz</p>
-                    <p>Datenschutzstraße 456</p>
-                    <p>12345 Berlin</p>
-                    <p><strong>E-Mail:</strong> dsb@ki-assistenten.de</p>
-                  </div>
                 </section>
 
                 <section data-testid="data-collection-details">

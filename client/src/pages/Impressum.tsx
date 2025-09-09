@@ -10,8 +10,8 @@ export default function Impressum() {
   return (
     <div className="min-h-screen" data-testid="impressum-page">
       <SEOHelmet 
-        title="Impressum - KI-Assistenten GmbH"
-        description="Impressum und Kontaktdaten der KI-Assistenten GmbH. Alle rechtlichen Informationen zu unserem Unternehmen."
+        title="Impressum - Zoë Hagen KI Consulting"
+        description="Impressum und Kontaktdaten von Zoë Hagen KI Consulting. Alle rechtlichen Informationen zu unserem Unternehmen."
       />
       
       <AccessibilityBanner />
@@ -39,9 +39,10 @@ export default function Impressum() {
                     Angaben gemäß § 5 TMG
                   </h2>
                   <div className="space-y-2">
-                    <p><strong>KI-Assistenten GmbH</strong></p>
-                    <p>Musterstraße 123</p>
-                    <p>12345 Berlin</p>
+                    <p><strong>Zoë Hagen KI Consulting</strong></p>
+                    <p>Zoë Hagen</p>
+                    <p>[Straße und Hausnummer]</p>
+                    <p>[PLZ und Ort]</p>
                     <p>Deutschland</p>
                   </div>
                 </section>
@@ -51,9 +52,8 @@ export default function Impressum() {
                     Kontakt
                   </h2>
                   <div className="space-y-2">
-                    <p><strong>Telefon:</strong> +49 (0) 123 456 789</p>
-                    <p><strong>E-Mail:</strong> kontakt@ki-assistenten.de</p>
-                    <p><strong>Website:</strong> www.ki-assistenten.de</p>
+                    <p><strong>Telefon:</strong> 01719862773</p>
+                    <p><strong>E-Mail:</strong> zoe-kiconsulting@pm.me</p>
                   </div>
                 </section>
 
@@ -62,23 +62,22 @@ export default function Impressum() {
                     Registereintrag
                   </h2>
                   <div className="space-y-2">
-                    <p><strong>Registergericht:</strong> Amtsgericht Berlin-Charlottenburg</p>
-                    <p><strong>Registernummer:</strong> HRB 123456 B</p>
+                    <p>Als Einzelunternehmen nicht im Handelsregister eingetragen.</p>
                   </div>
                 </section>
 
                 <section data-testid="management-info">
                   <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Vertretungsberechtigter Geschäftsführer
+                    Inhaber
                   </h2>
-                  <p>Dr. Max Mustermann</p>
+                  <p>Zoë Hagen</p>
                 </section>
 
                 <section data-testid="vat-info">
                   <h2 className="text-2xl font-semibold text-foreground mb-4">
                     Umsatzsteuer-ID
                   </h2>
-                  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: DE123456789</p>
+                  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: [USt-IdNr.]</p>
                 </section>
 
                 <section data-testid="professional-info">
@@ -86,9 +85,8 @@ export default function Impressum() {
                     Berufsbezeichnung und berufsrechtliche Regelungen
                   </h2>
                   <div className="space-y-2">
-                    <p><strong>Berufsbezeichnung:</strong> IT-Dienstleister</p>
-                    <p><strong>Zuständige Kammer:</strong> IHK Berlin</p>
-                    <p><strong>Verliehen durch:</strong> Deutschland</p>
+                    <p><strong>Berufsbezeichnung:</strong> KI-Beratung und IT-Dienstleistungen</p>
+                    <p><strong>Zuständige Kammer:</strong> [Zuständige IHK]</p>
                   </div>
                 </section>
 
@@ -97,10 +95,10 @@ export default function Impressum() {
                     Redaktionell verantwortlich
                   </h2>
                   <div className="space-y-2">
-                    <p>Dr. Max Mustermann</p>
-                    <p>KI-Assistenten GmbH</p>
-                    <p>Musterstraße 123</p>
-                    <p>12345 Berlin</p>
+                    <p>Zoë Hagen</p>
+                    <p>Zoë Hagen KI Consulting</p>
+                    <p>[Straße und Hausnummer]</p>
+                    <p>[PLZ und Ort]</p>
                   </div>
                 </section>
 

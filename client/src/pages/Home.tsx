@@ -92,10 +92,10 @@ export default function Home() {
                     KI mit Herz & Hirn
                   </span>
                   <br />
-                  <span className="text-foreground">– sicher, einfach, persönlich.</span>
+                  <span className="text-foreground">– sichere, digitale Teammitglieder für Ihren Service.</span>
                 </h1>
                 <p className="text-xl text-muted-foreground mb-8 fade-in" data-testid="hero-subtitle">
-                  Digitale Helfer, die Service sofort leichter machen – ohne Technik-Wissen, DSGVO-konform und mit vollem Support durch uns.
+                  Unsere digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                   <Button 
@@ -139,38 +139,14 @@ export default function Home() {
               ))}
             </section>
 
-            {/* Trust Boosters */}
-            <section className="py-8 px-4 sm:px-6 lg:px-8" data-testid="trust-boosters-section">
-              <div className="max-w-5xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                  <div className="flex flex-col items-center space-y-3">
-                    <div className="p-3 rounded-full bg-primary/10 border border-primary/20">
-                      <Shield className="w-8 h-8 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-1">DSGVO-konform</h3>
-                      <p className="text-sm text-muted-foreground">Vollständig EU-konform und datenschutzsicher</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center space-y-3">
-                    <div className="p-3 rounded-full bg-secondary/10 border border-secondary/20">
-                      <Zap className="w-8 h-8 text-secondary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-1">Einfache Implementierung</h3>
-                      <p className="text-sm text-muted-foreground">In 30 Tagen live ohne Technik-Wissen</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center space-y-3">
-                    <div className="p-3 rounded-full bg-accent/10 border border-accent/20">
-                      <Users className="w-8 h-8 text-accent" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg mb-1">Laufender Support</h3>
-                      <p className="text-sm text-muted-foreground">Persönliche Betreuung und Updates</p>
-                    </div>
-                  </div>
-                </div>
+            {/* Benefits */}
+            <section className="py-6 px-4 sm:px-6 lg:px-8" data-testid="benefits-section">
+              <div className="max-w-4xl mx-auto">
+                <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-muted-foreground">
+                  <li>• DSGVO-konform</li>
+                  <li>• einfache Implementierung</li>
+                  <li>• laufender Support</li>
+                </ul>
               </div>
             </section>
           </div>

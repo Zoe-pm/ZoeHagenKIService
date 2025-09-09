@@ -11,17 +11,8 @@ interface Message {
 }
 
 export default function ChatbotWidget() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: 'Hallo! Ich bin Zoes KI-Assistent. Wie kann ich Ihnen heute helfen?',
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ]);
-  const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  // Chatbot temporarily disabled - waiting for n8n integration details
+  return null;
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;

@@ -96,13 +96,13 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="kontakt" className="py-20 px-4 sm:px-6 lg:px-8" data-testid="contact-section">
+    <section id="kontakt" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="contact-section">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6" data-testid="contact-title">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold mb-4" data-testid="contact-title">
             Bereit für Ihren KI-Assistenten?
           </h2>
-          <p className="text-xl text-muted-foreground" data-testid="contact-subtitle">
+          <p className="text-muted-foreground" data-testid="contact-subtitle">
             Lassen Sie uns gemeinsam die perfekte Lösung für Ihr Unternehmen finden
           </p>
         </div>

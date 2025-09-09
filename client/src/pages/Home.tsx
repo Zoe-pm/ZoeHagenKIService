@@ -1,6 +1,5 @@
 import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import AccessibilityBanner from "@/components/AccessibilityBanner";
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
 import VoiceDemo from "@/components/VoiceDemo";
@@ -14,42 +13,42 @@ const products = [
   {
     id: "chatbot",
     title: "Chatbot",
-    description: "24/7 Kundensupport auf Ihrer Website. Beantwortet häufige Fragen automatisch und leitet komplexe Anfragen weiter.",
-    features: ["Sofortige Antworten", "Website-Integration", "Mehrsprachig"],
+    description: "24/7 Website-Assistent für Kundenfragen, Terminbuchung und Produktberatung. Sofort einsatzbereit.",
+    features: ["Live-Chat Integration", "FAQ-Automatisierung", "Lead-Qualifizierung"],
     icon: <MessageCircle className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
     buttonText: "Demo testen"
   },
   {
     id: "voicebot",
     title: "Voicebot", 
-    description: "Intelligente Telefon-Assistenz, die Anrufe entgegennimmt, weiterleitet und einfache Serviceanfragen bearbeitet.",
-    features: ["Telefon-Integration", "Natürliche Sprache", "Terminbuchung"],
+    description: "Intelligente Telefonzentrale mit natürlicher Spracherkennung für professionellen Kundenservice.",
+    features: ["Anruf-Routing", "Terminvereinbarung", "24/7 Erreichbarkeit"],
     icon: <Mic className="text-secondary" />,
-    image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
-    buttonText: "Jetzt anrufen"
+    buttonText: "15-Min Gespräch"
   },
   {
     id: "avatar",
     title: "Avatar",
-    description: "Visueller KI-Assistent mit menschlichem Gesicht für persönlichere Kundeninteraktionen auf Ihrer Website.",
-    features: ["Gesicht & Stimme", "Emotionale Intelligenz", "Personalisiert"],
+    description: "Digitaler Berater mit Gesicht für FAQ und Standardfragen. Antwortet auf vordefinierte Themen.",
+    features: ["Visuelle Präsenz", "FAQ-Spezialist", "Einfache Einrichtung"],
     icon: <UserCircle className="text-accent" />,
-    image: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben"
   },
   {
     id: "wissensbot",
     title: "Wissensbot",
-    description: "Interner KI-Assistent für Mitarbeiter-Onboarding und schnellen Zugriff auf Unternehmenswissen und Prozesse.",
-    features: ["Internes Wissen", "Onboarding-Hilfe", "Prozess-Optimierung"],
+    description: "Komplexer Unternehmens-Assistent mit tiefem Prozessverständnis. Braucht Interviews und individuelle Entwicklung.",
+    features: ["Prozess-Integration", "Interview-Phase nötig", "Aufwendige Anpassung"],
     icon: <Brain className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
-    buttonText: "Mehr erfahren"
+    buttonText: "Beratung buchen"
   }
 ];
 
@@ -69,7 +68,6 @@ export default function Home() {
         keywords="KI Assistenten, Chatbot, Voicebot, Avatar, Wissensbot, KI Kundenservice, DSGVO konform"
       />
       
-      <AccessibilityBanner />
       
       {/* Skip to main content */}
       <a 
@@ -84,23 +82,23 @@ export default function Home() {
 
       {/* Hero Section */}
       <main id="main-content">
-        <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
+        <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 fade-in" data-testid="hero-title">
                 <span className="gradient-text">
                   KI-Assistenten
                 </span>
                 <br />für Ihr Unternehmen
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 fade-in" data-testid="hero-subtitle">
-                Verbessern Sie Ihren Kundenservice mit unseren vier professionellen KI-Lösungen. 
-                DSGVO-konform, einfach zu integrieren, in nur 30 Tagen einsatzbereit.
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6 fade-in" data-testid="hero-subtitle">
+                Vier professionelle KI-Lösungen für modernen Kundenservice. 
+                DSGVO-konform, schnelle Integration.
               </p>
             </div>
 
             {/* Four Products Above-the-Fold */}
-            <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-20" data-testid="products-section">
+            <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12" data-testid="products-section">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -119,48 +117,38 @@ export default function Home() {
         <Timeline />
 
         {/* About Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8" data-testid="about-section">
+        <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="about-section">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div>
                 <img 
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                  alt="Professionelles Team bei der Diskussion von KI-Technologie-Lösungen" 
+                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  alt="Mensch-Maschine-Interaktion: Person arbeitet mit KI-Interface am Computer" 
                   className="rounded-lg shadow-2xl" 
                   loading="lazy"
                   data-testid="about-image"
                 />
               </div>
               <div>
-                <h2 className="text-4xl font-bold mb-6" data-testid="about-title">Über uns</h2>
-                <p className="text-muted-foreground text-lg mb-6" data-testid="about-description">
-                  Wir sind Ihr spezialisierter Partner für professionelle KI-Assistenten. Mit über 5 Jahren 
-                  Erfahrung haben wir bereits 200+ Unternehmen dabei geholfen, ihren Kundenservice zu 
-                  automatisieren und zu verbessern.
+                <h2 className="text-3xl font-bold mb-4" data-testid="about-title">Ihre KI-Partner</h2>
+                <p className="text-muted-foreground mb-6" data-testid="about-description">
+                  Spezialisiert auf professionelle KI-Assistenten. 200+ erfolgreiche Implementierungen, 
+                  maßgeschneiderte Lösungen für jeden Anwendungsfall.
                 </p>
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center" data-testid="about-feature-1">
-                    <Shield className="text-accent text-xl mr-4" />
-                    <span>100% DSGVO-konform und sicher</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                  <div className="text-center">
+                    <Shield className="text-accent text-2xl mx-auto mb-2" />
+                    <span className="text-sm">DSGVO-konform</span>
                   </div>
-                  <div className="flex items-center" data-testid="about-feature-2">
-                    <Settings className="text-accent text-xl mr-4" />
-                    <span>Einfache Integration in bestehende Systeme</span>
+                  <div className="text-center">
+                    <Settings className="text-accent text-2xl mx-auto mb-2" />
+                    <span className="text-sm">Einfache Integration</span>
                   </div>
-                  <div className="flex items-center" data-testid="about-feature-3">
-                    <Headphones className="text-accent text-xl mr-4" />
-                    <span>24/7 technischer Support</span>
+                  <div className="text-center">
+                    <Headphones className="text-accent text-2xl mx-auto mb-2" />
+                    <span className="text-sm">24/7 Support</span>
                   </div>
                 </div>
-                <Card className="glass">
-                  <CardContent className="p-4">
-                    <p className="text-sm text-muted-foreground" data-testid="about-tip">
-                      <Mic className="inline-block text-secondary mr-2" />
-                      <strong>Tipp:</strong> Fragen Sie unseren Voicebot: "Erzähl mir mehr über euer Unternehmen" 
-                      - er beantwortet auch Details über uns!
-                    </p>
-                  </CardContent>
-                </Card>
               </div>
             </div>
           </div>

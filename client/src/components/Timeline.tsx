@@ -34,13 +34,13 @@ const timelineSteps = [
 
 export default function Timeline() {
   return (
-    <section id="implementation" className="py-20 px-4 sm:px-6 lg:px-8" data-testid="timeline-section">
+    <section id="implementation" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="timeline-section">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6" data-testid="timeline-title">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold mb-4" data-testid="timeline-title">
             In 4 einfachen Schritten zur KI-Lösung
           </h2>
-          <p className="text-xl text-muted-foreground" data-testid="timeline-subtitle">
+          <p className="text-muted-foreground" data-testid="timeline-subtitle">
             Von der Beratung bis zum Go-Live in nur 30 Tagen
           </p>
         </div>

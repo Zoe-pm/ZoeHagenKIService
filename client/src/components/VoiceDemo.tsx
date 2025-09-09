@@ -58,15 +58,15 @@ export default function VoiceDemo() {
   };
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8" data-testid="voice-demo-section">
+    <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="voice-demo-section">
       <div className="max-w-4xl mx-auto">
         <Card className="glass">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-3xl font-bold mb-6" data-testid="voice-demo-title">
+          <CardContent className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4" data-testid="voice-demo-title">
               <Volume2 className="inline-block text-secondary mr-3" />
               Voicebot sofort testen
             </h2>
-            <p className="text-muted-foreground mb-8" data-testid="voice-demo-description">
+            <p className="text-muted-foreground mb-6" data-testid="voice-demo-description">
               Probieren Sie unseren Voicebot direkt aus. Klicken Sie auf das Mikrofon oder eine der Demo-Fragen.
             </p>
             

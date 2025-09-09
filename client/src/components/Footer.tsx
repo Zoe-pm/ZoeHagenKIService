@@ -128,11 +128,16 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-border mt-12 pt-8 text-center">
-          <p className="text-muted-foreground" data-testid="footer-copyright">
-            © 2024 KI-Assistenten GmbH. Alle Rechte vorbehalten. 
-            Made with <Heart className="inline-block w-4 h-4 text-secondary mx-1" /> in Deutschland
-          </p>
+        <div className="border-t border-border mt-12 pt-8">
+          <div className="text-center space-y-2">
+            <p className="text-muted-foreground" data-testid="footer-copyright">
+              © 2024 KI-Assistenten GmbH. Alle Rechte vorbehalten. 
+              Made with <Heart className="inline-block w-4 h-4 text-secondary mx-1" /> in Deutschland
+            </p>
+            <p className="text-sm text-muted-foreground" data-testid="footer-accessibility">
+              Diese Website ist barrierefrei nach WCAG 2.1 AA gestaltet
+            </p>
+          </div>
         </div>
       </div>
     </footer>

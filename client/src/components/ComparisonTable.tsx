@@ -48,13 +48,13 @@ const comparisonData = [
 
 export default function ComparisonTable() {
   return (
-    <section id="vergleich" className="py-20 px-4 sm:px-6 lg:px-8" data-testid="comparison-section">
+    <section id="vergleich" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="comparison-section">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6" data-testid="comparison-title">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold mb-4" data-testid="comparison-title">
             Welcher KI-Assistent passt zu Ihnen?
           </h2>
-          <p className="text-xl text-muted-foreground" data-testid="comparison-subtitle">
+          <p className="text-muted-foreground" data-testid="comparison-subtitle">
             Vergleichen Sie die vier Lösungen auf einen Blick
           </p>
         </div>

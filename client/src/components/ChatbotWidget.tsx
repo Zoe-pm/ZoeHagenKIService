@@ -30,18 +30,19 @@ export default function ChatbotWidget() {
       loadPreviousSession: true,
       metadata: {},
       showWelcomeScreen: false,
-      defaultLanguage: 'de',
+      defaultLanguage: 'en',
       initialMessages: [
         'Hier um zu helfen',
         'Ich bin Chatty, Ihre digitale Unterstützung. Womit kann ich helfen?'
       ],
       i18n: {
         en: {
-          title: 'Ich bin Chatty',
-          subtitle: '24/7 für Sie da',
+          title: 'Hallo!',
+          subtitle: '24/7 an Ihrer Seite',
           footer: '',
           getStarted: 'Los geht´s',
-          inputPlaceholder: 'Fragen Sie mich was...'
+          inputPlaceholder: 'Fragen Sie mich was...',
+          closeButtonTooltip: 'Chat schließen'
         }
       },
       enableStreaming: false,
@@ -66,8 +67,8 @@ export default function ChatbotWidget() {
     
     return () => {
       // Cleanup
-      if (window.openChatbot) {
-        delete window.openChatbot;
+      if (typeof window !== 'undefined' && window.openChatbot) {
+        window.openChatbot = undefined as any;
       }
     };
   }, []);

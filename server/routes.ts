@@ -89,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Chat endpoint for chatbot workflow
+  // Chat endpoint for chatbot workflow - connected to n8n
   app.post("/api/chat", async (req, res) => {
     try {
       const { message } = req.body;
@@ -98,40 +98,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ success: false, message: "Nachricht ist erforderlich" });
       }
 
-      // Enhanced chatbot responses with more context about Zoë Hagen KI Consulting
-      const responses: { [key: string]: string } = {
-        "hallo": "Hallo! Schön, dass Sie da sind. Ich bin Zoes KI-Assistent und helfe Ihnen gerne bei Fragen zu unseren KI-Lösungen.",
-        "chatbot": "Unser Chatbot kann Ihre Kunden 24/7 betreuen, Standardanfragen beantworten und Leads generieren. Interessiert Sie eine Demo?",
-        "voicebot": "Der Voicebot ermöglicht natürliche Gespräche per Sprache und kann Anrufe entgegennehmen. Möchten Sie mehr erfahren?",
-        "avatar": "Unser Avatar verleiht Ihrem Service ein menschliches Gesicht und baut Vertrauen zu Ihren Kunden auf. Soll ich Ihnen ein Beispiel zeigen?",
-        "wissensbot": "Der Wissensbot bewahrt Ihr internes Wissen und macht es für Ihr Team jederzeit verfügbar. Haben Sie Fragen dazu?",
-        "preis": "Unsere Chatbot-Lösung beginnt bei 299€ pro Monat. Für eine maßgeschneiderte Lösung erstelle ich gerne ein individuelles Angebot für Sie.",
-        "termin": "Gerne können Sie einen Beratungstermin buchen! Nutzen Sie unser Kontaktformular oder rufen Sie uns unter +49 01719862773 an.",
-        "öffnungszeiten": "Sie können uns jederzeit eine E-Mail an zoe-kiconsulting@pm.me senden. Für Telefonate sind wir Mo-Fr von 9-18 Uhr erreichbar.",
-        "kontakt": "Sie erreichen uns unter +49 01719862773 oder per E-Mail: zoe-kiconsulting@pm.me. Wie kann ich Ihnen weiterhelfen?",
-        "kosten": "Unsere KI-Lösungen beginnen bei 299€ monatlich. Je nach Ihren Anforderungen erstellen wir ein passendes Angebot. Soll ich Sie beraten?",
-        "demo": "Gerne zeige ich Ihnen eine Demo unserer Lösungen! Welche interessiert Sie am meisten: Chatbot, Voicebot, Avatar oder Wissensbot?",
-        "hilfe": "Ich helfe Ihnen gerne bei Fragen zu unseren KI-Assistenten. Was möchten Sie wissen: Funktionen, Preise, Demo oder Beratungstermin?",
-        "tschüss": "Auf Wiedersehen! Falls Sie noch Fragen haben, bin ich jederzeit da. Besuchen Sie auch gerne unsere Website für mehr Informationen.",
-        "danke": "Gerne! Ich bin immer da, wenn Sie Fragen haben. Möchten Sie mehr über unsere KI-Lösungen erfahren oder einen Termin buchen?",
-        "default": "Das ist eine sehr gute Frage! Zoë Hagen KI Consulting bietet maßgeschneiderte KI-Lösungen für Unternehmen. Gerne können wir das in einem persönlichen Gespräch besprechen. Soll ich einen Termin für Sie arrangieren?"
+      const webhookUrl = process.env.N8N_WEBHOOK_URL;
+      
+      if (!webhookUrl) {
+        console.error("N8N_WEBHOOK_URL not configured");
+        return res.status(500).json({ 
+          success: false, 
+          message: "Chatbot-Service ist nicht konfiguriert. Bitte kontaktieren Sie den Support." 
+        });
+      }
+
+      // Send message to n8n workflow
+      const n8nResponse = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message,
+          timestamp: new Date().toISOString(),
+          source: 'website-chatbot'
+        }),
+      });
+
+      if (!n8nResponse.ok) {
+        throw new Error(`n8n webhook responded with status ${n8nResponse.status}`);
+      }
+
+      const n8nData = await n8nResponse.json();
+      
+      // Extract response from n8n workflow
+      // Adjust this based on your n8n workflow output structure
+      let botResponse = "Entschuldigung, ich konnte keine Antwort generieren.";
+      
+      if (n8nData && n8nData.response) {
+        botResponse = n8nData.response;
+      } else if (n8nData && n8nData.message) {
+        botResponse = n8nData.message;
+      } else if (n8nData && typeof n8nData === 'string') {
+        botResponse = n8nData;
+      }
+
+      res.json({ success: true, response: botResponse });
+
+    } catch (error) {
+      console.error("n8n webhook error:", error);
+      
+      // Fallback responses when n8n is not available
+      const fallbackResponses: { [key: string]: string } = {
+        "hallo": "Hallo! Entschuldigung, mein KI-System wird gerade aktualisiert. Kontaktieren Sie uns gerne direkt unter +49 01719862773.",
+        "kontakt": "Sie erreichen uns unter +49 01719862773 oder per E-Mail: zoe-kiconsulting@pm.me",
+        "termin": "Für einen Beratungstermin rufen Sie uns bitte unter +49 01719862773 an.",
+        "default": "Entschuldigung, mein KI-System ist momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773 oder zoe-kiconsulting@pm.me"
       };
 
-      let response = responses.default;
-      const messageLower = message.toLowerCase();
+      const messageLower = req.body.message?.toLowerCase() || "";
+      let fallbackResponse = fallbackResponses.default;
       
-      // Find matching response
-      for (const [key, value] of Object.entries(responses)) {
+      for (const [key, value] of Object.entries(fallbackResponses)) {
         if (messageLower.includes(key)) {
-          response = value;
+          fallbackResponse = value;
           break;
         }
       }
 
-      res.json({ success: true, response });
-    } catch (error) {
-      console.error("Chat API error:", error);
-      res.status(500).json({ success: false, message: "Chat-Service ist momentan nicht verfügbar. Bitte versuchen Sie es später erneut." });
+      res.json({ success: true, response: fallbackResponse });
     }
   });
 

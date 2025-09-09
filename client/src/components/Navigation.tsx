@@ -91,7 +91,7 @@ export default function Navigation() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="glass fixed top-26 left-0 right-0 z-30 md:hidden" data-testid="mobile-menu">
+        <div className="glass fixed top-24 left-0 right-0 z-30 md:hidden" data-testid="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {location === "/" ? (
               <>

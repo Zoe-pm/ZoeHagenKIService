@@ -38,19 +38,47 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setInputText('');
     setIsLoading(true);
 
-    // Simulate response
-    setTimeout(() => {
-      let botResponse = 'Vielen Dank für Ihre Nachricht! ';
+    // Try to send to n8n webhook first
+    try {
+      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: messageToSend,
+          timestamp: new Date().toISOString(),
+          source: 'website-chatbot'
+        }),
+      });
+
+      let botResponse = '';
       
-      const input = messageToSend.toLowerCase();
-      if (input.includes('preis') || input.includes('kosten')) {
-        botResponse += 'Gerne besprechen wir individuelle Preise mit Ihnen. Kontaktieren Sie uns: +49 01719862773';
-      } else if (input.includes('termin') || input.includes('beratung')) {
-        botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie an: +49 01719862773';
-      } else if (input.includes('hallo') || input.includes('hi')) {
-        botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
-      } else {
-        botResponse += 'Für weitere Informationen rufen Sie uns gerne an: +49 01719862773';
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.response) {
+          botResponse = data.response;
+        } else if (data && data.message) {
+          botResponse = data.message;
+        } else if (data && typeof data === 'string') {
+          botResponse = data;
+        }
+      }
+      
+      // Fallback to smart responses if webhook fails or returns nothing
+      if (!botResponse) {
+        botResponse = 'Vielen Dank für Ihre Nachricht! ';
+        
+        const input = messageToSend.toLowerCase();
+        if (input.includes('preis') || input.includes('kosten')) {
+          botResponse += 'Gerne besprechen wir individuelle Preise mit Ihnen. Kontaktieren Sie uns: +49 01719862773';
+        } else if (input.includes('termin') || input.includes('beratung')) {
+          botResponse += 'Lassen Sie uns einen Beratungstermin vereinbaren! Rufen Sie an: +49 01719862773';
+        } else if (input.includes('hallo') || input.includes('hi')) {
+          botResponse += 'Schön, dass Sie da sind! Wie kann ich Ihnen heute helfen?';
+        } else {
+          botResponse += 'Für weitere Informationen rufen Sie uns gerne an: +49 01719862773';
+        }
       }
 
       const botMessage: Message = {
@@ -59,8 +87,19 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         sender: 'bot'
       };
       setMessages(prev => [...prev, botMessage]);
-      setIsLoading(false);
-    }, 1000);
+      
+    } catch (error) {
+      console.error('Chat webhook error:', error);
+      // Fallback response on error
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773',
+        sender: 'bot'
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    }
+    
+    setIsLoading(false);
   };
 
   if (!isOpen) return null;

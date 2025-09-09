@@ -40,50 +40,86 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
 
     try {
       console.log('Sending to n8n webhook:', messageToSend);
-      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: messageToSend,
-          chatInput: messageToSend
-        }),
-      });
-
-      console.log('Response status:', response.status);
-      let botResponse = '';
       
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Response data:', data);
-        
-        // Try multiple possible response formats from n8n
-        if (data && data.output) {
-          botResponse = data.output;
-        } else if (data && data.response) {
-          botResponse = data.response;
-        } else if (data && data.message) {
-          botResponse = data.message;
-        } else if (data && data.reply) {
-          botResponse = data.reply;
-        } else if (data && data.answer) {
-          botResponse = data.answer;
-        } else if (data && data.text) {
-          botResponse = data.text;
-        } else if (typeof data === 'string') {
-          botResponse = data;
-        } else if (data && data.body) {
-          botResponse = data.body;
-        } else {
-          console.log('Unexpected response format:', data);
-          botResponse = '';
+      // Try multiple request formats
+      const requestFormats = [
+        // Format 1: Simple message
+        { message: messageToSend },
+        // Format 2: chatInput field
+        { chatInput: messageToSend },
+        // Format 3: input field
+        { input: messageToSend },
+        // Format 4: query field
+        { query: messageToSend },
+        // Format 5: text field
+        { text: messageToSend }
+      ];
+      
+      let botResponse = '';
+      let success = false;
+      
+      for (let i = 0; i < requestFormats.length && !success; i++) {
+        try {
+          console.log(`Trying format ${i + 1}:`, requestFormats[i]);
+          const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestFormats[i]),
+          });
+
+          console.log(`Format ${i + 1} - Response status:`, response.status);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log(`Format ${i + 1} - Response data:`, data);
+            
+            // Try multiple possible response formats from n8n
+            if (data && data.output) {
+              botResponse = data.output;
+              success = true;
+            } else if (data && data.response) {
+              botResponse = data.response;
+              success = true;
+            } else if (data && data.message) {
+              botResponse = data.message;
+              success = true;
+            } else if (data && data.reply) {
+              botResponse = data.reply;
+              success = true;
+            } else if (data && data.answer) {
+              botResponse = data.answer;
+              success = true;
+            } else if (data && data.text) {
+              botResponse = data.text;
+              success = true;
+            } else if (typeof data === 'string') {
+              botResponse = data;
+              success = true;
+            } else if (data && data.body) {
+              botResponse = data.body;
+              success = true;
+            }
+            
+            if (success) {
+              console.log(`SUCCESS with format ${i + 1}! Response:`, botResponse);
+              break;
+            }
+          } else if (response.status === 500) {
+            console.log(`Format ${i + 1} - Server error 500, trying next format...`);
+          } else {
+            console.log(`Format ${i + 1} - Response not ok:`, response.status, response.statusText);
+          }
+        } catch (formatError) {
+          console.log(`Format ${i + 1} failed:`, formatError);
         }
-      } else {
-        console.log('Response not ok:', response.statusText);
+        
+        // Small delay between attempts
+        await new Promise(resolve => setTimeout(resolve, 200));
       }
       
-      console.log('Final botResponse:', botResponse);
+      console.log('Final botResponse:', botResponse, 'Success:', success);
       
       // Fallback to smart responses if webhook fails or returns nothing
       if (!botResponse) {

@@ -1,6 +1,7 @@
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import zoeImage from "@assets/Zoe_Website_1757416756555.jpg";
 
 export default function UeberUns() {
   return (
@@ -19,7 +20,7 @@ export default function UeberUns() {
           <div className="grid gap-6 lg:grid-cols-2 items-center">
             <div className="relative aspect-[3/4] w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-lg shadow-lg">
               <img
-                src="/images/zoe.jpg"
+                src={zoeImage}
                 alt="Zoë Hagen, Gründerin, Portrait im Büro"
                 className="w-full h-full object-cover"
                 loading="eager"

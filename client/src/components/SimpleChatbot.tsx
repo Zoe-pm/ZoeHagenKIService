@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createChat } from '@n8n/chat';
@@ -16,13 +16,13 @@ export function SimpleChatbot({ isOpen, onClose }: { isOpen: boolean; onClose: (
       createChat({
         webhookUrl: 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat',
         target: '#n8n-chat-modal',
-        mode: 'embedded',
-        defaultLanguage: 'de',
+        mode: 'window',
+        defaultLanguage: 'en',
         initialMessages: [
           'Hallo! Ich bin Ihre digitale Unterstützung. Womit kann ich helfen?'
         ],
         i18n: {
-          de: {
+          en: {
             title: 'Hallo!',
             subtitle: '24/7 an Ihrer Seite',
             footer: '',

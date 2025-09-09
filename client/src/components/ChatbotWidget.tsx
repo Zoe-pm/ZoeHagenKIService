@@ -70,7 +70,7 @@ export default function ChatbotWidget() {
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-80 h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden" data-testid="chatbot-window">
+        <div className="fixed bottom-24 right-6 z-40 w-80 max-h-[calc(100vh-8rem)] h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden" data-testid="chatbot-window">
           {/* Header */}
           <div className="button-gradient p-4 text-white">
             <div className="flex items-center gap-2">

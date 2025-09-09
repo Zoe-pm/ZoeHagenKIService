@@ -101,10 +101,16 @@ export default function UeberUns() {
               </div>
             </div>
             
-            <div className="mt-4 glass p-4 rounded border border-accent/20">
-              <h3 className="font-semibold text-accent mb-2">Enterprise Lösungen</h3>
+            <div className="mt-4 glass p-4 rounded border border-pink-300">
+              <h3 className="font-semibold text-pink-600 mb-2">Enterprise Lösungen</h3>
               <p className="text-sm text-muted-foreground">
-                Für größere Enterprise Lösungen kooperieren wir mit AICONIC.io und entwickeln 
+                Für größere Enterprise Lösungen kooperieren wir mit <a 
+                  href="https://web.aiconiq.io/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-pink-600 hover:underline font-medium"
+                  data-testid="aiconiq-link"
+                >AICONIQ.io</a> und entwickeln 
                 agentische KI-Lösungen für komplexe Unternehmensanforderungen.
               </p>
             </div>

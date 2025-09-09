@@ -111,7 +111,7 @@ export default function ContactForm() {
           {/* Contact Form */}
           <Card className="glass">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-6" data-testid="contact-form-title">
+              <h3 className="text-3xl font-bold mb-8 text-center" data-testid="contact-form-title">
                 Kostenlose Beratung buchen
               </h3>
               
@@ -127,6 +127,7 @@ export default function ContactForm() {
                           <Input 
                             placeholder="Max Mustermann" 
                             {...field} 
+                            className="text-lg p-4 border-2 border-muted bg-white shadow-sm focus:border-primary focus:shadow-md transition-all"
                             data-testid="contact-form-name"
                           />
                         </FormControl>
@@ -146,6 +147,7 @@ export default function ContactForm() {
                             type="email" 
                             placeholder="max@unternehmen.de" 
                             {...field}
+                            className="text-lg p-4 border-2 border-muted bg-white shadow-sm focus:border-primary focus:shadow-md transition-all"
                             data-testid="contact-form-email"
                           />
                         </FormControl>
@@ -164,6 +166,7 @@ export default function ContactForm() {
                           <Input 
                             placeholder="Mustermann GmbH" 
                             {...field}
+                            className="text-lg p-4 border-2 border-muted bg-white shadow-sm focus:border-primary focus:shadow-md transition-all"
                             data-testid="contact-form-company"
                           />
                         </FormControl>
@@ -180,7 +183,7 @@ export default function ContactForm() {
                         <FormLabel>Interesse an</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger data-testid="contact-form-interest">
+                            <SelectTrigger className="text-lg p-4 border-2 border-muted bg-white shadow-sm focus:border-primary focus:shadow-md transition-all" data-testid="contact-form-interest">
                               <SelectValue placeholder="Bitte wählen" />
                             </SelectTrigger>
                           </FormControl>
@@ -208,6 +211,7 @@ export default function ContactForm() {
                             rows={4}
                             placeholder="Beschreiben Sie kurz Ihre Anforderungen..."
                             {...field}
+                            className="text-lg p-4 border-2 border-muted bg-white shadow-sm focus:border-primary focus:shadow-md transition-all resize-none"
                             data-testid="contact-form-message"
                           />
                         </FormControl>
@@ -241,14 +245,14 @@ export default function ContactForm() {
                     <Phone className="text-accent text-lg mr-4" />
                     <div>
                       <p className="font-medium">Telefon</p>
-                      <p className="text-muted-foreground">+49 (0) 123 456 789</p>
+                      <p className="text-muted-foreground">01719862773</p>
                     </div>
                   </div>
                   <div className="flex items-center" data-testid="contact-email">
                     <Mail className="text-accent text-lg mr-4" />
                     <div>
                       <p className="font-medium">E-Mail</p>
-                      <p className="text-muted-foreground">kontakt@ki-assistenten.de</p>
+                      <p className="text-muted-foreground">zoe-kiconsulting@pm.me</p>
                     </div>
                   </div>
                   <div className="flex items-center" data-testid="contact-hours">
@@ -283,14 +287,6 @@ export default function ContactForm() {
                   >
                     <Download className="mr-2 h-4 w-4" />
                     Produktbroschüre laden
-                  </Button>
-                  <Button
-                    className="w-full button-gradient py-3 px-4 font-medium"
-                    onClick={() => handleQuickAction("ROI-Rechner")}
-                    data-testid="quick-action-calculator"
-                  >
-                    <Calculator className="mr-2 h-4 w-4" />
-                    ROI-Rechner starten
                   </Button>
                 </div>
               </CardContent>

@@ -24,8 +24,8 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         createChat({
           webhookUrl: 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat',
           target: '#n8n-chat-container',
-          mode: 'window',
-          defaultLanguage: 'de',
+          mode: 'window' as any,
+          defaultLanguage: 'de' as any,
           initialMessages: [
             'Hallo! Ich bin Ihre digitale Unterstützung. Womit kann ich helfen?'
           ],
@@ -36,8 +36,9 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
               footer: 'Schön dass Sie da sind!',
               getStarted: 'Frag mich was!',
               inputPlaceholder: 'Fragen Sie mich was...',
+              closeButtonTooltip: 'Schließen'
             }
-          }
+          } as any
         });
         
         chatInitialized.current = true;

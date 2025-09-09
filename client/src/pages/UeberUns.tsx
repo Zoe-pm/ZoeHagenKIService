@@ -65,12 +65,49 @@ export default function UeberUns() {
         <section className="mx-auto max-w-6xl px-4 py-4" data-testid="team-section">
           <div className="glass p-6 rounded-lg">
             <h2 className="text-2xl font-bold mb-4 text-primary">Ein starkes Team an meiner Seite</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Für jedes Projekt stelle ich das passende Team zusammen: erfahrene Webdesigner für moderne
-              Websites mit KI-Integration, mein Netzwerk rund um AICONIQ für agentische KI-Lösungen sowie
-              Spezialisten für Automatisierung und Datenschutz. So liefern wir schnelle Ergebnisse bei kleinen
-              Vorhaben und bleiben auch bei größeren Umsetzungen zuverlässig.
+            <p className="text-muted-foreground leading-relaxed mb-6">
+              Wir sind ein Team, das nicht nur KI-Lösungen entwickelt, sondern auch die passende digitale Infrastruktur bereitstellt. 
+              So kombinieren wir innovative KI-Tools mit professionellem Webdesign, sicherem Betrieb und Barrierefreiheit – für digitale 
+              Lösungen, die wirklich nachhaltig und zukunftsfähig sind.
             </p>
+            
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="glass p-4 rounded border border-primary/20">
+                <h3 className="font-semibold text-primary mb-2">Webdesign & UX</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Gemeinsam mit der Webdesign-Firma <a 
+                    href="https://www.krawall-frankfurt.de/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline font-medium"
+                    data-testid="krawall-link"
+                  >Krawall aus Frankfurt</a> bieten wir modernes, professionelles Webdesign. 
+                  Lisa Erwall sorgt für klare, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
+                </p>
+              </div>
+              
+              <div className="glass p-4 rounded border border-primary/20">
+                <h3 className="font-semibold text-primary mb-2">Hosting & Security</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  <a 
+                    href="https://www.erpa-web.de/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline font-medium"
+                    data-testid="patrick-weber-link"
+                  >Patrick Weber</a> kümmert sich um DSGVO-konformes Hosting, Datenschutz und IT-Security, 
+                  damit deine Website jederzeit sicher und zuverlässig läuft.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-4 glass p-4 rounded border border-accent/20">
+              <h3 className="font-semibold text-accent mb-2">Enterprise Lösungen</h3>
+              <p className="text-sm text-muted-foreground">
+                Für größere Enterprise Lösungen kooperieren wir mit AICONIC.io und entwickeln 
+                agentische KI-Lösungen für komplexe Unternehmensanforderungen.
+              </p>
+            </div>
           </div>
         </section>
 

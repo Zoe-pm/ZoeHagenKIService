@@ -109,10 +109,10 @@ export default function ContactForm() {
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="glass">
+          <Card className="glass" style={{background: 'linear-gradient(135deg, rgba(167, 199, 231, 0.1) 0%, rgba(93, 173, 226, 0.15) 50%, rgba(88, 181, 142, 0.1) 100%)'}}>
             <CardContent className="p-8">
-              <h3 className="text-3xl font-bold mb-8 text-center" data-testid="contact-form-title">
-                Kostenlose Beratung buchen
+              <h3 className="text-2xl font-bold mb-8 text-center" data-testid="contact-form-title">
+                Bereit für Ihr Service-Update?<br />Beratungstermin anfragen
               </h3>
               
               <Form {...contactForm}>
@@ -122,7 +122,7 @@ export default function ContactForm() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ihr Name *</FormLabel>
+                        <FormLabel className="text-lg font-semibold">Ihr Name *</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Max Mustermann" 
@@ -141,7 +141,7 @@ export default function ContactForm() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>E-Mail-Adresse *</FormLabel>
+                        <FormLabel className="text-lg font-semibold">E-Mail-Adresse *</FormLabel>
                         <FormControl>
                           <Input 
                             type="email" 
@@ -161,7 +161,7 @@ export default function ContactForm() {
                     name="company"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Unternehmen</FormLabel>
+                        <FormLabel className="text-lg font-semibold">Unternehmen</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Mustermann GmbH" 
@@ -180,7 +180,7 @@ export default function ContactForm() {
                     name="interest"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Interesse an</FormLabel>
+                        <FormLabel className="text-lg font-semibold">Interesse an</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="text-lg p-4 border-2 border-muted bg-white shadow-sm focus:border-primary focus:shadow-md transition-all" data-testid="contact-form-interest">
@@ -205,7 +205,7 @@ export default function ContactForm() {
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ihre Nachricht</FormLabel>
+                        <FormLabel className="text-lg font-semibold">Ihre Nachricht</FormLabel>
                         <FormControl>
                           <Textarea 
                             rows={4}
@@ -245,7 +245,13 @@ export default function ContactForm() {
                     <Phone className="text-accent text-lg mr-4" />
                     <div>
                       <p className="font-medium">Telefon</p>
-                      <p className="text-muted-foreground">01719862773</p>
+                      <a 
+                        href="tel:+4917198627773" 
+                        className="text-primary font-medium hover:underline"
+                        data-testid="phone-link"
+                      >
+                        +49 171 9862773
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-center" data-testid="contact-email">
@@ -253,13 +259,6 @@ export default function ContactForm() {
                     <div>
                       <p className="font-medium">E-Mail</p>
                       <p className="text-muted-foreground">zoe-kiconsulting@pm.me</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center" data-testid="contact-hours">
-                    <Calendar className="text-accent text-lg mr-4" />
-                    <div>
-                      <p className="font-medium">Terminbuchung</p>
-                      <p className="text-muted-foreground">Mo-Fr, 9:00-18:00 Uhr</p>
                     </div>
                   </div>
                 </div>

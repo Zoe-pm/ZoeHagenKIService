@@ -100,7 +100,7 @@
   
   /* Footer Verlauf */
   .footer-gradient {
-    background: linear-gradient(180deg, #E8E2D5 0%, #D4C5B3 100%);
+    background: linear-gradient(180deg, #E8E2D5 0%, #C4B5A3 50%, #B4A393 100%);
   }
   
   .voice-pulse {

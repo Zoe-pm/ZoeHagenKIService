@@ -21,7 +21,7 @@ const products = [
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
-    buttonText: "jetzt loschatten"
+    buttonText: "Jetzt chatten"
   },
   {
     id: "voicebot",

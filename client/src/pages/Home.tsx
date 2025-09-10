@@ -20,7 +20,7 @@ const products = [
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
-    buttonText: "Demo testen"
+    buttonText: "Testen Sie mich!"
   },
   {
     id: "voicebot",
@@ -30,7 +30,7 @@ const products = [
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
-    buttonText: "Jetzt anrufen"
+    buttonText: "Testen Sie mich!"
   },
   {
     id: "avatar",
@@ -94,12 +94,12 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in text-white" data-testid="hero-title">
-                  <span>
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
+                  <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
                     KI mit Herz & Hirn
                   </span>
                   <br />
-                  <span className="text-2xl md:text-3xl">– sichere, digitale Teammitglieder für Ihren Service.</span>
+                  <span className="text-2xl md:text-3xl text-white">– sichere, digitale Teammitglieder für Ihren Service.</span>
                 </h1>
                 <p className="text-xl text-white/90 mb-8 fade-in" data-testid="hero-subtitle">
                   Ihre digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.

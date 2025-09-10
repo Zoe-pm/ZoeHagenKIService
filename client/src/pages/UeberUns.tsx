@@ -29,8 +29,11 @@ export default function UeberUns() {
               />
             </div>
             <div className="text-center lg:text-left">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white" data-testid="main-title">
-                KI mit Herz & Hirn – von Menschen für Menschen
+              <h1 className="text-3xl md:text-4xl font-bold mb-4" data-testid="main-title">
+                <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+                  KI mit Herz & Hirn
+                </span>
+                <span className="text-white"> – von Menschen für Menschen</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed" data-testid="intro-text">
                 Ich bin Zoë Hagen, Gründerin von Zoë Hagen KI Consulting und der KI Toolbox.
@@ -54,7 +57,7 @@ export default function UeberUns() {
         {/* Wer wir sind */}
         <section className="mx-auto max-w-6xl px-4 py-4" data-testid="who-we-are-section">
           <div className="glass p-6 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Wer hinter der KI Toolbox steht</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary">Herz & Hirn: unser Ansatz</h2>
             <p className="text-muted-foreground leading-relaxed">
               Ich verbinde klare Umsetzung mit einem systemischen Blick auf Prozesse und Menschen.
               Ziel ist immer ein Service, der sich leicht anfühlt und verlässlich funktioniert – ohne Hürden
@@ -84,7 +87,7 @@ export default function UeberUns() {
                     className="text-primary hover:underline font-medium"
                     data-testid="krawall-link"
                   >Krawall aus Frankfurt</a> bieten wir modernes, professionelles Webdesign. 
-                  Lisa Erwall sorgt für klare, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
+                  Lisa Erwall sorgt für individuell designte, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
                 </p>
               </div>
               

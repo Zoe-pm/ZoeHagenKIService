@@ -57,7 +57,7 @@ export default function UeberUns() {
         {/* Wer wir sind */}
         <section className="mx-auto max-w-6xl px-4 py-4" data-testid="who-we-are-section">
           <div className="glass p-6 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Herz & Hirn: unser Ansatz</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary">Herz & Hirn: verständlich, sicher, persönlich</h2>
             <p className="text-muted-foreground leading-relaxed">
               Ich verbinde klare Umsetzung mit einem systemischen Blick auf Prozesse und Menschen.
               Ziel ist immer ein Service, der sich leicht anfühlt und verlässlich funktioniert – ohne Hürden

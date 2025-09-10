@@ -19,7 +19,7 @@ export default function UeberUns() {
         {/* Hero */}
         <section className="mx-auto max-w-6xl px-4 pt-6 pb-6" data-testid="hero-section">
           <div className="grid gap-6 lg:grid-cols-2 items-center">
-            <div className="relative aspect-[3/4] w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-lg shadow-lg">
+            <div className="relative aspect-[3/4] w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 overflow-hidden rounded-lg shadow-lg">
               <img
                 src={zoeImage}
                 alt="Zoë Hagen, Gründerin, Portrait im Büro"

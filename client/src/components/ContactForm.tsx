@@ -112,7 +112,7 @@ export default function ContactForm() {
           <Card className="glass" style={{background: 'linear-gradient(135deg, rgba(167, 199, 231, 0.1) 0%, rgba(93, 173, 226, 0.15) 50%, rgba(88, 181, 142, 0.1) 100%)'}}>
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold mb-8 text-center" data-testid="contact-form-title">
-                Bereit für Ihr Service-Update?<br />Beratungstermin anfragen
+                Interesse an unseren KI-Lösungen?<br />Jetzt Kontakt aufnehmen
               </h3>
               
               <Form {...contactForm}>
@@ -258,7 +258,13 @@ export default function ContactForm() {
                     <Mail className="text-accent text-lg mr-4" />
                     <div>
                       <p className="font-medium">E-Mail</p>
-                      <p className="text-muted-foreground">zoe-kiconsulting@pm.me</p>
+                      <a 
+                        href="mailto:zoe-kiconsulting@pm.me" 
+                        className="text-primary font-medium hover:underline"
+                        data-testid="email-link"
+                      >
+                        zoe-kiconsulting@pm.me
+                      </a>
                     </div>
                   </div>
                 </div>

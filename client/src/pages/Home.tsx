@@ -20,7 +20,7 @@ const products = [
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
-    buttonText: "Testen Sie mich!"
+    buttonText: "jetzt loschatten"
   },
   {
     id: "voicebot",
@@ -30,7 +30,7 @@ const products = [
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
-    buttonText: "Testen Sie mich!"
+    buttonText: "Sprechen Sie mit mir"
   },
   {
     id: "avatar",
@@ -95,7 +95,7 @@ export default function Home() {
             <div className="text-center mb-12">
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-teal-400 bg-clip-text text-transparent font-extrabold">
                     KI mit Herz & Hirn
                   </span>
                   <br />

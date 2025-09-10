@@ -30,7 +30,7 @@ export default function UeberUns() {
             </div>
             <div className="text-center lg:text-left">
               <h1 className="text-3xl md:text-4xl font-bold mb-4" data-testid="main-title">
-                <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-teal-400 bg-clip-text text-transparent font-extrabold">
                   KI mit Herz & Hirn
                 </span>
                 <span className="text-white"> – von Menschen für Menschen</span>

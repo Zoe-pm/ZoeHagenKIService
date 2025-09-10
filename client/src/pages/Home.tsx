@@ -95,7 +95,7 @@ export default function Home() {
             <div className="text-center mb-12">
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
-                  <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-teal-400 bg-clip-text text-transparent font-extrabold">
+                  <span className="text-white">
                     KI mit Herz & Hirn
                   </span>
                   <br />

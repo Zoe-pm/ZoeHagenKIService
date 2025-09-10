@@ -26,8 +26,8 @@ export default function ProductCard({
   onButtonClick
 }: ProductCardProps) {
   return (
-    <Card className="glass hover-lift focus-within:ring-2 focus-within:ring-ring fade-in" data-testid={`product-card-${id}`}>
-      <CardContent className="p-4">
+    <Card className="glass hover-lift focus-within:ring-2 focus-within:ring-ring fade-in h-full flex flex-col" data-testid={`product-card-${id}`}>
+      <CardContent className="p-4 flex flex-col h-full">
         <img 
           src={image} 
           alt={`${title} Interface-Darstellung`}
@@ -49,7 +49,7 @@ export default function ProductCard({
           {description}
         </p>
         
-        <div className="space-y-1 mb-4 text-sm">
+        <div className="space-y-1 mb-4 text-sm flex-grow">
           {features.map((feature, index) => (
             <div key={index} className="flex items-center" data-testid={`product-feature-${id}-${index}`}>
               <CheckCircle className="w-4 h-4 text-accent mr-2 flex-shrink-0" />

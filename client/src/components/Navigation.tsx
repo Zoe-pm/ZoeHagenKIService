@@ -29,7 +29,7 @@ export default function Navigation() {
                   className="h-12 w-auto cursor-pointer" 
                   data-testid="logo"
                 />
-                <span className="text-xl font-bold text-teal-600" data-testid="company-name">
+                <span className="text-xl font-bold text-blue-500" data-testid="company-name">
                   Zoë's KI Studio
                 </span>
               </Link>

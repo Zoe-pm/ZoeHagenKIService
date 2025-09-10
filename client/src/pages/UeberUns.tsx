@@ -36,7 +36,7 @@ export default function UeberUns() {
                 <span className="text-white"> – von Menschen für Menschen</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed" data-testid="intro-text">
-                Ich bin Zoë Hagen, Gründerin von Zoë Hagen KI Consulting und der KI Toolbox.
+                Ich bin Zoë Hagen, Gründerin von Zoë's KI Studio.
                 Meine Mission: KI so gestalten, dass sie Unternehmen entlastet, Abläufe vereinfacht
                 und Menschen mehr Freiraum gibt – verständlich, sicher und persönlich.
               </p>

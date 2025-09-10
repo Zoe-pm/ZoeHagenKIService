@@ -57,21 +57,25 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       console.log('URL:', 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat');
       console.log('Message being sent:', messageToSend);
       
-      const requestBody = {
+      console.log('Query parameters will be:', {
         message: messageToSend,
-        sessionId: `session-${Date.now()}`, // n8n erwartet sessionId
-        chatId: `chat-${Date.now()}`, // n8n erwartet auch chatId
+        sessionId: `session-${Date.now()}`,
+        chatId: `chat-${Date.now()}`,
         timestamp: new Date().toISOString(),
         source: 'website-chatbot'
-      };
-      console.log('Request body:', JSON.stringify(requestBody, null, 2));
+      });
 
-      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
+      // n8n erwartet GET mit Query-Parametern, nicht POST mit JSON
+      const params = new URLSearchParams({
+        message: messageToSend,
+        sessionId: `session-${Date.now()}`,
+        chatId: `chat-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        source: 'website-chatbot'
+      });
+      
+      const response = await fetch(`https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat?${params}`, {
+        method: 'GET',
       });
 
       console.log('Response status:', response.status);
@@ -83,12 +87,13 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       const responseText = await response.text();
       console.log('Raw response text:', responseText);
       
+      // n8n könnte Text oder JSON zurückgeben
       try {
         data = JSON.parse(responseText);
         console.log('Parsed JSON data:', data);
       } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        throw new Error(`Response ist kein gültiges JSON: ${responseText}`);
+        console.log('Response is not JSON, using as text:', responseText);
+        data = responseText; // Verwende Text direkt als Antwort
       }
       
       if (response.ok) {
@@ -126,8 +131,8 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       console.log('=== CHATBOT DEBUG END ===');
     } catch (error) {
       console.error('=== CHATBOT FETCH ERROR ===');
-      console.error('Error type:', error.constructor.name);
-      console.error('Error message:', error.message);
+      console.error('Error type:', error instanceof Error ? error.constructor.name : typeof error);
+      console.error('Error message:', error instanceof Error ? error.message : String(error));
       console.error('Full error:', error);
       console.error('=== END FETCH ERROR ===');
       

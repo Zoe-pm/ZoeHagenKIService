@@ -53,18 +53,6 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
-      console.log('=== CHATBOT DEBUG START ===');
-      console.log('URL:', 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat');
-      console.log('Message being sent:', messageToSend);
-      
-      console.log('Query parameters will be:', {
-        message: messageToSend,
-        sessionId: `session-${Date.now()}`,
-        chatId: `chat-${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        source: 'website-chatbot'
-      });
-
       // n8n erwartet GET mit Query-Parametern, nicht POST mit JSON
       const params = new URLSearchParams({
         message: messageToSend,
@@ -78,21 +66,13 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         method: 'GET',
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response statusText:', response.statusText);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-      console.log('Response ok:', response.ok);
-
       let data;
       const responseText = await response.text();
-      console.log('Raw response text:', responseText);
       
       // n8n könnte Text oder JSON zurückgeben
       try {
         data = JSON.parse(responseText);
-        console.log('Parsed JSON data:', data);
       } catch (parseError) {
-        console.log('Response is not JSON, using as text:', responseText);
         data = responseText; // Verwende Text direkt als Antwort
       }
       
@@ -109,7 +89,6 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
           botResponse = JSON.stringify(data);
         }
 
-        console.log('Bot response:', botResponse);
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
           text: botResponse,
@@ -120,21 +99,10 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       } else {
         // Show the actual error from n8n
         const errorText = data?.message || data?.error || JSON.stringify(data) || `HTTP ${response.status} Error`;
-        console.error('n8n Workflow Fehler Details:', {
-          status: response.status,
-          statusText: response.statusText,
-          data: data,
-          errorText: errorText
-        });
         throw new Error(`n8n Workflow Error (${response.status}): ${errorText}`);
       }
-      console.log('=== CHATBOT DEBUG END ===');
     } catch (error) {
-      console.error('=== CHATBOT FETCH ERROR ===');
-      console.error('Error type:', error instanceof Error ? error.constructor.name : typeof error);
-      console.error('Error message:', error instanceof Error ? error.message : String(error));
-      console.error('Full error:', error);
-      console.error('=== END FETCH ERROR ===');
+      console.error('Chatbot error:', error);
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),

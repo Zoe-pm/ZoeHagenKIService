@@ -60,6 +60,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       const requestBody = {
         message: messageToSend,
         sessionId: `session-${Date.now()}`, // n8n erwartet sessionId
+        chatId: `chat-${Date.now()}`, // n8n erwartet auch chatId
         timestamp: new Date().toISOString(),
         source: 'website-chatbot'
       };

@@ -53,10 +53,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
-      // Debug: Test verschiedene Formate für n8n Embedded Chat
-      console.log('Testing n8n Embedded Chat format...');
-      
-      // Format 1: POST mit JSON (für Embedded Chat Mode)
+      // n8n Embedded Chat Format
       const sessionId = `session-${Date.now()}`;
       const chatData = {
         input: messageToSend,
@@ -64,8 +61,6 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         chatId: `chat-${Date.now()}`,
         timestamp: new Date().toISOString()
       };
-      
-      console.log('Sending chat data:', chatData);
       
       const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
         method: 'POST',
@@ -88,7 +83,10 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       if (response.ok) {
         let botResponse = '';
         
-        if (data && data.response) {
+        if (data && data.output) {
+          // n8n Embedded Chat gibt "output" Feld zurück
+          botResponse = data.output;
+        } else if (data && data.response) {
           botResponse = data.response;
         } else if (data && data.message) {
           botResponse = data.message;

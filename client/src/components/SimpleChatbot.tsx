@@ -132,9 +132,9 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-20 right-4 z-40 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-96 glass rounded-lg shadow-xl border border-primary/20 overflow-hidden">
+    <div className="fixed bottom-24 right-4 z-40 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-[32rem] max-h-[calc(100vh-6rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col">
       {/* Header */}
-      <div className="button-gradient p-4 text-white flex justify-between items-center">
+      <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
           <h3 className="font-semibold">Hallo!</h3>
           <p className="text-sm opacity-90">24/7 an Ihrer Seite</p>
@@ -150,7 +150,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 h-64 overflow-y-auto space-y-3" data-testid="chat-messages">
+      <div className="flex-1 p-4 overflow-y-auto space-y-3" data-testid="chat-messages">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -183,7 +183,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t border-border flex-shrink-0">
         <div className="flex gap-2">
           <Input
             value={inputText}
@@ -213,7 +213,7 @@ export function ChatbotButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       onClick={onClick}
-      className="fixed bottom-4 right-4 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
+      className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
       aria-label="Chat öffnen"
       data-testid="chatbot-toggle"
     >

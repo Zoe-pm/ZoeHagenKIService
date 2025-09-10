@@ -135,14 +135,44 @@ export default function Home() {
               ))}
             </section>
 
-            {/* Benefits */}
-            <section className="py-6 px-4 sm:px-6 lg:px-8" data-testid="benefits-section">
+            {/* Micro-Trust */}
+            <section className="py-6 px-4 sm:px-6 lg:px-8" data-testid="micro-trust-section">
               <div className="max-w-4xl mx-auto">
-                <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-muted-foreground">
+                <ul className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center text-muted-foreground text-sm">
                   <li>• DSGVO-konform</li>
-                  <li>• einfache Implementierung</li>
-                  <li>• laufender Support</li>
+                  <li>• Barrierearm</li>
+                  <li>• Hosting in der EU</li>
+                  <li>• Laufender Support</li>
                 </ul>
+              </div>
+            </section>
+
+            {/* So arbeiten wir */}
+            <section className="py-8 px-4 sm:px-6 lg:px-8" data-testid="process-section">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-2xl font-bold text-center mb-8 text-white">So arbeiten wir</h2>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="bg-primary/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 text-primary font-bold">1</div>
+                    <h3 className="font-semibold text-white mb-2">Erstgespräch (30 Min.)</h3>
+                    <p className="text-sm text-white/80">Ziele & Use-Cases klären</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-primary/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 text-primary font-bold">2</div>
+                    <h3 className="font-semibold text-white mb-2">Pilot (2 Wochen)</h3>
+                    <p className="text-sm text-white/80">Prototyp mit echtem Inhalt</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-primary/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 text-primary font-bold">3</div>
+                    <h3 className="font-semibold text-white mb-2">Rollout</h3>
+                    <p className="text-sm text-white/80">Schulung, Feinschliff, Go-Live</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-primary/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 text-primary font-bold">4</div>
+                    <h3 className="font-semibold text-white mb-2">Support</h3>
+                    <p className="text-sm text-white/80">Monitoring & laufende Optimierung</p>
+                  </div>
+                </div>
               </div>
             </section>
           </div>

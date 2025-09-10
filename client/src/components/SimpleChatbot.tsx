@@ -53,17 +53,26 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
-      // n8n erwartet GET mit Query-Parametern, nicht POST mit JSON
-      const params = new URLSearchParams({
-        message: messageToSend,
-        sessionId: `session-${Date.now()}`,
-        chatId: `chat-${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        source: 'website-chatbot'
-      });
+      // Debug: Test verschiedene Formate für n8n Embedded Chat
+      console.log('Testing n8n Embedded Chat format...');
       
-      const response = await fetch(`https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat?${params}`, {
-        method: 'GET',
+      // Format 1: POST mit JSON (für Embedded Chat Mode)
+      const sessionId = `session-${Date.now()}`;
+      const chatData = {
+        input: messageToSend,
+        sessionId: sessionId,
+        chatId: `chat-${Date.now()}`,
+        timestamp: new Date().toISOString()
+      };
+      
+      console.log('Sending chat data:', chatData);
+      
+      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(chatData),
       });
 
       let data;

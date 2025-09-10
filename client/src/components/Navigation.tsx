@@ -22,13 +22,16 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <Link href="/">
+              <Link href="/" className="flex items-center space-x-3">
                 <img 
                   src={logoImage} 
                   alt="Zoë Hagen KI Consulting Logo" 
                   className="h-12 w-auto cursor-pointer" 
                   data-testid="logo"
                 />
+                <span className="text-xl font-bold text-foreground" data-testid="company-name">
+                  Zoë's KI Studio
+                </span>
               </Link>
             </div>
             

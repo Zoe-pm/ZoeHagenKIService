@@ -53,19 +53,41 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
+      console.log('=== CHATBOT DEBUG START ===');
+      console.log('URL:', 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat');
+      console.log('Message being sent:', messageToSend);
+      
+      const requestBody = {
+        message: messageToSend,
+        timestamp: new Date().toISOString(),
+        source: 'website-chatbot'
+      };
+      console.log('Request body:', JSON.stringify(requestBody, null, 2));
+
       const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          message: messageToSend,
-          timestamp: new Date().toISOString(),
-          source: 'website-chatbot'
-        }),
+        body: JSON.stringify(requestBody),
       });
 
-      const data = await response.json();
+      console.log('Response status:', response.status);
+      console.log('Response statusText:', response.statusText);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      console.log('Response ok:', response.ok);
+
+      let data;
+      const responseText = await response.text();
+      console.log('Raw response text:', responseText);
+      
+      try {
+        data = JSON.parse(responseText);
+        console.log('Parsed JSON data:', data);
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        throw new Error(`Response ist kein gültiges JSON: ${responseText}`);
+      }
       
       if (response.ok) {
         let botResponse = '';
@@ -80,6 +102,7 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
           botResponse = JSON.stringify(data);
         }
 
+        console.log('Bot response:', botResponse);
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
           text: botResponse,
@@ -90,10 +113,22 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
       } else {
         // Show the actual error from n8n
         const errorText = data?.message || data?.error || JSON.stringify(data) || `HTTP ${response.status} Error`;
+        console.error('n8n Workflow Fehler Details:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: data,
+          errorText: errorText
+        });
         throw new Error(`n8n Workflow Error (${response.status}): ${errorText}`);
       }
+      console.log('=== CHATBOT DEBUG END ===');
     } catch (error) {
-      console.error('Chat error:', error);
+      console.error('=== CHATBOT FETCH ERROR ===');
+      console.error('Error type:', error.constructor.name);
+      console.error('Error message:', error.message);
+      console.error('Full error:', error);
+      console.error('=== END FETCH ERROR ===');
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773',

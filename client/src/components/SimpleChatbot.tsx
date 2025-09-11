@@ -56,38 +56,32 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     try {
       let botResponse: string;
       
-      // Production chatbot - exact same approach as TestChatbot
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL_PROD;
-      console.log('JUNA: Webhook URL verfügbar:', !!webhookUrl);
-      
-      if (webhookUrl) {
-        // Direct n8n API Call (same as TestChatbot)
-        try {
-          const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: messageToSend,
-              botName: "Zoë KI Studio Assistant",
-              sessionId: `juna-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-            })
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            botResponse = data.response || data.message || 'Entschuldigung, keine Antwort erhalten.';
-          } else {
-            botResponse = `[n8n Fehler ${response.status}] Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL.`;
-          }
-        } catch (n8nError) {
-          console.error('n8n API Error:', n8nError);
-          botResponse = '[n8n Verbindungsfehler] Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL und Internetverbindung.';
+      // Production chatbot - use server endpoint (secure)
+      console.log('JUNA: Verwende Server-Endpoint für sicheren Webhook-Aufruf');
+      try {
+        const response = await fetch('/api/prod-chatbot', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageToSend,
+            botName: "Juna Zoes KI Studio",
+            sessionId: `juna-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          botResponse = data.response || 'Entschuldigung, keine Antwort erhalten.';
+        } else {
+          console.error('JUNA: Server Error:', data);
+          botResponse = `[Server Fehler ${response.status}] Juna ist nicht erreichbar.`;
         }
-      } else {
-        console.error('JUNA: Kein Webhook konfiguriert!');
-        botResponse = 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773';
+      } catch (serverError) {
+        console.error('JUNA: Server API Error:', serverError);
+        botResponse = '[Server Verbindungsfehler] Juna ist nicht erreichbar. Bitte prüfen Sie die Verbindung.';
       }
 
       const botMessage: Message = {

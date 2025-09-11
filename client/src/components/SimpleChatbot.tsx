@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,10 +17,20 @@ interface SimpleChatbotProps {
 }
 
 export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps) {
+  // Stable session ID for Juna
+  const getSessionId = () => {
+    let sessionId = localStorage.getItem('junaSessionId');
+    if (!sessionId) {
+      sessionId = `juna-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('junaSessionId', sessionId);
+    }
+    return sessionId;
+  };
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hallo! Ich bin Ihre digitale Unterstützung. Womit kann ich helfen?',
+      text: 'Hallo! Ich bin Juna, Ihre digitale Unterstützung. Womit kann ich helfen?',
       sender: 'bot',
       timestamp: new Date()
     }
@@ -56,32 +65,29 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     try {
       let botResponse: string;
       
-      // Production chatbot - use server endpoint (secure)
       console.log('JUNA: Verwende Server-Endpoint für sicheren Webhook-Aufruf');
-      try {
-        const response = await fetch('/api/prod-chatbot', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: messageToSend,
-            botName: "Juna Zoes KI Studio",
-            sessionId: `juna-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-          })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.success) {
-          botResponse = data.response || 'Entschuldigung, keine Antwort erhalten.';
-        } else {
-          console.error('JUNA: Server Error:', data);
-          botResponse = `[Server Fehler ${response.status}] Juna ist nicht erreichbar.`;
-        }
-      } catch (serverError) {
-        console.error('JUNA: Server API Error:', serverError);
-        botResponse = '[Server Verbindungsfehler] Juna ist nicht erreichbar. Bitte prüfen Sie die Verbindung.';
+      
+      const response = await fetch('/api/prod-chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: messageToSend,
+          botName: "Juna Zoes KI Studio",
+          sessionId: getSessionId()
+        })
+      });
+      
+      console.log('JUNA: Request mit sessionId:', getSessionId());
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        botResponse = data.response || 'Entschuldigung, keine Antwort erhalten.';
+      } else {
+        console.error('JUNA: Server Error:', data);
+        botResponse = `[Server Fehler ${response.status}] Juna ist nicht erreichbar.`;
       }
 
       const botMessage: Message = {
@@ -91,8 +97,9 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         timestamp: new Date()
       };
       setMessages(prev => [...prev, botMessage]);
+      
     } catch (error) {
-      console.error('Chatbot error:', error);
+      console.error('JUNA: Chatbot error:', error);
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -119,14 +126,15 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
-          <h3 className="font-semibold">Hallo!</h3>
-          <p className="text-sm opacity-90">24/7 an Ihrer Seite</p>
+          <h3 className="font-semibold">Juna</h3>
+          <p className="text-sm opacity-90">Zoes KI Studio</p>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={onClose}
           className="text-white hover:bg-white/20"
+          data-testid="button-close-chat"
         >
           <X className="h-4 w-4" />
         </Button>
@@ -140,21 +148,23 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
             className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] p-3 rounded-lg text-sm ${
+              className={`max-w-[80%] rounded-lg p-3 ${
                 message.sender === 'user'
-                  ? 'bg-primary text-white'
-                  : 'bg-muted text-muted-foreground'
+                  ? 'bg-primary text-primary-foreground ml-4'
+                  : 'bg-muted mr-4'
               }`}
-              data-testid={`message-${message.sender}`}
             >
-              {message.text}
+              <p className="text-sm">{message.text}</p>
+              <span className="text-xs opacity-70 mt-1 block">
+                {message.timestamp.toLocaleTimeString()}
+              </span>
             </div>
           </div>
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-muted text-muted-foreground p-3 rounded-lg text-sm">
-              <div className="flex gap-1">
+            <div className="bg-muted rounded-lg p-3 mr-4">
+              <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                 <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -166,23 +176,23 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-border flex-shrink-0">
-        <div className="flex gap-2">
+      <div className="p-4 border-t border-primary/20 flex-shrink-0">
+        <div className="flex space-x-2">
           <Input
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Fragen Sie mich was..."
-            className="flex-1"
             disabled={isLoading}
-            data-testid="chat-input"
+            className="flex-1"
+            data-testid="input-chat"
           />
           <Button
             onClick={handleSendMessage}
             disabled={isLoading || !inputText.trim()}
             size="sm"
             className="button-gradient"
-            data-testid="send-button"
+            data-testid="button-send-message"
           >
             <Send className="h-4 w-4" />
           </Button>
@@ -196,9 +206,8 @@ export function ChatbotButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
-      aria-label="Chat öffnen"
-      data-testid="chatbot-toggle"
+      className="fixed bottom-4 right-4 z-50 rounded-full w-14 h-14 button-gradient shadow-lg hover:shadow-xl transition-all duration-300"
+      data-testid="button-open-chat"
     >
       <MessageCircle className="h-6 w-6" />
     </Button>

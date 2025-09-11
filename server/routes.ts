@@ -420,13 +420,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-session-id': req.body.sessionId || 'juna-fallback-session'
         },
         body: JSON.stringify({
           message: message,
-          botName: "Zoë KI Studio Assistant"
+          botName: req.body.botName || "Juna Zoes KI Studio Assistant",
+          sessionId: req.body.sessionId || 'juna-fallback-session',
+          session_id: req.body.sessionId || 'juna-fallback-session',
+          timestamp: new Date().toISOString(),
+          source: 'website-chatbot'
         }),
         signal: AbortSignal.timeout(10000) // 10 second timeout
       });
+
+      console.log('JUNA: n8n Request sent with sessionId:', req.body.sessionId);
 
       if (!response.ok) {
         return res.status(502).json({ success: false, message: "Chatbot ist momentan nicht erreichbar" });

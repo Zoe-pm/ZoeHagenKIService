@@ -15,6 +15,12 @@ export default function Navigation() {
     setIsMobileMenuOpen(false);
   };
 
+  // Styling für normale Links
+  const normalLinkClass = "text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring";
+  
+  // Styling für aktuelle Seite - Zoë's KI Studio Design
+  const activeLinkClass = "bg-gradient-to-r from-cyan-400 to-pink-500 text-white px-3 py-2 rounded-md text-sm font-medium font-semibold shadow-md";
+
   return (
     <>
       <nav className="glass fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-background/80" role="navigation" aria-label="Hauptnavigation">
@@ -36,29 +42,49 @@ export default function Navigation() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {/* Neue Menü-Reihenfolge wie gewünscht */}
-                <Link href="/" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-home">
+                {/* Alle Links gleich, nur aktuelle Seite hervorheben */}
+                <Link 
+                  href="/" 
+                  className={location === "/" ? activeLinkClass : normalLinkClass}
+                  data-testid="nav-home"
+                >
                   Start
                 </Link>
                 {location === "/" && (
                   <button 
                     onClick={() => scrollToSection('produkte')}
-                    className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+                    className={normalLinkClass}
                     data-testid="nav-produkte"
                   >
                     Produkte
                   </button>
                 )}
-                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
+                <Link 
+                  href="/ueber-uns" 
+                  className={location === "/ueber-uns" ? activeLinkClass : normalLinkClass}
+                  data-testid="nav-ueber-uns"
+                >
                   Über uns
                 </Link>
-                <Link href="/test" className="bg-gradient-to-r from-yellow-400 to-green-500 text-black px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring hover:from-yellow-500 hover:to-green-600" data-testid="nav-test">
+                <Link 
+                  href="/test" 
+                  className={location === "/test" ? activeLinkClass : normalLinkClass}
+                  data-testid="nav-test"
+                >
                   Konfiguration Bots
                 </Link>
-                <Link href="/kontakt" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
+                <Link 
+                  href="/kontakt" 
+                  className={location === "/kontakt" ? activeLinkClass : normalLinkClass}
+                  data-testid="nav-kontakt"
+                >
                   Kontakt
                 </Link>
-                <Link href="/admin" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-admin">
+                <Link 
+                  href="/admin" 
+                  className={location === "/admin" ? activeLinkClass : normalLinkClass}
+                  data-testid="nav-admin"
+                >
                   Admin
                 </Link>
               </div>
@@ -86,7 +112,7 @@ export default function Navigation() {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link 
                 href="/" 
-                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className={`${location === "/" ? "bg-gradient-to-r from-cyan-400 to-pink-500 text-white font-semibold" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-home"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -103,7 +129,7 @@ export default function Navigation() {
               )}
               <Link 
                 href="/ueber-uns" 
-                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className={`${location === "/ueber-uns" ? "bg-gradient-to-r from-cyan-400 to-pink-500 text-white font-semibold" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-ueber-uns"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -111,7 +137,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/test" 
-                className="bg-gradient-to-r from-yellow-400 to-green-500 text-black block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className={`${location === "/test" ? "bg-gradient-to-r from-cyan-400 to-pink-500 text-white font-semibold" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-test"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -119,7 +145,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/kontakt" 
-                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className={`${location === "/kontakt" ? "bg-gradient-to-r from-cyan-400 to-pink-500 text-white font-semibold" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-kontakt"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -127,7 +153,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/admin" 
-                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className={`${location === "/admin" ? "bg-gradient-to-r from-cyan-400 to-pink-500 text-white font-semibold" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-admin"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

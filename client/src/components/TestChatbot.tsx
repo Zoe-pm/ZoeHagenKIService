@@ -95,21 +95,35 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
   }, [messages]);
 
   const speakText = (text: string) => {
-    if (!speechSynthesis || config.activeBot !== "voicebot") return;
+    // Safe guards for TTS functionality
+    if (!('speechSynthesis' in window) || 
+        typeof window.SpeechSynthesisUtterance === 'undefined' || 
+        config.activeBot !== "voicebot") {
+      return;
+    }
     
-    // Cancel any ongoing speech
-    speechSynthesis.cancel();
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = config.voicebot.voiceSpeed[0] || 1;
-    utterance.pitch = config.voicebot.voicePitch[0] || 1;
-    utterance.lang = 'de-DE';
-    
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    
-    speechSynthesis.speak(utterance);
+    try {
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      // Safe access with fallback values
+      utterance.rate = config.voicebot?.voiceSpeed?.[0] ?? 1;
+      utterance.pitch = config.voicebot?.voicePitch?.[0] ?? 1;
+      utterance.lang = 'de-DE';
+      
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        console.warn('TTS Error - Speech synthesis failed');
+      };
+      
+      speechSynthesis.speak(utterance);
+    } catch (ttsError) {
+      console.warn('TTS not available:', ttsError);
+      setIsSpeaking(false);
+    }
   };
 
   const handleSendMessage = async () => {
@@ -185,16 +199,12 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       };
 
       setMessages(prev => [...prev, botMessage]);
-      
-      // Speak response if voicebot and voice enabled
-      if (config.activeBot === "voicebot" && voiceEnabled) {
-        speakText(botResponse);
-      }
 
     } catch (error) {
-      console.error('Test chat error:', error);
+      console.error('Chatbot message error:', error instanceof Error ? error.message : 'Unknown error', error);
+      // Add user-visible error message
       const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: (Date.now() + 2).toString(),
         text: 'Entschuldigung, es gab einen Fehler. Das ist ein Test-System - Ihr echter Bot wird zuverlässiger funktionieren.',
         sender: 'bot',
         timestamp: new Date()
@@ -202,6 +212,17 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      
+      // TTS outside main try/catch to prevent crashes
+      if (config.activeBot === "voicebot" && voiceEnabled) {
+        // Use setTimeout to avoid blocking UI
+        setTimeout(() => {
+          const lastBotMessage = messages[messages.length - 1];
+          if (lastBotMessage?.sender === 'bot') {
+            speakText(lastBotMessage.text);
+          }
+        }, 100);
+      }
     }
   };
 
@@ -215,7 +236,7 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
   const toggleVoice = () => {
     setVoiceEnabled(!voiceEnabled);
     if (isSpeaking) {
-      speechSynthesis.cancel();
+      speechSynthesis?.cancel();
       setIsSpeaking(false);
     }
   };

@@ -213,9 +213,31 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
     >
       {/* Header */}
       <div 
-        className="flex items-center justify-between p-4 border-b text-white rounded-t-lg"
+        className="flex items-center justify-between p-4 border-b text-white rounded-t-lg relative"
         style={{ backgroundColor: currentConfig.primaryColor }}
       >
+        {/* Logo positioned based on config */}
+        {(config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl) && (
+          <div 
+            className={`absolute ${
+              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-left' ? 'left-2 top-2' :
+              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-right' ? 'right-2 top-2' : 
+              'left-1/2 top-2 transform -translate-x-1/2'
+            }`}
+          >
+            <img 
+              src={config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl}
+              alt="Firmenlogo"
+              className={`
+                ${(config.activeBot === "chatbot" ? config.chatbot.logoSize : config.voicebot.logoSize) === 'small' ? 'h-6 w-auto' :
+                  (config.activeBot === "chatbot" ? config.chatbot.logoSize : config.voicebot.logoSize) === 'large' ? 'h-12 w-auto' : 
+                  'h-8 w-auto'}
+                rounded
+              `}
+            />
+          </div>
+        )}
+        
         <div className="flex items-center gap-2">
           {config.activeBot === "chatbot" ? (
             <MessageCircle className="w-5 h-5" />

@@ -745,9 +745,9 @@ export default function KundenTest() {
                           reader.onload = (event) => {
                             const logoUrl = event.target?.result as string;
                             if (testConfig.activeBot === "chatbot") {
-                              handleChatbotConfigChange('logoUrl', logoUrl);
+                              setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoUrl } }));
                             } else {
-                              handleVoicebotConfigChange('logoUrl', logoUrl);
+                              setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoUrl } }));
                             }
                           };
                           reader.readAsDataURL(file);
@@ -775,9 +775,9 @@ export default function KundenTest() {
                       value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoPosition : testConfig.voicebot.logoPosition}
                       onValueChange={(value) => {
                         if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange('logoPosition', value);
+                          setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoPosition: value } }));
                         } else {
-                          handleVoicebotConfigChange('logoPosition', value);
+                          setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoPosition: value } }));
                         }
                       }}
                       data-testid="select-logo-position"
@@ -802,9 +802,9 @@ export default function KundenTest() {
                       value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoSize : testConfig.voicebot.logoSize}
                       onValueChange={(value) => {
                         if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange('logoSize', value);
+                          setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoSize: value } }));
                         } else {
-                          handleVoicebotConfigChange('logoSize', value);
+                          setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoSize: value } }));
                         }
                       }}
                       data-testid="select-logo-size"

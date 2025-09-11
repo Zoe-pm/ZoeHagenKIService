@@ -85,7 +85,7 @@ export default function KundenTest() {
   const [testConfig, setTestConfig] = useState<TestConfig>({
     activeBot: "chatbot",
     chatbot: {
-      name: "Zoe",
+      name: "Wie soll ihr neues Teammitglied heißen?",
       primaryColor: "#fdff06",
       backgroundColor: "#cbffb3",
       textColor: "#1F2937",

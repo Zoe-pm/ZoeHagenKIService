@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import logoImage from "@assets/logo_zoe_ki_1757417595587.jpg";
 
 export default function Navigation() {
@@ -37,149 +36,99 @@ export default function Navigation() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {/* Aktuelle Seite immer zuerst anzeigen */}
-                {location === "/" ? (
-                  <>
-                    <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
-                      Startseite
-                    </span>
-                    <button 
-                      onClick={() => scrollToSection('produkte')}
-                      className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
-                      data-testid="nav-produkte"
-                    >
-                      Produkte
-                    </button>
-                    <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
-                      Über uns
-                    </Link>
-                    <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test">
-                      Testbereich
-                    </Link>
-                    <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
-                      Kontakt
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    {/* Aktuelle Seite zuerst, dann andere */}
-                    {location === "/ueber-uns" ? (
-                      <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
-                        Über uns
-                      </span>
-                    ) : location === "/test" ? (
-                      <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
-                        Testbereich
-                      </span>
-                    ) : location === "/kontakt" ? (
-                      <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
-                        Kontakt
-                      </span>
-                    ) : null}
-                    <Link href="/" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-home">
-                      Startseite
-                    </Link>
-                    {location !== "/ueber-uns" && (
-                      <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns-alt">
-                        Über uns
-                      </Link>
-                    )}
-                    {location !== "/test" && (
-                      <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test-alt">
-                        Testbereich
-                      </Link>
-                    )}
-                    {location !== "/kontakt" && (
-                      <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt-alt">
-                        Kontakt
-                      </Link>
-                    )}
-                  </>
+                {/* Immer gleiche Menüführung ohne Hervorhebung */}
+                <Link href="/" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-home">
+                  Startseite
+                </Link>
+                {location === "/" && (
+                  <button 
+                    onClick={() => scrollToSection('produkte')}
+                    className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+                    data-testid="nav-produkte"
+                  >
+                    Produkte
+                  </button>
                 )}
+                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
+                  Über uns
+                </Link>
+                <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test">
+                  Testbereich
+                </Link>
+                <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
+                  Kontakt
+                </Link>
               </div>
             </div>
-            
+
             <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label={isMobileMenuOpen ? "Menü schließen" : "Menü öffnen"}
-                data-testid="mobile-menu-toggle"
+                className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
+                data-testid="mobile-menu-button"
               >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
             </div>
           </div>
         </div>
-      </nav>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="glass fixed top-16 left-0 right-0 z-30 md:hidden backdrop-blur-md bg-background/95" data-testid="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {/* Mobile: Aktuelle Seite zuerst */}
-            {location === "/" ? (
-              <>
-                <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
-                  Startseite
-                </div>
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden glass backdrop-blur-md bg-background/95">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <Link 
+                href="/" 
+                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                data-testid="mobile-nav-home"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Startseite
+              </Link>
+              {location === "/" && (
                 <button 
                   onClick={() => scrollToSection('produkte')}
-                  className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium w-full text-left"
+                  className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors w-full text-left"
                   data-testid="mobile-nav-produkte"
                 >
                   Produkte
                 </button>
-                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns">
-                  Über uns
-                </Link>
-                <Link href="/test" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test">
-                  Testbereich
-                </Link>
-                <Link href="/kontakt" className="button-gradient block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-kontakt">
-                  Kontakt
-                </Link>
-              </>
-            ) : (
-              <>
-                {/* Mobile: Aktuelle Seite zuerst anzeigen */}
-                {location === "/ueber-uns" ? (
-                  <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
-                    Über uns
-                  </div>
-                ) : location === "/test" ? (
-                  <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
-                    Testbereich
-                  </div>
-                ) : location === "/kontakt" ? (
-                  <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
-                    Kontakt
-                  </div>
-                ) : null}
-                <Link href="/" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-home">
-                  Startseite
-                </Link>
-                {location !== "/ueber-uns" && (
-                  <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns-alt">
-                    Über uns
-                  </Link>
-                )}
-                {location !== "/test" && (
-                  <Link href="/test" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test-alt">
-                    Testbereich
-                  </Link>
-                )}
-                {location !== "/kontakt" && (
-                  <Link href="/kontakt" className="button-gradient block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-kontakt-alt">
-                    Kontakt
-                  </Link>
-                )}
-              </>
-            )}
+              )}
+              <Link 
+                href="/ueber-uns" 
+                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                data-testid="mobile-nav-ueber-uns"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Über uns
+              </Link>
+              <Link 
+                href="/test" 
+                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                data-testid="mobile-nav-test"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Testbereich
+              </Link>
+              <Link 
+                href="/kontakt" 
+                className="button-gradient block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                data-testid="mobile-nav-kontakt"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Kontakt
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </nav>
+      
+      {/* Spacer for fixed navigation */}
+      <div className="h-16"></div>
     </>
   );
 }

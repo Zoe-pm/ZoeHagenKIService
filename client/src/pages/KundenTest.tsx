@@ -142,6 +142,17 @@ export default function KundenTest() {
       }
     }
   }, []);
+  
+  // Periodic session revalidation to auto-logout deleted test codes
+  useEffect(() => {
+    if (!isAuthorized || !session?.token) return;
+    
+    const revalidationInterval = setInterval(async () => {
+      await validateSession(session.token);
+    }, 30000); // Check every 30 seconds
+    
+    return () => clearInterval(revalidationInterval);
+  }, [isAuthorized, session?.token]);
 
   // Auto-hide overlay when authorized
   useEffect(() => {
@@ -164,18 +175,26 @@ export default function KundenTest() {
           const sessionData: TestSession = {
             token,
             email: data.email,
-            expiresAt: data.expiresAt
+            expiresAt: data.expiresAt,
+            // Include n8n configuration from API response
+            n8nWebhookUrl: data.n8nWebhookUrl,
+            n8nBotName: data.n8nBotName,
+            n8nBotGreeting: data.n8nBotGreeting
           };
           setSession(sessionData);
           setIsAuthorized(true);
           setEmail(data.email);
+          
+          // Update localStorage with refreshed session including n8n config
+          localStorage.setItem('test-session', JSON.stringify(sessionData));
         }
       } else {
-        localStorage.removeItem('test-session');
+        // Session invalid or deleted - force logout
+        handleLogout();
       }
     } catch (error) {
       console.error('Session validation error:', error);
-      localStorage.removeItem('test-session');
+      handleLogout();
     }
   };
 

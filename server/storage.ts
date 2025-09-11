@@ -170,13 +170,37 @@ export class MemStorage implements IStorage {
       return undefined;
     }
     
+    // Check if the test code still exists and is active
+    const testCodeInfo = this.testCodeDetails.get(session.accessCode);
+    if (!testCodeInfo || !testCodeInfo.isActive || testCodeInfo.expiresAt < new Date()) {
+      // Test code was deleted or expired - invalidate session
+      this.testSessions.delete(token);
+      return undefined;
+    }
+    
+    // Check if email is still allowed for this test code
+    const allowedEmails = this.validTestCodes.get(session.accessCode);
+    if (!allowedEmails || !allowedEmails.includes(session.email)) {
+      // Email no longer allowed - invalidate session
+      this.testSessions.delete(token);
+      return undefined;
+    }
+    
     return session;
   }
 
   async cleanupExpiredSessions(): Promise<void> {
     const now = new Date();
     for (const [token, session] of Array.from(this.testSessions.entries())) {
+      // Remove expired sessions
       if (session.expiresAt < now) {
+        this.testSessions.delete(token);
+        continue;
+      }
+      
+      // Remove sessions whose test code has expired or no longer exists
+      const testCodeInfo = this.testCodeDetails.get(session.accessCode);
+      if (!testCodeInfo || testCodeInfo.expiresAt < now || !testCodeInfo.isActive) {
         this.testSessions.delete(token);
       }
     }
@@ -239,9 +263,18 @@ export class MemStorage implements IStorage {
 
   async deleteTestCode(code: string): Promise<void> {
     const normalizedCode = code.toUpperCase().trim();
+    
+    // Delete test code data
     this.validTestCodes.delete(normalizedCode);
     this.testCodeDetails.delete(normalizedCode);
     this.testCodeUsageStats.delete(normalizedCode);
+    
+    // IMPORTANT: Invalidate all active sessions using this test code
+    for (const [token, session] of Array.from(this.testSessions.entries())) {
+      if (session.accessCode === normalizedCode) {
+        this.testSessions.delete(token);
+      }
+    }
   }
 
   async getAllTestCodes(): Promise<TestCodeInfo[]> {

@@ -173,7 +173,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true, 
         valid: true,
         email: session.email,
-        expiresAt: session.expiresAt.toISOString()
+        expiresAt: session.expiresAt.toISOString(),
+        // Include n8n configuration to prevent config loss after refresh
+        n8nWebhookUrl: session.n8nWebhookUrl,
+        n8nBotName: session.n8nBotName,
+        n8nBotGreeting: session.n8nBotGreeting
       });
     } catch (error) {
       console.error("Session validation error:", error);

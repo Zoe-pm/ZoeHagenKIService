@@ -59,11 +59,23 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       // Production chatbot uses demo responses (stable, no external dependencies)
       const responses: { [key: string]: string } = {
         "hallo": "Hallo! Schön, dass Sie da sind. Wie kann ich Ihnen heute helfen?",
+        "wer bist du": "Ich bin der digitale Assistent von Zoë's KI Studio. Ich helfe Ihnen gerne bei Fragen zu unseren AI-Lösungen für Ihr Unternehmen.",
+        "wer": "Ich bin der digitale Assistent von Zoë's KI Studio. Ich helfe Ihnen gerne bei Fragen zu unseren AI-Lösungen für Ihr Unternehmen.", 
+        "was machst du": "Ich informiere Sie über unsere AI-Assistenten: Chatbots, Voicebots, Avatare und Wissensbots für Unternehmen.",
         "service": "Wir bieten AI-Assistenten für Ihr Unternehmen. Chatbots, Voicebots, Avatare und Wissensbots.",
+        "produkte": "Unsere AI-Lösungen: Chatbot (24/7 Kundensupport), Voicebot (Sprachanrufe), Avatar (Videoberatung), Wissensbot (interne Schulungen).",
+        "chatbot": "Unser Chatbot automatisiert Ihren Kundensupport 24/7. Interessiert? Buchen Sie ein kostenloses Erstgespräch!",
+        "voicebot": "Unser Voicebot führt natürliche Gespräche am Telefon. Perfekt für Terminbuchung und erste Kundenanfragen.",
+        "avatar": "Unser Avatar bietet persönliche Videoberatung mit menschlichem Gesicht. Ideal für Verkaufsgespräche.",
+        "wissensbot": "Unser Wissensbot schult Ihre Mitarbeiter intern und beantwortet Firmenfragen blitzschnell.",
         "kontakt": "Gerne! Buchen Sie ein kostenloses 15-minütiges Erstgespräch über unsere Kontaktseite.",
         "preise": "Unsere Lösungen sind individuell konfiguriert. Lassen Sie uns in einem kurzen Gespräch Ihre Anforderungen besprechen.",
+        "preis": "Unsere Lösungen sind individuell konfiguriert. Lassen Sie uns in einem kurzen Gespräch Ihre Anforderungen besprechen.",
+        "kosten": "Die Kosten hängen von Ihren Anforderungen ab. Buchen Sie ein kostenloses Erstgespräch für ein individuelles Angebot.",
         "termin": "Perfekt! Nutzen Sie einfach unsere Kontaktseite um einen Termin zu buchen.",
+        "beratung": "Buchen Sie gerne ein kostenloses 15-minütiges Erstgespräch. Keine Technik-Kenntnisse erforderlich!",
         "hilfe": "Ich helfe Ihnen gerne weiter! Fragen Sie mich zu unseren AI-Lösungen oder buchen Sie direkt einen Beratungstermin.",
+        "wie": "Gerne erkläre ich Ihnen unsere AI-Lösungen. Fragen Sie konkret nach Chatbot, Voicebot, Avatar oder Wissensbot!",
         "default": "Vielen Dank für Ihre Nachricht. Für detaillierte Informationen zu unseren AI-Lösungen buchen Sie gerne ein kostenloses Erstgespräch!"
       };
 

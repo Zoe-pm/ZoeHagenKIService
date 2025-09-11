@@ -58,6 +58,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       
       // Production chatbot - exact same approach as TestChatbot
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL_PROD;
+      console.log('JUNA: Webhook URL verfügbar:', !!webhookUrl);
       
       if (webhookUrl) {
         // Direct n8n API Call (same as TestChatbot)
@@ -70,7 +71,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
             body: JSON.stringify({
               message: messageToSend,
               botName: "Zoë KI Studio Assistant",
-              sessionId: "zoe-ki-studio-prod-session"
+              sessionId: `juna-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
             })
           });
           
@@ -85,7 +86,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
           botResponse = '[n8n Verbindungsfehler] Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL und Internetverbindung.';
         }
       } else {
-        // Fallback message if no webhook configured
+        console.error('JUNA: Kein Webhook konfiguriert!');
         botResponse = 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773';
       }
 

@@ -59,13 +59,7 @@ export default function ProductCard({
         </div>
         
         <Button
-          className={`w-full py-4 px-6 font-semibold text-base rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
-            id === 'chatbot' 
-              ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-blue-200 hover:shadow-blue-300' 
-              : id === 'voicebot'
-              ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-purple-200 hover:shadow-purple-300'
-              : 'button-gradient'
-          }`}
+          className="w-full button-gradient py-4 px-6 font-semibold text-base rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
           onClick={onButtonClick}
           data-testid={`product-button-${id}`}
         >

@@ -838,8 +838,27 @@ export default function KundenTest() {
                     />
                   </div>
 
-                  {/* Konfiguration speichern und abschicken */}
-                  <div className="pt-6 border-t border-border/50">
+                  {/* Test & Save Buttons */}
+                  <div className="pt-6 border-t border-border/50 space-y-3">
+                    {isAuthorized ? (
+                      <Button 
+                        onClick={() => setIsChatOpen(true)}
+                        className="w-full bg-gradient-to-r from-cyan-500 to-pink-500 hover:from-cyan-600 hover:to-pink-600 text-white font-semibold py-3 text-lg shadow-lg"
+                        size="lg"
+                        data-testid="button-test-bot"
+                      >
+                        🤖 {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} testen
+                      </Button>
+                    ) : (
+                      <Button 
+                        disabled
+                        className="w-full opacity-50 cursor-not-allowed"
+                        size="lg"
+                      >
+                        🔒 Anmeldung erforderlich
+                      </Button>
+                    )}
+
                     <Button
                       onClick={async () => {
                         if (!session) {
@@ -882,34 +901,16 @@ export default function KundenTest() {
                         }
                       }}
                       disabled={!isAuthorized || isValidating}
-                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 text-lg shadow-lg disabled:opacity-50"
-                      size="lg"
+                      className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 shadow-md disabled:opacity-50"
+                      size="default"
                       data-testid="button-save-config"
                     >
                       {isValidating ? "💾 Wird gespeichert..." : "💾 Konfiguration speichern & abschicken"}
                     </Button>
-                    <p className="text-xs text-muted-foreground text-center mt-2">
-                      Sie erhalten eine detaillierte Zusammenfassung Ihrer Konfiguration per E-Mail
+                    <p className="text-xs text-muted-foreground text-center">
+                      Sie erhalten eine detaillierte Zusammenfassung per E-Mail
                     </p>
                   </div>
-
-                  {isAuthorized ? (
-                    <Button 
-                      onClick={() => setIsChatOpen(true)}
-                      className="w-full button-gradient"
-                      size="lg"
-                    >
-                      🤖 {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} testen
-                    </Button>
-                  ) : (
-                    <Button 
-                      disabled
-                      className="w-full opacity-50 cursor-not-allowed"
-                      size="lg"
-                    >
-                      🔒 Anmeldung erforderlich
-                    </Button>
-                  )}
 
                 </CardContent>
                 </fieldset>

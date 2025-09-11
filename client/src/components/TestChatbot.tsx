@@ -74,12 +74,14 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
       timestamp: new Date()
     };
     setMessages([initialMessage]);
-    
-    // Speak initial greeting if voicebot
-    if (config.activeBot === "voicebot" && voiceEnabled) {
+  }, [currentConfig.greeting, config.activeBot]); // Removed voiceEnabled dependency
+
+  // Separate effect for voice greeting when voice is enabled
+  useEffect(() => {
+    if (config.activeBot === "voicebot" && voiceEnabled && messages.length > 0) {
       speakText(currentConfig.greeting);
     }
-  }, [currentConfig.greeting, config.activeBot, voiceEnabled]);
+  }, [voiceEnabled]); // Only trigger when voice is toggled
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -189,21 +191,29 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
   if (!isOpen) return null;
 
   const widgetSizeClasses = {
-    small: 'w-80 h-80',
-    medium: 'w-96 h-[450px]', // Reduzierte Höhe für bessere mobile Darstellung
-    large: 'w-[450px] h-[520px]' // Reduzierte Höhe für bessere mobile Darstellung
+    small: 'h-80',
+    medium: 'h-[450px]', // Reduzierte Höhe für bessere mobile Darstellung
+    large: 'h-[520px]' // Reduzierte Höhe für bessere mobile Darstellung
   };
 
   const sizeClass = widgetSizeClasses[currentConfig.widgetSize as keyof typeof widgetSizeClasses] || widgetSizeClasses.medium;
+  
+  // Responsive width based on screen size
+  const getResponsiveWidth = () => {
+    if (currentConfig.widgetSize === 'small') return { width: 'clamp(280px, calc(100vw - 40px), 320px)', maxWidth: 'calc(100vw - 40px)' };
+    if (currentConfig.widgetSize === 'large') return { width: 'clamp(320px, calc(100vw - 40px), 450px)', maxWidth: 'calc(100vw - 40px)' };
+    return { width: 'clamp(300px, calc(100vw - 40px), 384px)', maxWidth: 'calc(100vw - 40px)' }; // medium
+  };
 
   return (
     <div 
-      className={`fixed ${sizeClass} shadow-2xl border rounded-lg z-50 flex flex-col max-h-[80vh]`}
+      className={`fixed ${sizeClass} shadow-2xl border rounded-lg z-[9999] flex flex-col max-h-[80vh]`}
       style={{
         backgroundColor: currentConfig.backgroundColor,
-        bottom: '80px',
-        maxHeight: 'calc(100vh - 120px)',
+        bottom: '20px',
+        maxHeight: 'calc(100vh - 40px)',
         fontFamily: config.activeBot === "chatbot" ? config.chatbot.fontFamily : 'Inter',
+        ...getResponsiveWidth(),
         // Position respektieren
         ...(currentConfig.position === 'bottom-left' && { left: '20px' }),
         ...(currentConfig.position === 'bottom-right' && { right: '20px' }),
@@ -255,13 +265,15 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
               onClick={toggleVoice}
               size="sm"
               variant="ghost"
-              className="text-white hover:text-white/80 p-1"
+              className="text-white hover:bg-white/20 p-3 border border-white/20 rounded-full transition-all hover:scale-110 min-w-[44px] min-h-[44px]"
               data-testid="button-toggle-voice"
+              aria-label={voiceEnabled ? "Sprachausgabe deaktivieren" : "Sprachausgabe aktivieren"}
+              aria-pressed={voiceEnabled}
             >
               {voiceEnabled ? (
-                isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />
+                isSpeaking ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />
               ) : (
-                <VolumeX className="w-4 h-4" />
+                <VolumeX className="w-5 h-5" />
               )}
             </Button>
           )}
@@ -269,10 +281,11 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
             onClick={onClose}
             size="sm"
             variant="ghost"
-            className="text-white hover:text-white/80 p-1"
+            className="text-white hover:bg-white/20 p-3 border border-white/20 rounded-full transition-all hover:scale-110 min-w-[44px] min-h-[44px]"
             data-testid="button-close-test-chat"
+            aria-label="Chat schließen"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </Button>
         </div>
       </div>

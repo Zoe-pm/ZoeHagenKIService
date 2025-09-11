@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertConsultationSchema, testAccessSchema, testSessionSchema } from "@shared/schema";
+import { insertContactSchema, insertConsultationSchema, testAccessSchema, testSessionSchema, testConfigSaveSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -56,6 +56,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, product });
     } catch (error) {
       res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
+
+  // Test config save endpoint
+  app.post("/api/test-config", async (req, res) => {
+    try {
+      const { email, sessionToken, config } = testConfigSaveSchema.parse(req.body);
+      
+      // Validate session
+      const session = await storage.getTestSession(sessionToken);
+      if (!session) {
+        return res.status(401).json({ success: false, message: "Ungültiges oder abgelaufenes Token" });
+      }
+      
+      // Generate a unique reference ID
+      const referenceId = `ZKS-${Date.now().toString().slice(-6)}`;
+      
+      // Store config (in memory for now - in production this would be saved to database)
+      console.log(`Config saved for ${email} with reference: ${referenceId}`, {
+        activeBot: config.activeBot,
+        botName: config.activeBot === "chatbot" ? config.chatbot.name : config.voicebot.name
+      });
+      
+      res.status(201).json({ 
+        success: true, 
+        message: "Konfiguration erfolgreich gespeichert",
+        referenceId,
+        email: session.email
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ success: false, errors: error.errors });
+      } else {
+        console.error("Config save error:", error);
+        res.status(500).json({ success: false, message: "Server-Fehler beim Speichern der Konfiguration" });
+      }
     }
   });
 

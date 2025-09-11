@@ -127,3 +127,44 @@ export interface TestAccessGrant {
   createdAt: Date;
   expiresAt: Date;
 }
+
+// Test config save schema  
+export const testConfigSaveSchema = z.object({
+  email: z.string().email(),
+  sessionToken: z.string(),
+  config: z.object({
+    activeBot: z.enum(["chatbot", "voicebot"]),
+    chatbot: z.object({
+      name: z.string(),
+      primaryColor: z.string(),
+      backgroundColor: z.string(),
+      widgetSize: z.string(),
+      fontFamily: z.string(),
+      position: z.string(),
+      greeting: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      logoUrl: z.string(),
+      logoPosition: z.string(),
+      logoSize: z.string(),
+    }),
+    voicebot: z.object({
+      name: z.string(),
+      primaryColor: z.string(),
+      backgroundColor: z.string(),
+      widgetSize: z.string(),
+      position: z.string(),
+      voiceSpeed: z.array(z.number()),
+      voicePitch: z.array(z.number()),
+      elevenLabsVoiceId: z.string(),
+      greeting: z.string(),
+      title: z.string(),
+      subtitle: z.string(),
+      logoUrl: z.string(),
+      logoPosition: z.string(),
+      logoSize: z.string(),
+    })
+  })
+});
+
+export type TestConfigSave = z.infer<typeof testConfigSaveSchema>;

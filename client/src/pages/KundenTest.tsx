@@ -841,17 +841,52 @@ export default function KundenTest() {
                   {/* Konfiguration speichern und abschicken */}
                   <div className="pt-6 border-t border-border/50">
                     <Button
-                      onClick={() => {
-                        toast({
-                          title: "✅ Konfiguration gespeichert!",
-                          description: "Ihre Einstellungen wurden erfolgreich übermittelt. Sie erhalten eine Zusammenfassung per E-Mail.",
-                        });
+                      onClick={async () => {
+                        if (!session) {
+                          toast({
+                            title: "❌ Fehler",
+                            description: "Keine gültige Session gefunden. Bitte loggen Sie sich erneut ein.",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+
+                        try {
+                          setIsValidating(true);
+                          
+                          const response = await apiRequest('POST', '/api/test-config', {
+                            email: session.email,
+                            sessionToken: session.token,
+                            config: testConfig
+                          });
+
+                          const data = await response.json();
+
+                          if (response.ok && data.success) {
+                            toast({
+                              title: "✅ Konfiguration gespeichert!",
+                              description: `Ihre Einstellungen wurden erfolgreich übermittelt. Referenz: ${data.referenceId}. Sie erhalten eine Zusammenfassung per E-Mail.`,
+                            });
+                          } else {
+                            throw new Error(data.message || 'Unbekannter Fehler');
+                          }
+                        } catch (error) {
+                          console.error('Config save error:', error);
+                          toast({
+                            title: "❌ Speichern fehlgeschlagen",
+                            description: "Es gab einen Fehler beim Speichern Ihrer Konfiguration. Bitte versuchen Sie es erneut.",
+                            variant: "destructive"
+                          });
+                        } finally {
+                          setIsValidating(false);
+                        }
                       }}
-                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 text-lg shadow-lg"
+                      disabled={!isAuthorized || isValidating}
+                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 text-lg shadow-lg disabled:opacity-50"
                       size="lg"
                       data-testid="button-save-config"
                     >
-                      💾 Konfiguration speichern & abschicken
+                      {isValidating ? "💾 Wird gespeichert..." : "💾 Konfiguration speichern & abschicken"}
                     </Button>
                     <p className="text-xs text-muted-foreground text-center mt-2">
                       Sie erhalten eine detaillierte Zusammenfassung Ihrer Konfiguration per E-Mail

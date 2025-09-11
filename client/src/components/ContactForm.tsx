@@ -33,11 +33,7 @@ export default function ContactForm() {
 
   const contactMutation = useMutation({
     mutationFn: async (data: z.infer<typeof contactSchema>) => {
-      return await apiRequest('/api/contact', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return await apiRequest('POST', '/api/contact', data);
     },
     onSuccess: () => {
       toast({
@@ -76,7 +72,7 @@ export default function ContactForm() {
               Bereit für Ihren KI-Assistenten?
             </h2>
             <p className="text-muted-foreground text-lg" data-testid="contact-subtitle">
-              Lassen Sie uns gemeinsam die perfekte Lösung für Ihr Unternehmen finden
+              Lassen Sie uns gemeinsam die perfekte Lösung für Ihr Unternehmen finden.
             </p>
           </div>
           

@@ -263,7 +263,7 @@ export default function KundenTest() {
   };
 
   const generateNameSuggestions = (type: "chatbot" | "voicebot") => {
-    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Zoe", "Sam", "Rio"];
+    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Zoia", "Sam", "Rio"];
     const voicebotNames = ["Juna", "Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
     return type === "chatbot" ? chatbotNames : voicebotNames;
   };
@@ -1100,8 +1100,7 @@ export default function KundenTest() {
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Die fachlichen Inhalte (z. B. FAQs, Produktinfos, Prozesse, Dokumente) stellen Sie uns separat bereit. 
-                    Nach Bestätigung erhalten Sie automatisch eine E-Mail mit sicheren Upload-Optionen und einer Vorlage, 
-                    welche Informationen wir benötigen. Die inhaltliche Befüllung erfolgt getrennt von Design & Stimme.
+                    Das Training des Chatbots erfolgt durch uns und getrennt von Design & Stimme.
                   </p>
                 </CardContent>
               </Card>

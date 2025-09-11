@@ -20,6 +20,8 @@ interface TestConfig {
     fontFamily: string;
     position: string;
     greeting: string;
+    title: string;
+    subtitle: string;
   };
   voicebot: {
     name: string;
@@ -31,6 +33,8 @@ interface TestConfig {
     voicePitch: number[];
     elevenLabsVoiceId: string;
     greeting: string;
+    title: string;
+    subtitle: string;
   };
 }
 
@@ -52,11 +56,14 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
 
   const currentConfig = config.activeBot === "chatbot" ? config.chatbot : config.voicebot;
 
-  // Initialize with configured greeting
+  // Initialize with configured greeting including subtitle
   useEffect(() => {
+    const subtitle = config.activeBot === "chatbot" ? config.chatbot.subtitle : config.voicebot.subtitle;
+    const greetingText = subtitle ? `${subtitle}\n\n${currentConfig.greeting}` : currentConfig.greeting;
+    
     const initialMessage: Message = {
       id: '1',
-      text: currentConfig.greeting,
+      text: greetingText,
       sender: 'bot',
       timestamp: new Date()
     };
@@ -176,21 +183,25 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
   if (!isOpen) return null;
 
   const widgetSizeClasses = {
-    small: 'w-80 h-96',
-    medium: 'w-96 h-[500px]',
-    large: 'w-[450px] h-[600px]'
+    small: 'w-80 h-80',
+    medium: 'w-96 h-[450px]', // Reduzierte Höhe für bessere mobile Darstellung
+    large: 'w-[450px] h-[520px]' // Reduzierte Höhe für bessere mobile Darstellung
   };
 
   const sizeClass = widgetSizeClasses[currentConfig.widgetSize as keyof typeof widgetSizeClasses] || widgetSizeClasses.medium;
 
   return (
     <div 
-      className={`fixed ${sizeClass} shadow-2xl border rounded-lg z-50 flex flex-col`}
+      className={`fixed ${sizeClass} shadow-2xl border rounded-lg z-50 flex flex-col max-h-[80vh]`}
       style={{
         backgroundColor: currentConfig.backgroundColor,
-        bottom: '20px',
-        right: '20px',
-        fontFamily: config.activeBot === "chatbot" ? config.chatbot.fontFamily : 'Inter'
+        bottom: '80px',
+        maxHeight: 'calc(100vh - 120px)',
+        fontFamily: config.activeBot === "chatbot" ? config.chatbot.fontFamily : 'Inter',
+        // Position respektieren
+        ...(currentConfig.position === 'bottom-left' && { left: '20px' }),
+        ...(currentConfig.position === 'bottom-right' && { right: '20px' }),
+        ...(currentConfig.position === 'center' && { left: '50%', transform: 'translateX(-50%)' })
       }}
       data-testid="test-chatbot-widget"
     >
@@ -205,7 +216,10 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
           ) : (
             <Volume2 className="w-5 h-5" />
           )}
-          <span className="font-semibold">{currentConfig.name} (TEST)</span>
+          <div>
+            <div className="font-semibold">{currentConfig.name} (TEST)</div>
+            <div className="text-xs text-white/80">{config.activeBot === "chatbot" ? config.chatbot.title : config.voicebot.title}</div>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {config.activeBot === "voicebot" && (

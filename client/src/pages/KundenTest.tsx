@@ -22,6 +22,8 @@ interface ChatbotConfig {
   fontFamily: string;
   position: "bottom-right" | "bottom-left" | "center";
   greeting: string;
+  title: string;
+  subtitle: string;
 }
 
 interface VoicebotConfig {
@@ -34,6 +36,8 @@ interface VoicebotConfig {
   voicePitch: number[];
   elevenLabsVoiceId: string;
   greeting: string;
+  title: string;
+  subtitle: string;
 }
 
 interface TestConfig {
@@ -47,6 +51,21 @@ interface TestSession {
   email: string;
   expiresAt: string;
 }
+
+// 10 webfähige Schriftvarianten + Schreibschrift
+const fontOptions = [
+  { name: "Inter", value: "Inter", category: "Sans-Serif" },
+  { name: "Roboto", value: "Roboto, sans-serif", category: "Sans-Serif" },
+  { name: "Open Sans", value: "Open Sans, sans-serif", category: "Sans-Serif" },
+  { name: "Lato", value: "Lato, sans-serif", category: "Sans-Serif" },
+  { name: "Montserrat", value: "Montserrat, sans-serif", category: "Sans-Serif" },
+  { name: "Poppins", value: "Poppins, sans-serif", category: "Sans-Serif" },
+  { name: "Source Sans Pro", value: "Source Sans Pro, sans-serif", category: "Sans-Serif" },
+  { name: "Nunito", value: "Nunito, sans-serif", category: "Sans-Serif" },
+  { name: "Playfair Display", value: "Playfair Display, serif", category: "Serif" },
+  { name: "Merriweather", value: "Merriweather, serif", category: "Serif" },
+  { name: "Dancing Script", value: "Dancing Script, cursive", category: "Schreibschrift" }
+];
 
 export default function KundenTest() {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -65,7 +84,9 @@ export default function KundenTest() {
       widgetSize: "medium",
       fontFamily: "Inter",
       position: "bottom-right",
-      greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
+      greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
+      title: "Willkommen!",
+      subtitle: "Ich helfe Ihnen gerne weiter"
     },
     voicebot: {
       name: "Juna",
@@ -76,7 +97,9 @@ export default function KundenTest() {
       voiceSpeed: [1],
       voicePitch: [1],
       elevenLabsVoiceId: "",
-      greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent."
+      greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
+      title: "Sprachassistent",
+      subtitle: "Sprechen Sie mit mir!"
     }
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -176,7 +199,9 @@ export default function KundenTest() {
         widgetSize: "medium",
         fontFamily: "Inter",
         position: "bottom-right",
-        greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
+        greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
+        title: "Willkommen!",
+        subtitle: "Ich helfe Ihnen gerne weiter"
       },
       voicebot: {
         name: "Juna",
@@ -187,7 +212,9 @@ export default function KundenTest() {
         voiceSpeed: [1],
         voicePitch: [1],
         elevenLabsVoiceId: "",
-        greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent."
+        greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
+        title: "Sprachassistent",
+        subtitle: "Sprechen Sie mit mir!"
       }
     });
   };
@@ -628,14 +655,67 @@ export default function KundenTest() {
                           <SelectValue placeholder="Schriftart wählen" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Inter">Inter</SelectItem>
-                          <SelectItem value="Arial">Arial</SelectItem>
-                          <SelectItem value="Helvetica">Helvetica</SelectItem>
-                          <SelectItem value="Times New Roman">Times New Roman</SelectItem>
+                          {/* Sans-Serif Gruppe */}
+                          <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-b">Sans-Serif</div>
+                          {fontOptions.filter(font => font.category === "Sans-Serif").map((font) => (
+                            <SelectItem key={font.value} value={font.value}>
+                              <span style={{ fontFamily: font.value }}>{font.name}</span>
+                            </SelectItem>
+                          ))}
+                          
+                          {/* Serif Gruppe */}
+                          <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-b border-t">Serif</div>
+                          {fontOptions.filter(font => font.category === "Serif").map((font) => (
+                            <SelectItem key={font.value} value={font.value}>
+                              <span style={{ fontFamily: font.value }}>{font.name}</span>
+                            </SelectItem>
+                          ))}
+                          
+                          {/* Schreibschrift Gruppe */}
+                          <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-b border-t">Schreibschrift</div>
+                          {fontOptions.filter(font => font.category === "Schreibschrift").map((font) => (
+                            <SelectItem key={font.value} value={font.value}>
+                              <span style={{ fontFamily: font.value }}>{font.name}</span>
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
                   )}
+
+                  {/* Title */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Titel</label>
+                    <Input
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.title : testConfig.voicebot.title}
+                      onChange={(e) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange("title", e.target.value);
+                        } else {
+                          handleVoicebotConfigChange("title", e.target.value);
+                        }
+                      }}
+                      placeholder="z.B. Willkommen!"
+                      data-testid="input-bot-title"
+                    />
+                  </div>
+
+                  {/* Subtitle */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Untertitel</label>
+                    <Input
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.subtitle : testConfig.voicebot.subtitle}
+                      onChange={(e) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange("subtitle", e.target.value);
+                        } else {
+                          handleVoicebotConfigChange("subtitle", e.target.value);
+                        }
+                      }}
+                      placeholder="z.B. Ich helfe Ihnen gerne weiter"
+                      data-testid="input-bot-subtitle"
+                    />
+                  </div>
 
                   {/* Custom Greeting */}
                   <div>

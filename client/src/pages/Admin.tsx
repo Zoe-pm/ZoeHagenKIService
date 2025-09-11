@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Shield, UserX, Plus, Trash2, Send, Eye } from "lucide-react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { apiRequest } from '@/lib/queryClient';
 
 // Admin login schema
@@ -222,88 +224,93 @@ export default function Admin() {
   // Show login form if not authenticated
   if (!adminToken || !sessionData?.valid) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-br from-cyan-400 to-pink-500 rounded-full flex items-center justify-center">
-              <Shield className="w-8 h-8 text-white" />
-            </div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">
-              Admin-Login
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...loginForm}>
-              <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-                <FormField
-                  control={loginForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Admin-Passwort</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Passwort eingeben"
-                          data-testid="input-admin-password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-cyan-400 to-pink-500 hover:from-cyan-500 hover:to-pink-600 text-white"
-                  disabled={loginMutation.isPending}
-                  data-testid="button-admin-login"
-                >
-                  {loginMutation.isPending ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Anmelden...
-                    </>
-                  ) : (
-                    <>
-                      <Shield className="w-4 h-4 mr-2" />
-                      Anmelden
-                    </>
-                  )}
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 pt-20">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] rounded-full flex items-center justify-center">
+                <Shield className="w-8 h-8 text-gray-800" />
+              </div>
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] bg-clip-text text-transparent">
+                Admin-Login
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...loginForm}>
+                <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                  <FormField
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Admin-Passwort</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Passwort eingeben"
+                            data-testid="input-admin-password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button 
+                    type="submit" 
+                    className="w-full button-gradient text-gray-800 font-semibold"
+                    disabled={loginMutation.isPending}
+                    data-testid="button-admin-login"
+                  >
+                    {loginMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Anmelden...
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-4 h-4 mr-2" />
+                        Anmelden
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent">
-                Zoë's KI Studio - Admin Dashboard
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                Verwalten Sie Test-Codes und Kundenzugänge
-              </p>
+    <div className="min-h-screen">
+      <Navigation />
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4 pt-20 min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] bg-clip-text text-transparent">
+                  Zoë's KI Studio - Admin Dashboard
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-2">
+                  Verwalten Sie Test-Codes und Kundenzugänge
+                </p>
+              </div>
+              <Button 
+                variant="outline" 
+                onClick={handleLogout}
+                data-testid="button-admin-logout"
+                className="flex items-center gap-2"
+              >
+                <UserX className="w-4 h-4" />
+                Abmelden
+              </Button>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={handleLogout}
-              data-testid="button-admin-logout"
-              className="flex items-center gap-2"
-            >
-              <UserX className="w-4 h-4" />
-              Abmelden
-            </Button>
           </div>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Test Code Creation */}
@@ -441,7 +448,7 @@ export default function Admin() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-cyan-400 to-pink-500 hover:from-cyan-500 hover:to-pink-600 text-white"
+                    className="w-full button-gradient text-gray-800 font-semibold"
                     disabled={createTestCodeMutation.isPending}
                     data-testid="button-create-testcode"
                   >
@@ -538,7 +545,9 @@ export default function Admin() {
             </CardContent>
           </Card>
         </div>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }

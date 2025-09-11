@@ -982,6 +982,26 @@ export default function KundenTest() {
                     <span className="text-sm text-muted-foreground">Begrüßung:</span>
                     <p className="font-medium mt-1 p-2 bg-muted rounded text-sm">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.greeting : testConfig.voicebot.greeting}</p>
                   </div>
+                  
+                  {/* Logo Einstellungen */}
+                  {(testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl) && (
+                    <div className="mt-4">
+                      <span className="text-sm text-muted-foreground">Logo:</span>
+                      <div className="mt-2 space-y-2">
+                        <div className="flex items-center gap-3">
+                          <img 
+                            src={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl}
+                            alt="Firmenlogo Vorschau"
+                            className="h-8 w-auto border rounded"
+                          />
+                          <div className="text-sm">
+                            <div>Position: {testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoPosition : testConfig.voicebot.logoPosition}</div>
+                            <div>Größe: {testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoSize : testConfig.voicebot.logoSize}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

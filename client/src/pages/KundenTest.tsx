@@ -302,10 +302,10 @@ export default function KundenTest() {
         <section className="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Hier testen Sie Ihr digitales neues Teammitglied
+              Hier testen Sie Ihr neues Teammitglied
             </h1>
             <p className="text-xl text-white/90 mb-6">
-              Hier konfigurieren Sie Ihr digitales neues Teammitglied. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. Änderungen sehen Sie live in der Vorschau. Mit „Speichern & Bestätigen" erhalten Sie eine Zusammenfassung per E-Mail.
+              Hier konfigurieren Sie Ihr neues Teammitglied. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. Änderungen sehen Sie live in der Vorschau. Mit „Speichern & Bestätigen" erhalten Sie eine Zusammenfassung per E-Mail.
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8 border border-white/20">
               <p className="text-white/95 text-sm">
@@ -405,14 +405,6 @@ export default function KundenTest() {
                   </p>
                 </div>
                 
-                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                  <h4 className="font-semibold text-green-800 mb-2">🎯 Demo-Zugang (für sofortiges Testen)</h4>
-                  <div className="text-sm text-green-700 space-y-1">
-                    <p><strong>E-Mail:</strong> demo@kunde.de</p>
-                    <p><strong>Testcode:</strong> ZKS-DEMO-2024</p>
-                    <p className="text-xs text-green-600 mt-2">Dieser Demo-Zugang ist für alle Besucher verfügbar zum sofortigen Testen der Funktionalität.</p>
-                  </div>
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -767,15 +759,15 @@ export default function KundenTest() {
                     So wird Ihr Chatbot auf der Website erscheinen:
                   </p>
                 </CardHeader>
-                <CardContent className={`min-h-[500px] relative ${!isAuthorized ? 'opacity-50' : ''}`}>
+                <CardContent className={`min-h-[300px] relative ${!isAuthorized ? 'opacity-50' : ''}`}>
                   <div 
                     className={`
-                      p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[400px] relative overflow-hidden bg-white
+                      p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[250px] relative overflow-hidden bg-white
                     `}
                   >
-                    <div className="text-center text-muted-foreground py-20">
+                    <div className="text-center text-muted-foreground py-12">
                       <p className="mb-4">TEST-Bot Vorschau</p>
-                      <p className="text-sm">So wird Ihr konfigurierter {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} aussehen. Klicken Sie auf "Testen" um ihn auszuprobieren.</p>
+                      <p className="text-sm">Klicken Sie auf die Bubble um Ihren {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} zu testen.</p>
                       
                       {/* Simulierter Bot Button */}
                       <div 
@@ -813,6 +805,14 @@ export default function KundenTest() {
                       <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.name : testConfig.voicebot.name}</p>
                     </div>
                     <div>
+                      <span className="text-sm text-muted-foreground">Titel:</span>
+                      <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.title : testConfig.voicebot.title}</p>
+                    </div>
+                    <div>
+                      <span className="text-sm text-muted-foreground">Untertitel:</span>
+                      <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.subtitle : testConfig.voicebot.subtitle}</p>
+                    </div>
+                    <div>
                       <span className="text-sm text-muted-foreground">Position:</span>
                       <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position}</p>
                     </div>
@@ -833,9 +833,27 @@ export default function KundenTest() {
                       </>
                     )}
                     {testConfig.activeBot === "chatbot" && (
+                      <>
+                        <div>
+                          <span className="text-sm text-muted-foreground">Schriftart:</span>
+                          <p className="font-medium">{testConfig.chatbot.fontFamily}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-muted-foreground">Hintergrundfarbe:</span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div 
+                              className="w-4 h-4 rounded border" 
+                              style={{ backgroundColor: testConfig.chatbot.backgroundColor }}
+                            ></div>
+                            <p className="font-medium text-sm">{testConfig.chatbot.backgroundColor}</p>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {testConfig.activeBot === "voicebot" && testConfig.voicebot.elevenLabsVoiceId && (
                       <div>
-                        <span className="text-sm text-muted-foreground">Schriftart:</span>
-                        <p className="font-medium">{testConfig.chatbot.fontFamily}</p>
+                        <span className="text-sm text-muted-foreground">ElevenLabs Voice ID:</span>
+                        <p className="font-medium">{testConfig.voicebot.elevenLabsVoiceId || "Nicht gesetzt"}</p>
                       </div>
                     )}
                   </div>

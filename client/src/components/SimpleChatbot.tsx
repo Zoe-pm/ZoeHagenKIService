@@ -54,33 +54,47 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     setIsLoading(true);
 
     try {
-      // Production chatbot uses n8n webhook
-      const response = await fetch('/api/prod-chatbot', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: messageToSend
-        })
-      });
-
-      const data = await response.json();
+      let botResponse: string;
       
-      if (response.ok && data.success) {
-        const botResponse = data.response || 'Entschuldigung, ich konnte keine Antwort generieren.';
-
-        const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: botResponse,
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, botMessage]);
+      // Production chatbot - exact same approach as TestChatbot
+      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL_PROD;
+      
+      if (webhookUrl) {
+        // Direct n8n API Call (same as TestChatbot)
+        try {
+          const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: messageToSend,
+              botName: "Zoë KI Studio Assistant"
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            botResponse = data.response || data.message || 'Entschuldigung, keine Antwort erhalten.';
+          } else {
+            botResponse = `[n8n Fehler ${response.status}] Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL.`;
+          }
+        } catch (n8nError) {
+          console.error('n8n API Error:', n8nError);
+          botResponse = '[n8n Verbindungsfehler] Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL und Internetverbindung.';
+        }
       } else {
-        const errorText = data?.message || `HTTP ${response.status} Error`;
-        throw new Error(`Chat Error (${response.status}): ${errorText}`);
+        // Fallback message if no webhook configured
+        botResponse = 'Entschuldigung, ich bin momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773';
       }
+
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: botResponse,
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Chatbot error:', error);
       

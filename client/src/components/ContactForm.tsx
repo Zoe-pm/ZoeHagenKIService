@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import zoePhoto from "@assets/Zoe_Website_1757416756555.jpg";
+import { useEffect, useState } from 'react';
 
 // Calendly global type
 declare global {
@@ -28,6 +29,27 @@ const contactSchema = z.object({
 
 export default function ContactForm() {
   const { toast } = useToast();
+  const [calendlyLoaded, setCalendlyLoaded] = useState(false);
+  
+  // Calendly Script laden
+  useEffect(() => {
+    if (window.Calendly) {
+      setCalendlyLoaded(true);
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    script.onload = () => {
+      setCalendlyLoaded(true);
+    };
+    document.head.appendChild(script);
+    
+    return () => {
+      // Cleanup: Script nicht entfernen da global benötigt
+    };
+  }, []);
   
   const contactForm = useForm({
     resolver: zodResolver(contactSchema),
@@ -76,12 +98,29 @@ export default function ContactForm() {
         return;
       }
       
-      if (window.Calendly) {
+      if (!calendlyLoaded || !window.Calendly) {
+        toast({
+          title: "Calendly lädt...",
+          description: "Bitte warten Sie einen Moment, bis Calendly vollständig geladen ist.",
+        });
+        // Retry nach kurzer Wartezeit
+        setTimeout(() => {
+          if (window.Calendly) {
+            window.Calendly.initPopupWidget({ url: calendlyDemoUrl });
+          } else {
+            window.open(calendlyDemoUrl, '_blank');
+          }
+        }, 1000);
+        return;
+      }
+      
+      try {
         // Calendly Popup öffnen
         window.Calendly.initPopupWidget({
           url: calendlyDemoUrl
         });
-      } else {
+      } catch (error) {
+        console.error('Calendly Popup Error:', error);
         // Fallback zu direktem Link
         window.open(calendlyDemoUrl, '_blank');
       }

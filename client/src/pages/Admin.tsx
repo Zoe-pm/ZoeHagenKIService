@@ -75,10 +75,12 @@ export default function Admin() {
   // Admin login mutation
   const loginMutation = useMutation({
     mutationFn: async (data: AdminLoginForm) => {
-      return await apiRequest('/api/admin/login', {
+      const response = await fetch('/api/admin/login', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
+      return await response.json();
     },
     onSuccess: (data) => {
       if (data.success && data.token) {
@@ -104,25 +106,24 @@ export default function Admin() {
     queryKey: ['admin-session'],
     queryFn: async () => {
       if (!adminToken) return null;
-      return await apiRequest('/api/admin/session', {
+      const response = await fetch('/api/admin/session', {
         headers: { Authorization: `Bearer ${adminToken}` }
       });
+      return await response.json();
     },
     enabled: !!adminToken,
     refetchInterval: 5 * 60 * 1000, // Check every 5 minutes
-    retry: false,
-    onError: () => {
-      handleLogout();
-    }
+    retry: false
   });
 
   // Test codes query
   const { data: testCodesData, isLoading: testCodesLoading } = useQuery({
     queryKey: ['admin-testcodes'],
-    queryFn: async (): Promise<{ data: TestCodeInfo[] }> => {
-      return await apiRequest('/api/admin/testcodes', {
+    queryFn: async () => {
+      const response = await fetch('/api/admin/testcodes', {
         headers: { Authorization: `Bearer ${adminToken}` }
       });
+      return await response.json();
     },
     enabled: !!adminToken && sessionData?.valid,
     refetchInterval: 30000, // Refresh every 30 seconds
@@ -132,14 +133,18 @@ export default function Admin() {
   const createTestCodeMutation = useMutation({
     mutationFn: async (data: CreateTestCodeForm) => {
       const emailsArray = data.emails.split(',').map(email => email.trim()).filter(Boolean);
-      return await apiRequest('/api/admin/testcodes', {
+      const response = await fetch('/api/admin/testcodes', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${adminToken}` },
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}` 
+        },
         body: JSON.stringify({
           ...data,
           emails: emailsArray
         })
       });
+      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-testcodes'] });
@@ -161,10 +166,11 @@ export default function Admin() {
   // Delete test code mutation
   const deleteTestCodeMutation = useMutation({
     mutationFn: async (code: string) => {
-      return await apiRequest(`/api/admin/testcodes/${code}`, {
+      const response = await fetch(`/api/admin/testcodes/${code}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${adminToken}` }
       });
+      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-testcodes'] });

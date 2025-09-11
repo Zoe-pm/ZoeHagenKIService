@@ -51,13 +51,15 @@ export default function Navigation() {
                 >
                   Start
                 </Link>
-                <Link 
-                  href="/produkte" 
-                  className={location === "/produkte" ? activeLinkClass : normalLinkClass}
-                  data-testid="nav-produkte"
-                >
-                  Produkte
-                </Link>
+                {location === "/" && (
+                  <button 
+                    onClick={() => scrollToSection('produkte')}
+                    className={normalLinkClass}
+                    data-testid="nav-produkte"
+                  >
+                    Produkte
+                  </button>
+                )}
                 <Link 
                   href="/ueber-uns" 
                   className={location === "/ueber-uns" ? activeLinkClass : normalLinkClass}
@@ -117,14 +119,18 @@ export default function Navigation() {
               >
                 Start
               </Link>
-              <Link 
-                href="/produkte" 
-                className={`${location === "/produkte" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
-                data-testid="mobile-nav-produkte"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Produkte
-              </Link>
+              {location === "/" && (
+                <button 
+                  onClick={() => {
+                    scrollToSection('produkte');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors w-full text-left"
+                  data-testid="mobile-nav-produkte"
+                >
+                  Produkte
+                </button>
+              )}
               <Link 
                 href="/ueber-uns" 
                 className={`${location === "/ueber-uns" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}

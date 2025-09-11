@@ -24,6 +24,7 @@ import {
 import { Phone, Mail, Calendar, Video, Download, Calculator } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import zoePhoto from "@assets/Zoe_Website_1757416756555.jpg";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein"),
@@ -109,10 +110,20 @@ export default function ContactForm() {
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="glass" style={{background: 'linear-gradient(135deg, rgba(167, 199, 231, 0.1) 0%, rgba(93, 173, 226, 0.15) 50%, rgba(88, 181, 142, 0.1) 100%)'}}>
-            <CardContent className="p-8">
+          <Card className="glass relative" style={{background: 'linear-gradient(135deg, rgba(167, 199, 231, 0.1) 0%, rgba(93, 173, 226, 0.15) 50%, rgba(88, 181, 142, 0.1) 100%)'}}>
+            <CardContent className="p-8 relative">
+              {/* Zoë's Photo */}
+              <div className="absolute -top-12 right-4 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg bg-white">
+                <img 
+                  src={zoePhoto}
+                  alt="Zoë Hagen - Gründerin von Zoë's KI Studio"
+                  className="w-full h-full object-cover"
+                  data-testid="zoe-contact-photo"
+                />
+              </div>
+              
               <h3 className="text-2xl font-bold mb-8 text-center" data-testid="contact-form-title">
-                Interesse an unseren KI-Lösungen?<br />Jetzt Kontakt aufnehmen
+                Persönliches Erstgespräch vereinbaren
               </h3>
               
               <Form {...contactForm}>

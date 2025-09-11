@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product } from "@shared/schema";
+import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product, type TestAccessRequest, type TestAccessGrant } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 // Contact type for storage
@@ -19,6 +19,12 @@ export interface IStorage {
   // Product methods
   getAllProducts(): Promise<Product[]>;
   getProduct(id: string): Promise<Product | undefined>;
+  
+  // Test access methods
+  validateTestAccess(email: string, accessCode: string): Promise<boolean>;
+  createTestSession(email: string, accessCode: string): Promise<TestAccessGrant>;
+  getTestSession(token: string): Promise<TestAccessGrant | undefined>;
+  cleanupExpiredSessions(): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -26,15 +32,22 @@ export class MemStorage implements IStorage {
   private contacts: Map<string, Contact>;
   private consultations: Map<string, Consultation>;
   private products: Map<string, Product>;
+  private testSessions: Map<string, TestAccessGrant>;
+  private validTestCodes: Map<string, string[]>; // code -> allowed emails
 
   constructor() {
     this.users = new Map();
     this.contacts = new Map();
     this.consultations = new Map();
     this.products = new Map();
+    this.testSessions = new Map();
+    this.validTestCodes = new Map();
     
     // Initialize with some sample products
     this.initializeProducts();
+    
+    // Initialize secure test codes
+    this.initializeTestCodes();
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -82,6 +95,85 @@ export class MemStorage implements IStorage {
 
   async getProduct(id: string): Promise<Product | undefined> {
     return this.products.get(id);
+  }
+
+  async validateTestAccess(email: string, accessCode: string): Promise<boolean> {
+    const normalizedEmail = email.toLowerCase().trim();
+    const upperCode = accessCode.toUpperCase().trim();
+    
+    const allowedEmails = this.validTestCodes.get(upperCode);
+    return allowedEmails ? allowedEmails.includes(normalizedEmail) : false;
+  }
+
+  async createTestSession(email: string, accessCode: string): Promise<TestAccessGrant> {
+    const isValid = await this.validateTestAccess(email, accessCode);
+    if (!isValid) {
+      throw new Error("Ungültiger Zugriffscode oder Email-Adresse");
+    }
+
+    const id = randomUUID();
+    const token = randomUUID() + randomUUID().replace(/-/g, ''); // Double UUID for extra security
+    const createdAt = new Date();
+    const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000); // 24 hours
+
+    const session: TestAccessGrant = {
+      id,
+      email: email.toLowerCase().trim(),
+      accessCode: accessCode.toUpperCase().trim(),
+      token,
+      createdAt,
+      expiresAt
+    };
+
+    this.testSessions.set(token, session);
+    
+    // Cleanup expired sessions periodically
+    setTimeout(() => this.cleanupExpiredSessions(), 0);
+    
+    return session;
+  }
+
+  async getTestSession(token: string): Promise<TestAccessGrant | undefined> {
+    const session = this.testSessions.get(token);
+    
+    if (!session) {
+      return undefined;
+    }
+    
+    // Check if session is expired
+    if (session.expiresAt < new Date()) {
+      this.testSessions.delete(token);
+      return undefined;
+    }
+    
+    return session;
+  }
+
+  async cleanupExpiredSessions(): Promise<void> {
+    const now = new Date();
+    for (const [token, session] of Array.from(this.testSessions.entries())) {
+      if (session.expiresAt < now) {
+        this.testSessions.delete(token);
+      }
+    }
+  }
+
+  private initializeTestCodes() {
+    // Secure server-side test codes mapping
+    this.validTestCodes.set('ZKS-DEMO-2024', [
+      'demo@kunde.de', 
+      'test@unternehmen.de'
+    ]);
+    
+    this.validTestCodes.set('ZKS-TEST-2024', [
+      'kunde@firma.de', 
+      'user@company.de'
+    ]);
+    
+    this.validTestCodes.set('ZKS-PREVIEW-2024', [
+      'manager@startup.de', 
+      'info@business.de'
+    ]);
   }
 
   private initializeProducts() {

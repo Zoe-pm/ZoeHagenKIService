@@ -70,3 +70,25 @@ export type InsertConsultation = z.infer<typeof insertConsultationSchema>;
 export type Consultation = typeof consultations.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
+
+// Test access schemas
+export const testAccessSchema = z.object({
+  email: z.string().email("Ungültige Email-Adresse"),
+  accessCode: z.string().min(1, "Zugriffscode ist erforderlich"),
+});
+
+export const testSessionSchema = z.object({
+  token: z.string(),
+});
+
+export type TestAccessRequest = z.infer<typeof testAccessSchema>;
+export type TestSession = z.infer<typeof testSessionSchema>;
+
+export interface TestAccessGrant {
+  id: string;
+  email: string;
+  accessCode: string;
+  token: string;
+  createdAt: Date;
+  expiresAt: Date;
+}

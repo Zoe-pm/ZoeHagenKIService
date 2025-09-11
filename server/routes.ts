@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertConsultationSchema } from "@shared/schema";
+import { insertContactSchema, insertConsultationSchema, testAccessSchema, testSessionSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -89,9 +89,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Chat endpoint for chatbot workflow - connected to n8n
+  // Test access validation endpoint
+  app.post("/api/test-access", async (req, res) => {
+    try {
+      const { email, accessCode } = testAccessSchema.parse(req.body);
+      
+      const session = await storage.createTestSession(email, accessCode);
+      
+      res.status(201).json({ 
+        success: true, 
+        token: session.token,
+        expiresAt: session.expiresAt.toISOString()
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ success: false, errors: error.errors });
+      } else if (error instanceof Error && error.message.includes("Ungültiger")) {
+        res.status(401).json({ success: false, message: error.message });
+      } else {
+        console.error("Test access error:", error);
+        res.status(500).json({ success: false, message: "Server-Fehler bei der Authentifizierung" });
+      }
+    }
+  });
+
+  // Test session validation endpoint
+  app.get("/api/test-session", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : req.query.token as string;
+      
+      if (!token) {
+        return res.status(401).json({ success: false, message: "Kein Token bereitgestellt" });
+      }
+      
+      const session = await storage.getTestSession(token);
+      
+      if (!session) {
+        return res.status(401).json({ success: false, message: "Ungültiges oder abgelaufenes Token" });
+      }
+      
+      res.json({ 
+        success: true, 
+        valid: true,
+        email: session.email,
+        expiresAt: session.expiresAt.toISOString()
+      });
+    } catch (error) {
+      console.error("Session validation error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler bei der Session-Validierung" });
+    }
+  });
+
+  // Chat endpoint for chatbot workflow - connected to n8n (with session validation)
   app.post("/api/chat", async (req, res) => {
     try {
+      // Validate session token for secure access
+      const authHeader = req.headers.authorization;
+      const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : req.body.token;
+      
+      if (!token) {
+        return res.status(401).json({ success: false, message: "Authentifizierung erforderlich" });
+      }
+      
+      const session = await storage.getTestSession(token);
+      if (!session) {
+        return res.status(401).json({ success: false, message: "Ungültiges oder abgelaufenes Token" });
+      }
+
       const { message } = req.body;
       
       if (!message || message.trim().length === 0) {

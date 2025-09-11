@@ -14,9 +14,10 @@ interface Message {
 interface SimpleChatbotProps {
   isOpen: boolean;
   onClose: () => void;
+  authToken?: string;
 }
 
-export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
+export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -53,48 +54,28 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
     setIsLoading(true);
 
     try {
-      // n8n Embedded Chat Format
-      const sessionId = `session-${Date.now()}`;
-      const chatData = {
-        input: messageToSend,
-        sessionId: sessionId,
-        chatId: `chat-${Date.now()}`,
-        timestamp: new Date().toISOString()
-      };
-      
-      const response = await fetch('https://zoebahati.app.n8n.cloud/webhook/fd03b457-76f0-409a-ae7d-e9974b6e807c/chat', {
+      // Check if authentication token is available
+      if (!authToken) {
+        throw new Error('Authentifizierung erforderlich');
+      }
+
+      // Use secure server endpoint
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
         },
-        body: JSON.stringify(chatData),
+        body: JSON.stringify({
+          message: messageToSend,
+          token: authToken
+        }),
       });
 
-      let data;
-      const responseText = await response.text();
+      const data = await response.json();
       
-      // n8n könnte Text oder JSON zurückgeben
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        data = responseText; // Verwende Text direkt als Antwort
-      }
-      
-      if (response.ok) {
-        let botResponse = '';
-        
-        if (data && data.output) {
-          // n8n Embedded Chat gibt "output" Feld zurück
-          botResponse = data.output;
-        } else if (data && data.response) {
-          botResponse = data.response;
-        } else if (data && data.message) {
-          botResponse = data.message;
-        } else if (data && typeof data === 'string') {
-          botResponse = data;
-        } else {
-          botResponse = JSON.stringify(data);
-        }
+      if (response.ok && data.success) {
+        const botResponse = data.response || 'Entschuldigung, ich konnte keine Antwort generieren.';
 
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
@@ -104,9 +85,8 @@ export function SimpleChatbot({ isOpen, onClose }: SimpleChatbotProps) {
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
-        // Show the actual error from n8n
-        const errorText = data?.message || data?.error || JSON.stringify(data) || `HTTP ${response.status} Error`;
-        throw new Error(`n8n Workflow Error (${response.status}): ${errorText}`);
+        const errorText = data?.message || `HTTP ${response.status} Error`;
+        throw new Error(`Chat Error (${response.status}): ${errorText}`);
       }
     } catch (error) {
       console.error('Chatbot error:', error);

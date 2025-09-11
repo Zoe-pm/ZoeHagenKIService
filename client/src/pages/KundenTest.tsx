@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -8,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 interface TestConfig {
   theme: "light" | "dark" | "blue" | "green";
@@ -18,10 +19,19 @@ interface TestConfig {
   greeting: string;
 }
 
+interface TestSession {
+  token: string;
+  email: string;
+  expiresAt: string;
+}
+
 export default function KundenTest() {
-  const [location] = useLocation();
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
+  const [accessCode, setAccessCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
+  const [session, setSession] = useState<TestSession | null>(null);
+  const [authError, setAuthError] = useState<string>("");
   const [testConfig, setTestConfig] = useState<TestConfig>({
     theme: "blue",
     position: "bottom-right",
@@ -30,24 +40,55 @@ export default function KundenTest() {
     greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { toast } = useToast();
 
-  // Einfache Token-basierte Authentifizierung
+  // Check for existing session on mount
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    
-    // Hier können verschiedene Tokens für verschiedene Kunden definiert werden
-    const validTokens = [
-      'demo-kunde-2024',
-      'test-access-123',
-      'kunde-preview-456'
-    ];
-    
-    if (token && validTokens.includes(token)) {
-      setIsAuthorized(true);
-      setAccessToken(token);
+    const savedSession = localStorage.getItem('test-session');
+    if (savedSession) {
+      try {
+        const sessionData: TestSession = JSON.parse(savedSession);
+        const expiresAt = new Date(sessionData.expiresAt);
+        
+        if (expiresAt > new Date()) {
+          validateSession(sessionData.token);
+        } else {
+          localStorage.removeItem('test-session');
+        }
+      } catch (error) {
+        localStorage.removeItem('test-session');
+      }
     }
-  }, [location]);
+  }, []);
+
+  const validateSession = async (token: string) => {
+    try {
+      const response = await fetch('/api/test-session', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          const sessionData: TestSession = {
+            token,
+            email: data.email,
+            expiresAt: data.expiresAt
+          };
+          setSession(sessionData);
+          setIsAuthorized(true);
+          setEmail(data.email);
+        }
+      } else {
+        localStorage.removeItem('test-session');
+      }
+    } catch (error) {
+      console.error('Session validation error:', error);
+      localStorage.removeItem('test-session');
+    }
+  };
 
   const handleConfigChange = (key: keyof TestConfig, value: any) => {
     setTestConfig(prev => ({
@@ -66,96 +107,171 @@ export default function KundenTest() {
     });
   };
 
-  // Wenn nicht autorisiert, Zugangsformular anzeigen
-  if (!isAuthorized) {
-    return (
-      <>
-        <SEOHelmet 
-          title="Kundentest – Geschützter Bereich"
-          description="Geschützter Testbereich für Kunden"
-        />
-        
-        <Navigation />
-        
-        <main className="min-h-screen pt-20 flex items-center justify-center">
-          <div className="max-w-md mx-auto p-8">
-            <Card className="glass">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl mb-4">🔒 Geschützter Testbereich</CardTitle>
-                <p className="text-muted-foreground">
-                  Dieser Bereich ist nur für Kunden mit gültigem Zugangstoken zugänglich.
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Zugangstoken eingeben:</label>
-                  <input 
-                    type="password"
-                    value={accessToken}
-                    onChange={(e) => setAccessToken(e.target.value)}
-                    className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                    placeholder="Token eingeben..."
-                    data-testid="access-token-input"
-                  />
-                </div>
-                <Button 
-                  onClick={() => {
-                    const validTokens = ['demo-kunde-2024', 'test-access-123', 'kunde-preview-456'];
-                    if (validTokens.includes(accessToken)) {
-                      setIsAuthorized(true);
-                    } else {
-                      alert('Ungültiges Token. Bitte wenden Sie sich an Zoë\'s KI Studio.');
-                    }
-                  }}
-                  className="w-full"
-                  data-testid="access-submit"
-                >
-                  Zugang anfordern
-                </Button>
-                <p className="text-xs text-muted-foreground text-center">
-                  Sie haben noch kein Token? Kontaktieren Sie uns für einen Testzugang.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-        
-        <Footer />
-      </>
-    );
-  }
+  const handleAccessRequest = async () => {
+    if (!email.trim() || !accessCode.trim()) {
+      setAuthError("Bitte Email und Zugriffscode eingeben");
+      return;
+    }
 
-  // Autorisierter Testbereich
+    setIsValidating(true);
+    setAuthError("");
+    
+    try {
+      const response = await apiRequest('POST', '/api/test-access', {
+        email: email.trim(),
+        accessCode: accessCode.trim()
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        const sessionData: TestSession = {
+          token: result.token,
+          email: email.trim(),
+          expiresAt: result.expiresAt
+        };
+        
+        setSession(sessionData);
+        setIsAuthorized(true);
+        
+        // Save session to localStorage
+        localStorage.setItem('test-session', JSON.stringify(sessionData));
+        
+        toast({
+          title: "🎉 Zugang gewährt!",
+          description: "Sie können jetzt den Chatbot testen.",
+        });
+      }
+    } catch (error: any) {
+      const errorMessage = error?.message || "Ungültiger Code oder Email. Bitte kontaktieren Sie Zoë's KI Studio für einen gültigen Testzugang.";
+      setAuthError(errorMessage);
+      
+      toast({
+        title: "❌ Zugang verweigert",
+        description: errorMessage,
+        variant: "destructive"
+      });
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setSession(null);
+    setIsAuthorized(false);
+    setEmail("");
+    setAccessCode("");
+    setAuthError("");
+    localStorage.removeItem('test-session');
+    
+    toast({
+      title: "Abgemeldet",
+      description: "Sie wurden erfolgreich abgemeldet.",
+    });
+  };
+
   return (
     <>
       <SEOHelmet 
-        title="KI-Assistent Testbereich"
-        description="Testen und konfigurieren Sie Ihren persönlichen KI-Assistenten"
+        title="KI-Assistent Testbereich – Zoë's KI Studio"
+        description="Testen Sie Ihren persönlichen KI-Assistenten und passen Sie ihn an Ihre Bedürfnisse an"
       />
       
       <Navigation />
       
       <main className="min-h-screen pt-20">
-        {/* Header */}
-        <section className="hero-gradient py-8 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  KI-Assistent Testbereich
-                </h1>
-                <p className="text-white/80">
-                  Testen Sie Ihren persönlichen Chatbot und passen Sie ihn an Ihre Bedürfnisse an.
-                </p>
-              </div>
-              <Badge variant="secondary" className="bg-white/20 text-white">
-                Token: {accessToken.slice(0, 8)}...
-              </Badge>
+        {/* Intro-Hero */}
+        <section className="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              🚀 Ihr KI-Assistent wartet auf Sie
+            </h1>
+            <p className="text-xl text-white/90 mb-8">
+              Entdecken Sie, wie Ihr persönlicher Chatbot aussehen und klingen wird. 
+              Testen Sie verschiedene Designs, Stimmen und Begrüßungen – 
+              <span className="font-semibold"> alles live und interaktiv!</span>
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/80 text-sm max-w-2xl mx-auto">
+              <div>✨ Live-Vorschau</div>
+              <div>🎨 Design anpassen</div>
+              <div>🗣️ Stimme testen</div>
             </div>
           </div>
         </section>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          
+          {!isAuthorized ? (
+            /* Authentifizierung für Chatbot-Zugang */
+            <Card className="glass max-w-lg mx-auto mb-8">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl mb-4">🔓 Chatbot freischalten</CardTitle>
+                <p className="text-muted-foreground">
+                  Sie können alle Einstellungen sehen und anpassen. 
+                  Für den Chat benötigen Sie einen Testcode.
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {authError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-sm text-red-600">{authError}</p>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Email-Adresse</label>
+                  <Input 
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="ihre@email.de"
+                    data-testid="email-input"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Testcode</label>
+                  <Input 
+                    type="text"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value)}
+                    placeholder="ZKS-DEMO-2024"
+                    data-testid="access-code-input"
+                  />
+                </div>
+                <Button 
+                  onClick={handleAccessRequest}
+                  disabled={!email || !accessCode || isValidating}
+                  className="w-full button-gradient"
+                  data-testid="unlock-chatbot"
+                >
+                  {isValidating ? "Wird geprüft..." : "🤖 Chatbot freischalten"}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  Noch keinen Testcode? <a href="/kontakt" className="text-primary hover:underline">Jetzt anfordern</a>
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            /* Authentifiziert - Zeige Logout Option */
+            <Card className="glass max-w-lg mx-auto mb-8">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl mb-4">✅ Zugang gewährt</CardTitle>
+                <p className="text-muted-foreground">
+                  Sie sind als {session?.email} angemeldet und können den Chatbot testen.
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button 
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="w-full"
+                  data-testid="logout-button"
+                >
+                  🔒 Abmelden
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Konfiguration */}
@@ -163,11 +279,14 @@ export default function KundenTest() {
               <Card className="glass sticky top-24">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    🎛️ Anpassungen
+                    🎛️ Live-Anpassungen
                     <Button variant="outline" size="sm" onClick={resetConfig}>
-                      Zurücksetzen
+                      Reset
                     </Button>
                   </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Sehen Sie sofort, wie Ihre Änderungen wirken
+                  </p>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   
@@ -244,13 +363,23 @@ export default function KundenTest() {
                     />
                   </div>
 
-                  <Button 
-                    onClick={() => setIsChatOpen(true)}
-                    className="w-full button-gradient"
-                    size="lg"
-                  >
-                    🤖 Chatbot testen
-                  </Button>
+                  {isAuthorized ? (
+                    <Button 
+                      onClick={() => setIsChatOpen(true)}
+                      className="w-full button-gradient"
+                      size="lg"
+                    >
+                      🤖 Chatbot testen
+                    </Button>
+                  ) : (
+                    <Button 
+                      disabled
+                      className="w-full"
+                      size="lg"
+                    >
+                      🔒 Erst Code eingeben
+                    </Button>
+                  )}
 
                 </CardContent>
               </Card>
@@ -288,7 +417,7 @@ export default function KundenTest() {
                             testConfig.theme === 'dark' ? 'bg-gray-700 hover:bg-gray-800' : 
                             'bg-primary hover:bg-primary/90'}
                         `}
-                        onClick={() => setIsChatOpen(true)}
+                        onClick={() => isAuthorized && setIsChatOpen(true)}
                       >
                         💬
                       </div>
@@ -323,7 +452,7 @@ export default function KundenTest() {
                   </div>
                   <div className="mt-4">
                     <span className="text-sm text-muted-foreground">Begrüßung:</span>
-                    <p className="font-medium mt-1 p-2 bg-muted rounded">{testConfig.greeting}</p>
+                    <p className="font-medium mt-1 p-2 bg-muted rounded text-sm">{testConfig.greeting}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -337,6 +466,7 @@ export default function KundenTest() {
         <SimpleChatbot
           isOpen={isChatOpen}
           onClose={() => setIsChatOpen(false)}
+          authToken={session?.token}
         />
       )}
       

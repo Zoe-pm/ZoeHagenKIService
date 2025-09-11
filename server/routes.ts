@@ -440,7 +440,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const data = await response.json();
-      const botResponse = data.response || data.message || 'Entschuldigung, keine Antwort erhalten.';
+      console.log('JUNA: n8n Raw Response:', JSON.stringify(data, null, 2));
+      
+      // Try multiple possible response field names
+      const botResponse = data.response || data.message || data.output || data.text || data.answer || 'Entschuldigung, keine Antwort erhalten.';
+      
+      console.log('JUNA: Extracted botResponse:', botResponse);
 
       res.json({ success: true, response: botResponse });
       

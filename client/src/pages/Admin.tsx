@@ -485,7 +485,7 @@ export default function Admin() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {testCodesData?.data?.map((testCode) => (
+                  {testCodesData?.data?.map((testCode: TestCodeInfo) => (
                     <div 
                       key={testCode.code} 
                       className="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm"

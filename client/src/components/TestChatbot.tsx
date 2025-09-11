@@ -93,6 +93,16 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  
+  // TTS for voicebot - speak new bot messages
+  useEffect(() => {
+    if (config.activeBot === "voicebot" && voiceEnabled && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage?.sender === 'bot') {
+        speakText(lastMessage.text);
+      }
+    }
+  }, [messages, voiceEnabled, config.activeBot]);
 
   const speakText = (text: string) => {
     // Safe guards for TTS functionality
@@ -172,12 +182,12 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       } else {
         // Fallback: Demo responses when no n8n webhook configured  
         const testResponses: { [key: string]: string } = {
-          "hallo": `Hallo! Ich bin ${currentConfig.name}, Ihr TEST-Assistent. Das ist nur eine Vorschau der Funktionalität.`,
-          "test": "Das ist ein Test-Bot zur Demonstration. Ihr echter Bot wird individuell konfiguriert und trainiert.",
-          "funktionen": "In der echten Version kann ich Ihre spezifischen Fragen beantworten, Termine buchen und vieles mehr.",
-          "kosten": "Für genaue Preise und Funktionen sprechen Sie bitte mit Zoë. Dies ist nur eine Demo.",
+          "hallo": currentConfig.greeting || `Hallo! Ich bin ${currentConfig.name}, wie kann ich Ihnen helfen?`,
+          "test": "Das ist eine Vorschau der Funktionalität. Ihr echter Bot wird individuell konfiguriert.",
+          "funktionen": "In der echten Version kann ich Ihre spezifischen Fragen beantworten und vieles mehr.",
+          "kosten": "Für genaue Informationen sprechen Sie bitte mit Zoë's KI Studio.",
           "voice": config.activeBot === "voicebot" ? "Ich kann sprechen! Probieren Sie die Sprachausgabe aus." : "Wechseln Sie zum Voicebot um die Sprachfunktion zu testen.",
-          "default": `Ich bin ${currentConfig.name}, Ihr digitaler Test-Assistent. In der echten Version werde ich mit Ihren spezifischen Inhalten und Workflows trainiert.`
+          "default": currentConfig.greeting || `Hallo! Ich bin ${currentConfig.name}, wie kann ich Ihnen helfen?`
         };
 
         const messageLower = messageToSend.toLowerCase();
@@ -212,17 +222,6 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
-      
-      // TTS outside main try/catch to prevent crashes
-      if (config.activeBot === "voicebot" && voiceEnabled) {
-        // Use setTimeout to avoid blocking UI
-        setTimeout(() => {
-          const lastBotMessage = messages[messages.length - 1];
-          if (lastBotMessage?.sender === 'bot') {
-            speakText(lastBotMessage.text);
-          }
-        }, 100);
-      }
     }
   };
 

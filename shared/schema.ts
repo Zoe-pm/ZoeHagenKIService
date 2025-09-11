@@ -128,6 +128,24 @@ export interface TestAccessGrant {
   expiresAt: Date;
 }
 
+export interface TestCodeInfo {
+  code: string;
+  emails: string[];
+  customerName?: string;
+  customerCompany?: string;
+  createdAt: Date;
+  expiresAt: Date;
+  isActive: boolean;
+}
+
+export interface TestCodeUsage {
+  code: string;
+  totalLogins: number;
+  uniqueUsers: number;
+  lastAccess?: Date;
+  activeSessions: number;
+}
+
 // Test config save schema  
 export const testConfigSaveSchema = z.object({
   email: z.string().email(),

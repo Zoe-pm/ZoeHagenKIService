@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product, type TestAccessRequest, type TestAccessGrant } from "@shared/schema";
+import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product, type TestAccessRequest, type TestAccessGrant, type TestCodeInfo, type TestCodeUsage } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 // Contact type for storage
@@ -25,6 +25,16 @@ export interface IStorage {
   createTestSession(email: string, accessCode: string): Promise<TestAccessGrant>;
   getTestSession(token: string): Promise<TestAccessGrant | undefined>;
   cleanupExpiredSessions(): Promise<void>;
+  
+  // Admin methods
+  validateAdminLogin(password: string): Promise<boolean>;
+  createAdminSession(): Promise<string>;
+  validateAdminSession(token: string): Promise<boolean>;
+  createTestCode(code: string, emails: string[], customerName?: string, customerCompany?: string, expiresInHours?: number): Promise<void>;
+  deleteTestCode(code: string): Promise<void>;
+  getAllTestCodes(): Promise<TestCodeInfo[]>;
+  getTestCodeUsage(code: string): Promise<TestCodeUsage>;
+  getAllActiveSessions(): Promise<TestAccessGrant[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -34,6 +44,10 @@ export class MemStorage implements IStorage {
   private products: Map<string, Product>;
   private testSessions: Map<string, TestAccessGrant>;
   private validTestCodes: Map<string, string[]>; // code -> allowed emails
+  private testCodeDetails: Map<string, TestCodeInfo>;
+  private adminSessions: Map<string, { token: string; expiresAt: Date }>;
+  private testCodeUsageStats: Map<string, { logins: Set<string>; lastAccess?: Date }>;
+  private readonly adminPassword = process.env.ADMIN_PASSWORD || 'fallback-password'; // Admin-Passwort aus Umgebungsvariable
 
   constructor() {
     this.users = new Map();
@@ -42,6 +56,9 @@ export class MemStorage implements IStorage {
     this.products = new Map();
     this.testSessions = new Map();
     this.validTestCodes = new Map();
+    this.testCodeDetails = new Map();
+    this.adminSessions = new Map();
+    this.testCodeUsageStats = new Map();
     
     // Initialize with some sample products
     this.initializeProducts();
@@ -158,22 +175,123 @@ export class MemStorage implements IStorage {
     }
   }
 
+  // Admin methods implementation
+  async validateAdminLogin(password: string): Promise<boolean> {
+    return password === this.adminPassword;
+  }
+
+  async createAdminSession(): Promise<string> {
+    const token = randomUUID() + randomUUID().replace(/-/g, '');
+    const expiresAt = new Date(Date.now() + 12 * 60 * 60 * 1000); // 12 hours
+    this.adminSessions.set(token, { token, expiresAt });
+    return token;
+  }
+
+  async validateAdminSession(token: string): Promise<boolean> {
+    const session = this.adminSessions.get(token);
+    if (!session) return false;
+    
+    if (session.expiresAt < new Date()) {
+      this.adminSessions.delete(token);
+      return false;
+    }
+    return true;
+  }
+
+  async createTestCode(
+    code: string, 
+    emails: string[], 
+    customerName?: string, 
+    customerCompany?: string, 
+    expiresInHours: number = 72
+  ): Promise<void> {
+    const normalizedCode = code.toUpperCase().trim();
+    const normalizedEmails = emails.map(email => email.toLowerCase().trim());
+    
+    this.validTestCodes.set(normalizedCode, normalizedEmails);
+    
+    const testCodeInfo: TestCodeInfo = {
+      code: normalizedCode,
+      emails: normalizedEmails,
+      customerName,
+      customerCompany,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + expiresInHours * 60 * 60 * 1000),
+      isActive: true
+    };
+    
+    this.testCodeDetails.set(normalizedCode, testCodeInfo);
+    this.testCodeUsageStats.set(normalizedCode, { logins: new Set() });
+  }
+
+  async deleteTestCode(code: string): Promise<void> {
+    const normalizedCode = code.toUpperCase().trim();
+    this.validTestCodes.delete(normalizedCode);
+    this.testCodeDetails.delete(normalizedCode);
+    this.testCodeUsageStats.delete(normalizedCode);
+  }
+
+  async getAllTestCodes(): Promise<TestCodeInfo[]> {
+    const now = new Date();
+    const codes = Array.from(this.testCodeDetails.values());
+    
+    // Update isActive status based on expiry
+    return codes.map(code => ({
+      ...code,
+      isActive: code.expiresAt > now
+    }));
+  }
+
+  async getTestCodeUsage(code: string): Promise<TestCodeUsage> {
+    const normalizedCode = code.toUpperCase().trim();
+    const stats = this.testCodeUsageStats.get(normalizedCode);
+    
+    if (!stats) {
+      return {
+        code: normalizedCode,
+        totalLogins: 0,
+        uniqueUsers: 0,
+        activeSessions: 0
+      };
+    }
+
+    const activeSessions = Array.from(this.testSessions.values())
+      .filter(session => session.accessCode === normalizedCode && session.expiresAt > new Date())
+      .length;
+
+    return {
+      code: normalizedCode,
+      totalLogins: stats.logins.size,
+      uniqueUsers: stats.logins.size,
+      lastAccess: stats.lastAccess,
+      activeSessions
+    };
+  }
+
+  async getAllActiveSessions(): Promise<TestAccessGrant[]> {
+    const now = new Date();
+    return Array.from(this.testSessions.values())
+      .filter(session => session.expiresAt > now);
+  }
+
   private initializeTestCodes() {
     // Secure server-side test codes mapping
-    this.validTestCodes.set('ZKS-DEMO-2024', [
-      'demo@kunde.de', 
-      'test@unternehmen.de'
-    ]);
+    const demoCode: TestCodeInfo = {
+      code: 'ZKS-DEMO-2024',
+      emails: ['demo@kunde.de', 'test@unternehmen.de'],
+      customerName: 'Demo Kunde',
+      customerCompany: 'Demo-Unternehmen',
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      isActive: true
+    };
+
+    this.validTestCodes.set('ZKS-DEMO-2024', demoCode.emails);
+    this.testCodeDetails.set('ZKS-DEMO-2024', demoCode);
+    this.testCodeUsageStats.set('ZKS-DEMO-2024', { logins: new Set() });
     
-    this.validTestCodes.set('ZKS-TEST-2024', [
-      'kunde@firma.de', 
-      'user@company.de'
-    ]);
-    
-    this.validTestCodes.set('ZKS-PREVIEW-2024', [
-      'manager@startup.de', 
-      'info@business.de'
-    ]);
+    this.validTestCodes.set('ZKS-TEST-2024', ['kunde@firma.de', 'user@company.de']);
+    this.validTestCodes.set('ZKS-PREVIEW-2024', ['manager@startup.de', 'info@business.de']);
   }
 
   private initializeProducts() {

@@ -267,6 +267,133 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin API Routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { password } = req.body;
+      
+      const isValid = await storage.validateAdminLogin(password);
+      if (!isValid) {
+        return res.status(401).json({ success: false, message: "Ungültiges Admin-Passwort" });
+      }
+      
+      const token = await storage.createAdminSession();
+      res.json({ success: true, token });
+    } catch (error) {
+      console.error("Admin login error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
+  app.get("/api/admin/session", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token) {
+        return res.status(401).json({ success: false, message: "Kein Token bereitgestellt" });
+      }
+      
+      const isValid = await storage.validateAdminSession(token);
+      res.json({ success: true, valid: isValid });
+    } catch (error) {
+      console.error("Admin session validation error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
+  app.get("/api/admin/testcodes", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token || !(await storage.validateAdminSession(token))) {
+        return res.status(401).json({ success: false, message: "Nicht autorisiert" });
+      }
+      
+      const testCodes = await storage.getAllTestCodes();
+      res.json({ success: true, data: testCodes });
+    } catch (error) {
+      console.error("Get test codes error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
+  app.post("/api/admin/testcodes", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token || !(await storage.validateAdminSession(token))) {
+        return res.status(401).json({ success: false, message: "Nicht autorisiert" });
+      }
+      
+      const { code, emails, customerName, customerCompany, expiresInHours, sendEmail } = req.body;
+      
+      await storage.createTestCode(code, emails, customerName, customerCompany, expiresInHours);
+      
+      // E-Mail versenden wenn gewünscht
+      if (sendEmail && emails.length > 0) {
+        const { sendTestCodeEmail } = await import('./sendgrid');
+        const validUntil = new Date(Date.now() + (expiresInHours || 72) * 60 * 60 * 1000).toLocaleDateString('de-DE');
+        
+        for (const email of emails) {
+          await sendTestCodeEmail({
+            customerName: customerName || 'Kunde',
+            customerEmail: email,
+            testCode: code,
+            validUntil,
+            loginUrl: `${req.protocol}://${req.get('host')}/test`
+          });
+        }
+      }
+      
+      res.json({ success: true, message: "Test-Code erfolgreich erstellt" });
+    } catch (error) {
+      console.error("Create test code error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
+  app.delete("/api/admin/testcodes/:code", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token || !(await storage.validateAdminSession(token))) {
+        return res.status(401).json({ success: false, message: "Nicht autorisiert" });
+      }
+      
+      await storage.deleteTestCode(req.params.code);
+      res.json({ success: true, message: "Test-Code gelöscht" });
+    } catch (error) {
+      console.error("Delete test code error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
+  app.get("/api/admin/sessions", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token || !(await storage.validateAdminSession(token))) {
+        return res.status(401).json({ success: false, message: "Nicht autorisiert" });
+      }
+      
+      const sessions = await storage.getAllActiveSessions();
+      res.json({ success: true, data: sessions });
+    } catch (error) {
+      console.error("Get sessions error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
+  app.get("/api/admin/usage/:code", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token || !(await storage.validateAdminSession(token))) {
+        return res.status(401).json({ success: false, message: "Nicht autorisiert" });
+      }
+      
+      const usage = await storage.getTestCodeUsage(req.params.code);
+      res.json({ success: true, data: usage });
+    } catch (error) {
+      console.error("Get usage error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

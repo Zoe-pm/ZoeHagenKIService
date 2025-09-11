@@ -10,7 +10,7 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
 import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const products = [
   {
@@ -57,6 +57,11 @@ const products = [
 
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);

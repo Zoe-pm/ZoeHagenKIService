@@ -4,8 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Mic, UserCircle, Brain, ArrowRight, CheckCircle } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import SimpleChatbot from "@/components/SimpleChatbot";
-import ChatbotButton from "@/components/ChatbotButton";
+import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
 
 const products = [
   {

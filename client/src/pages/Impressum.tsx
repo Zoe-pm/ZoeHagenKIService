@@ -35,118 +35,48 @@ export default function Impressum() {
           <Card className="glass">
             <CardContent className="p-8">
               <h1 className="text-4xl font-bold mb-8 gradient-text" data-testid="impressum-title">
-                Impressum
+                Impressum (Anbieterkennzeichnung nach § 5 DDG)
               </h1>
               
               <div className="space-y-8 text-muted-foreground">
                 <section data-testid="company-info">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Angaben gemäß § 5 TMG
-                  </h2>
-                  <div className="space-y-2">
-                    <p><strong>Zoë Hagen KI Consulting</strong></p>
-                    <p>Zoë Hagen</p>
-                    <p>[Straße und Hausnummer]</p>
-                    <p>[PLZ und Ort]</p>
-                    <p>Deutschland</p>
+                  <div className="space-y-4">
+                    <p className="text-foreground">
+                      <strong>Zoë Hagen – Einzelunternehmerin (Kleinunternehmerin nach § 19 UStG)</strong><br />
+                      Zoes KI Studio / Zoe Hagen KI Consulting<br />
+                      Jägerweg 28, 13503 Berlin<br />
+                      E-Mail: <a href="mailto:zoehagenkiconsulting@pm.me" className="text-accent hover:underline">zoehagenkiconsulting@pm.me</a>
+                    </p>
+                    
+                    <p className="text-foreground">
+                      <strong>Telefon:</strong> <a href="tel:+4916098627730" className="text-accent hover:underline">+49 (0) 160 98627730</a>
+                    </p>
+                    
+                    <p className="text-foreground">
+                      <strong>Verantwortlich für den Inhalt dieser Webseite:</strong><br />
+                      Zoë Hagen, Jägerweg 28, 13503 Berlin.
+                    </p>
                   </div>
                 </section>
 
-                <section data-testid="contact-info">
+                <section data-testid="vsbg-info">
                   <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Kontakt
-                  </h2>
-                  <div className="space-y-2">
-                    <p><strong>Telefon:</strong> 01719862773</p>
-                    <p><strong>E-Mail:</strong> zoe-kiconsulting@pm.me</p>
-                  </div>
-                </section>
-
-                <section data-testid="business-info">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Registereintrag
-                  </h2>
-                  <div className="space-y-2">
-                    <p>Als Einzelunternehmen nicht im Handelsregister eingetragen.</p>
-                  </div>
-                </section>
-
-                <section data-testid="management-info">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Inhaber
-                  </h2>
-                  <p>Zoë Hagen</p>
-                </section>
-
-                <section data-testid="vat-info">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Umsatzsteuer-ID
-                  </h2>
-                  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: [USt-IdNr.]</p>
-                </section>
-
-                <section data-testid="professional-info">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Berufsbezeichnung und berufsrechtliche Regelungen
-                  </h2>
-                  <div className="space-y-2">
-                    <p><strong>Berufsbezeichnung:</strong> KI-Beratung und IT-Dienstleistungen</p>
-                    <p><strong>Zuständige Kammer:</strong> [Zuständige IHK]</p>
-                  </div>
-                </section>
-
-                <section data-testid="editorial-info">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Redaktionell verantwortlich
-                  </h2>
-                  <div className="space-y-2">
-                    <p>Zoë Hagen</p>
-                    <p>Zoë Hagen KI Consulting</p>
-                    <p>[Straße und Hausnummer]</p>
-                    <p>[PLZ und Ort]</p>
-                  </div>
-                </section>
-
-                <section data-testid="dispute-resolution">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    EU-Streitschlichtung
+                    Hinweis nach § 36 VSBG (Verbraucherstreitbeilegung):
                   </h2>
                   <p>
-                    Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
-                    <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline ml-1">
-                      https://ec.europa.eu/consumers/odr/
-                    </a>
-                  </p>
-                  <p className="mt-2">
-                    Unsere E-Mail-Adresse finden Sie oben im Impressum.
+                    Ich bin weder verpflichtet noch bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle 
+                    teilzunehmen. (Hinweis: Unternehmen mit ≤ 10 Beschäftigten sind von der Pflicht nach § 36 VSBG ausgenommen; 
+                    die obige Negativ-Erklärung ist zulässig, aber nicht zwingend.)
                   </p>
                 </section>
 
-                <section data-testid="consumer-dispute">
+                <section data-testid="liability-info">
                   <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Verbraucherstreitbeilegung/Universalschlichtungsstelle
+                    Haftung für Inhalte & Links:
                   </h2>
                   <p>
-                    Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 
-                    Verbraucherschlichtungsstelle teilzunehmen.
-                  </p>
-                </section>
-
-                <section data-testid="liability-content">
-                  <h2 className="text-2xl font-semibold text-foreground mb-4">
-                    Haftung für Inhalte
-                  </h2>
-                  <p>
-                    Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den 
-                    allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht 
-                    unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach 
-                    Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
-                  </p>
-                  <p className="mt-4">
-                    Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen 
-                    Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt 
-                    der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden 
-                    Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.
+                    Eigene Inhalte unterliegen den gesetzlichen Vorschriften. Für externe Links wird keine Haftung übernommen; 
+                    zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar.
                   </p>
                 </section>
               </div>

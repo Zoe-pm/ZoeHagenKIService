@@ -65,8 +65,7 @@ export default function Impressum() {
                   </h2>
                   <p>
                     Ich bin weder verpflichtet noch bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle 
-                    teilzunehmen. (Hinweis: Unternehmen mit ≤ 10 Beschäftigten sind von der Pflicht nach § 36 VSBG ausgenommen; 
-                    die obige Negativ-Erklärung ist zulässig, aber nicht zwingend.)
+                    teilzunehmen.
                   </p>
                 </section>
 

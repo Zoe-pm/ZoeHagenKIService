@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Mic, UserCircle, Brain, ArrowRight, CheckCircle } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
 
@@ -168,11 +169,10 @@ export default function Produkte() {
             <Card className="glass border-primary/20">
               <CardContent className="p-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                  Welche Lösung passt zu Ihnen?
+                  Bereit für Ihr Service-Update?
                 </h2>
                 <p className="text-xl text-muted-foreground mb-8">
-                  Lassen Sie uns in einem unverbindlichen Gespräch herausfinden, 
-                  welcher KI-Assistant Ihren Service am besten unterstützt.
+                  Lassen Sie uns herausfinden, welche Lösung für Sie am besten passt.
                 </p>
                 <Button 
                   size="lg" 
@@ -180,7 +180,7 @@ export default function Produkte() {
                   onClick={() => scrollToSection('kontakt')}
                   data-testid="products-cta-button"
                 >
-                  Jetzt kostenlose Beratung buchen
+                  Los geht's!
                 </Button>
                 <p className="text-sm text-muted-foreground mt-4">
                   15 Minuten unverbindliches Gespräch • Individuelle Empfehlung • Keine Technik-Kenntnisse nötig
@@ -189,6 +189,8 @@ export default function Produkte() {
             </Card>
           </div>
         </section>
+
+        <ContactForm />
       </main>
 
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />

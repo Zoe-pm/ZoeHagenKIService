@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { SimpleChatbot } from "@/components/SimpleChatbot";
+import { TestChatbot } from "@/components/TestChatbot";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -277,9 +277,14 @@ export default function KundenTest() {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Hier testen Sie Ihr digitales neues Teammitglied
             </h1>
-            <p className="text-xl text-white/90 mb-8">
+            <p className="text-xl text-white/90 mb-6">
               Hier konfigurieren Sie Ihr digitales neues Teammitglied. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. Änderungen sehen Sie live in der Vorschau. Mit „Speichern & Bestätigen" erhalten Sie eine Zusammenfassung per E-Mail.
             </p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8 border border-white/20">
+              <p className="text-white/95 text-sm">
+                <strong>💡 Hinweis:</strong> Alle gezeigten Anpassungen sind Beispiele. Nach unserem Gespräch können wir weitere individuelle Anpassungen problemlos umsetzen – von erweiterten Funktionen bis hin zu speziellen Design-Anforderungen.
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/80 text-sm max-w-2xl mx-auto">
               <div>✨ Live-Vorschau</div>
               <div>🎨 Design anpassen</div>
@@ -689,8 +694,8 @@ export default function KundenTest() {
                     `}
                   >
                     <div className="text-center text-muted-foreground py-20">
-                      <p className="mb-4">Ihre Website-Vorschau</p>
-                      <p className="text-sm">Der Chatbot erscheint je nach Position unten rechts, links oder zentral.</p>
+                      <p className="mb-4">TEST-Bot Vorschau</p>
+                      <p className="text-sm">So wird Ihr konfigurierter {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} aussehen. Klicken Sie auf "Testen" um ihn auszuprobieren.</p>
                       
                       {/* Simulierter Bot Button */}
                       <div 
@@ -793,12 +798,13 @@ export default function KundenTest() {
         </div>
       </main>
 
-      {/* Chatbot Widget */}
+      {/* TEST-Chatbot Widget */}
       {isChatOpen && (
-        <SimpleChatbot
+        <TestChatbot
           isOpen={isChatOpen}
           onClose={() => setIsChatOpen(false)}
           authToken={session?.token}
+          config={testConfig}
         />
       )}
       

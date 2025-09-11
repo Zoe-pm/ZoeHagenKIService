@@ -1,6 +1,7 @@
 import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones, CheckCircle, Users, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "wouter";
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
 import VoiceDemo from "@/components/VoiceDemo";
@@ -57,6 +58,7 @@ const products = [
 
 export default function Home() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [, setLocation] = useLocation();
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
   useEffect(() => {
@@ -75,8 +77,8 @@ export default function Home() {
       // Open chatbot directly
       setIsChatOpen(true);
     } else {
-      // For other products, scroll to contact section
-      scrollToSection('kontakt');
+      // For other products, navigate to contact page
+      setLocation('/kontakt');
     }
   };
 
@@ -117,14 +119,15 @@ export default function Home() {
                   Ihre digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    size="lg" 
-                    className="button-gradient px-8 py-4 text-lg font-semibold"
-                    onClick={() => scrollToSection('kontakt')}
-                    data-testid="cta-primary"
-                  >
-                    Jetzt Erstgespräch buchen
-                  </Button>
+                  <Link href="/kontakt">
+                    <Button 
+                      size="lg" 
+                      className="button-gradient px-8 py-4 text-lg font-semibold"
+                      data-testid="cta-primary"
+                    >
+                      Jetzt Erstgespräch buchen
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -225,14 +228,15 @@ export default function Home() {
                 <p className="text-xl text-muted-foreground mb-8">
                   Wir übernehmen die Einrichtung – Sie profitieren vom Ergebnis.
                 </p>
-                <Button 
-                  size="lg" 
-                  className="button-gradient px-12 py-6 text-xl"
-                  onClick={() => scrollToSection('kontakt')}
-                  data-testid="central-cta-button"
-                >
-                  Jetzt Erstgespräch buchen
-                </Button>
+                <Link href="/kontakt">
+                  <Button 
+                    size="lg" 
+                    className="button-gradient px-12 py-6 text-xl"
+                    data-testid="central-cta-button"
+                  >
+                    Jetzt Erstgespräch buchen
+                  </Button>
+                </Link>
                 <p className="text-sm text-muted-foreground mt-4">
                   15 Minuten unverbindliches Gespräch • Keine Technik-Kenntnisse nötig
                 </p>
@@ -241,7 +245,6 @@ export default function Home() {
           </div>
         </section>
 
-        <ContactForm />
       </main>
 
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />

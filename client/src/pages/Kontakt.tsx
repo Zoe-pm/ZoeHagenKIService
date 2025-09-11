@@ -9,6 +9,18 @@ export default function Kontakt() {
   // Automatisch zum Seitenbeginn scrollen beim Laden der Kontaktseite
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Calendly Widget initialisieren
+    const timer = setTimeout(() => {
+      if (window.Calendly) {
+        window.Calendly.initInlineWidget({
+          url: 'https://calendly.com/zoe-kiconsulting',
+          parentElement: document.getElementById('calendly-inline-widget')
+        });
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -46,6 +58,25 @@ export default function Kontakt() {
         <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="contact-form-section">
           <div className="max-w-4xl mx-auto">
             <ContactForm />
+          </div>
+        </section>
+
+        {/* Calendly Terminbuchung */}
+        <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="calendly-section">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4 text-primary">📅 Termin direkt buchen</h2>
+              <p className="text-lg text-muted-foreground">
+                Wählen Sie einen passenden Zeitpunkt für Ihr kostenloses Erstgespräch
+              </p>
+            </div>
+            <div className="glass p-2 rounded-lg">
+              <div 
+                id="calendly-inline-widget" 
+                style={{minWidth: '320px', height: '700px'}}
+                data-testid="calendly-widget"
+              ></div>
+            </div>
           </div>
         </section>
 

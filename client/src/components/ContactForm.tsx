@@ -12,6 +12,13 @@ import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import zoePhoto from "@assets/Zoe_Website_1757416756555.jpg";
 
+// Calendly global type
+declare global {
+  interface Window {
+    Calendly: any;
+  }
+}
+
 // Contact form schema
 const contactSchema = z.object({
   name: z.string().min(2, 'Name ist zu kurz').max(50, 'Name ist zu lang'),
@@ -52,10 +59,22 @@ export default function ContactForm() {
   });
 
   const handleQuickAction = async (action: string) => {
-    toast({
-      title: "Demo verfügbar",
-      description: `${action} wird in Kürze verfügbar sein. Kontaktieren Sie uns gerne direkt.`,
-    });
+    if (action === "15-Min Demo") {
+      // Calendly Popup öffnen
+      if (window.Calendly) {
+        window.Calendly.initPopupWidget({
+          url: 'https://calendly.com/zoe-kiconsulting/15min-demo'
+        });
+      } else {
+        // Fallback zu direktem Link
+        window.open('https://calendly.com/zoe-kiconsulting/15min-demo', '_blank');
+      }
+    } else {
+      toast({
+        title: "Demo verfügbar",
+        description: `${action} wird in Kürze verfügbar sein. Kontaktieren Sie uns gerne direkt.`,
+      });
+    }
   };
 
   const onSubmitContact = (data: z.infer<typeof contactSchema>) => {

@@ -143,26 +143,36 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
     setError(null);
 
     try {
-      // Start the voice call with Zoia's configuration
-      await vapi.start({
-        model: {
-          provider: "openai",
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content: `Du bist Zoia, die freundliche Voice-Assistentin von Zoës KI Studio. 
-              Du hilfst Kunden bei Fragen zu unseren KI-Produkten: Chatbot, Voicebot, Avatar und Wissensbot.
-              Antworte kurz, freundlich und auf Deutsch. Stelle gezielt Rückfragen um zu helfen.
-              Du bist die Voice-Version - erwähne dass es auch Juna gibt, den Text-Chatbot.`
-            }
-          ]
-        },
-        voice: {
-          provider: "11labs", 
-          voiceId: "sarah" // Friendly female voice
-        }
-      });
+      // Get Assistant ID from environment or use default inline config
+      const assistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID;
+      
+      if (assistantId) {
+        // Use pre-configured assistant from Vapi dashboard
+        console.log('ZOIA: Using configured assistant:', assistantId);
+        await vapi.start(assistantId);
+      } else {
+        // Fallback to inline configuration
+        console.log('ZOIA: Using inline configuration (no assistant ID provided)');
+        await vapi.start({
+          model: {
+            provider: "openai",
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "system",
+                content: `Du bist Zoia, die freundliche Voice-Assistentin von Zoës KI Studio. 
+                Du hilfst Kunden bei Fragen zu unseren KI-Produkten: Chatbot, Voicebot, Avatar und Wissensbot.
+                Antworte kurz, freundlich und auf Deutsch. Stelle gezielt Rückfragen um zu helfen.
+                Du bist die Voice-Version - erwähne dass es auch Juna gibt, den Text-Chatbot.`
+              }
+            ]
+          },
+          voice: {
+            provider: "11labs", 
+            voiceId: "sarah" // Friendly female voice
+          }
+        });
+      }
     } catch (err) {
       console.error('ZOIA: Failed to start call:', err);
       setError('Anruf konnte nicht gestartet werden. Prüfen Sie Ihr Mikrofon.');

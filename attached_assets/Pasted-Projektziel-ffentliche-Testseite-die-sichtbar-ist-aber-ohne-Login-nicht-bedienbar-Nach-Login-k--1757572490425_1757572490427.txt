@@ -1,0 +1,161 @@
+Projektziel: Öffentliche Testseite, die sichtbar ist, aber ohne Login nicht bedienbar. Nach Login können Kund:innen getrennt Chatbot oder VoiceBot konfigurieren und testen.
+Wichtig: Kein Konfig-Download/JSON für Kund:innen. Nur ich (Admin) erhalte die vollständigen Einstellungen per E-Mail. DSGVO-konform, missbrauchssicher, mit Wow-Effekt (Live-Vorschau, Voice-Probe).
+
+⸻
+
+1) Globale Seitenänderungen
+	•	Bereich „Persönliches Erstgespräch“ komplett entfernen (vollständig löschen).
+	•	Kontaktseite: Foto oben rechts platzieren. Größe beibehalten, Ausschnitt enger (mehr Gesicht, weniger Hintergrund).
+
+⸻
+
+2) Route & Public View der Testseite
+	•	Route: /test ist öffentlich sichtbar, aber alle Controls disabled (per Overlay).
+	•	Sichtbarer Login-Block (Seite/Modal) mit Feldern: E-Mail, Testcode, Captcha.
+	•	Overlay-Hinweis (oben):
+„Anmeldung erforderlich – Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.“
+
+Header & Intro auf /test:
+	•	Header: „Hier testen Sie Ihr digitales neues Teammitglied.“
+	•	Intro-Text:
+„Hier konfigurieren Sie Ihr digitales neues Teammitglied. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. Änderungen sehen Sie live in der Vorschau. Mit ‚Speichern & Bestätigen‘ erhalten Sie eine Zusammenfassung per E-Mail.“
+
+Hinweis am Seitenende (Content-Lieferung):
+	•	„Wichtiger Hinweis zur inhaltlichen Befüllung: Die fachlichen Inhalte (z. B. FAQs, Produktinfos, Prozesse, Dokumente) stellen Sie uns separat bereit. Nach Bestätigung erhalten Sie automatisch eine E-Mail mit sicheren Upload-Optionen und einer Vorlage, welche Informationen wir benötigen. Die inhaltliche Befüllung erfolgt getrennt von Design & Stimme.“
+
+⸻
+
+3) Auth & Sicherheit
+	•	Endpoint POST /auth/test-login nimmt email, testCode, captchaToken.
+	•	Prüfungen:
+	•	Captcha (Cloudflare Turnstile oder hCaptcha).
+	•	Rate-Limit Login: max. 5 Versuche / 10 Min / IP und 5 / 10 Min / E-Mail; bei Überschreitung 429.
+	•	Testcode: signiertes Token (z. B. JWT) mit tenantId, scope=test, exp.
+	•	Bei Erfolg: HTTP-only Session-Cookie setzen (Secure, SameSite=Lax).
+	•	Admin-Mail bei jedem erfolgreichen Login (Details siehe Punkt 8).
+	•	Erst nach Login: Overlay entfernen, Controls aktivieren.
+
+Security Header & Schutz:
+	•	CSP: default-src 'self'; frame-ancestors 'none';
+	•	CSRF-Token für POST-Requests.
+	•	Referrer-Policy strict-origin-when-cross-origin, HSTS aktiv.
+	•	Keine Secrets im Client; alle Dritt-APIs nur serverseitig via Proxy.
+
+⸻
+
+4) Varianten & Layout (strikt getrennt)
+	•	Nach Login 2-Spalten-Layout: links Form-Tabs, rechts Live-Vorschau (iframe).
+	•	Tabs/Varianten (getrennte Speicherbereiche):
+	•	Chatbot testen
+	•	VoiceBot testen
+	•	Jeder Tab hat eigene Felder, eigene Vorschau, eigene Speichern-Buttons.
+
+⸻
+
+5) Form-Felder & Live-Vorschau
+
+Gemeinsame Branding-Optionen (je Variante separat)
+	•	Farbauswahl aktivieren:
+	•	3 Presets (z. B. „Warm“, „Modern“, „Seriös“) plus Color-Picker für primaryColor, secondaryColor, backgroundColor.
+	•	Hex-Input mit Validierung #RRGGBB.
+	•	Kontrastwarnung (Barrierefreiheit).
+	•	Schriftart: Whitelist (3–5 Web-safe Fonts).
+	•	Widget: type (bubble|bar), size (sm|md|lg), position (bottom-left|bottom-right).
+	•	Begrüßungstext (greetingText) – max. 120 Zeichen, kein HTML/Links.
+
+Spezifisch Chatbot
+	•	Readonly Infos: endpointUrl, apiKeyRef (nur Referenz).
+	•	Knowledge-Preset (Dropdown).
+	•	Temperatur (0.1–0.7, Schritt 0.1), maxTokens (256/512/1024).
+	•	Testbereich (kleines Chat-Fenster) → Proxy POST /chat/test (serverseitig, throttled).
+
+Spezifisch VoiceBot
+	•	Readonly Infos: endpointUrl, apiKeyRef.
+	•	Stimme (ElevenLabs): Dropdown aus Server-Whitelist (/voices liefert {name, voiceId}).
+	•	Probe anhören: Button ruft POST /voice/preview auf; Server erzeugt ≤ 3 s Audio, kein Persistieren, Response als Blob → Audio Player.
+	•	Regler: stability (0–1), similarityBoost (0–1), vadSensitivity (low|normal|high).
+
+Vorschau-Verhalten:
+	•	Live-Vorschau (rechts, iframe) übernimmt ungespeicherte Änderungen (Soft-Reload).
+	•	Nach Save zeigt Toast: „Gespeichert – Version v{{n}}.“
+
+⸻
+
+6) Buttons & Speichern
+	•	Pro Tab unten rechts: „Speichern“ und „Speichern & Bestätigen (E-Mail)“.
+	•	POST /tenant/config: validieren & speichern (inkl. Versionierung & Audit).
+	•	POST /tenant/confirm: speichern + E-Mails senden (siehe 7 & 8).
+
+⸻
+
+7) E-Mails an Kund:innen (ohne JSON/Anhang)
+	•	Kein Download/Export im UI. Kein JSON/Anhang an Kund:innen.
+	•	Betreff: „Ihre Konfiguration – Digitales Teammitglied (v{{version}})“
+	•	Inhalt: Lesbare Zusammenfassung nur der gewählten Optionen (je Tab, falls genutzt):
+	•	Chatbot: Farben/Font/Widget, Begrüßungstext, Knowledge-Preset, Temperatur, Tokens.
+	•	VoiceBot: Stimme (Name), Stability/Similarity, VAD, Farben/Font/Widget, Begrüßungstext.
+	•	Nächste Schritte: Platzhalter {{uploadLink}} & {{checklistLink}} (vorerst Dummy), Hinweis „Inhalte separat liefern“.
+	•	Rechtshinweis (transaktional, DSGVO).
+
+Mails werden serverseitig versendet (kein Client-Mail). Provider siehe 9).
+
+⸻
+
+8) Admin-Benachrichtigungen (an mich)
+	•	Bei jedem erfolgreichen Login: sofortige Admin-Mail.
+	•	Betreff: [Login] {{tenantName}} – {{userEmail}} – {{timestamp}}
+	•	Body: Tenant (ID/Name), User-E-Mail, Zeit (UTC & Europe/Berlin), IP, grobe Geo (Stadt/Land), User-Agent, Session-ID (gekürzt), Logins letzte 24h.
+	•	Bei „Speichern & Bestätigen“: Admin-Mail mit vollständiger Konfiguration im E-Mail-Body (gut formatiert, kein Anhang notwendig). Kund:innen bekommen kein JSON.
+	•	Optional: Tägliche Übersicht 18:00 Europe/Berlin: Logins gesamt, Chat-Tests, Voice-Previews, ob Quoten erreicht.
+
+⸻
+
+9) Mail-Service (serverseitig, keine Client-Mails)
+	•	Bitte nennen, welche Provider verfügbar sind (Resend/Postmark/AWS SES/SMTP). Einen davon implementieren.
+	•	ENV-Variablen:
+	•	MAIL_FROM=no-reply@soe-ki-consulting.me
+	•	MAIL_TO_ADMIN=admin@soe-ki-consulting.me (Platzhalter; ich liefere final)
+	•	MAIL_PROVIDER (z. B. resend|postmark|ses|smtp)
+	•	MAIL_PROVIDER_API_KEY bzw. SMTP-Creds
+	•	Fehlertoleranz: Retry, Logging, kein Silent-Fail.
+
+⸻
+
+10) Anti-Bot & Kostenkontrolle (Missbrauch vermeiden)
+	•	Captcha am Login (Turnstile/hCaptcha).
+	•	Honeypot im Login-Form (z. B. verstecktes Feld website; wenn befüllt → reject).
+	•	Quoten (pro Tenant, konfigurierbar via ENV):
+	•	Chat-Tests POST /chat/test: max. 20/24h, zusätzlich Throttle 1 Request/3s.
+	•	Voice-Preview POST /voice/preview: max. 10/24h, ≤ 3s Audio, mono 22.05 kHz.
+	•	Global Cap/Tag (Failsafe): z. B. 1000 Chat-Tokens & 30 Voice-Sekunden/Tenant.
+	•	Bei Überschreitung: HTTP 429 + UI-Meldung: „Tageslimit erreicht …“.
+
+⸻
+
+11) DSGVO & Aufbewahrung
+	•	Rechtsgrundlage: Art. 6 (1) b DSGVO (Vertrag/Testzugang).
+	•	Datenminimierung: nur E-Mail + Konfigwerte + technische Logs.
+	•	Aufbewahrung: Logs 90 Tage, Voice-Previews max. 24h (Auto-Purge), gespeicherte Konfigurationen 12 Monate (Support).
+	•	AV-Verträge mit Hosting/Mail/Voice-Provider (EU/EWR bevorzugt).
+	•	Cookies: nur essentielle Session-Cookies (kein Banner nötig).
+	•	Datenschutzhinweise auf /datenschutz ergänzen (Zweck, Rechtsgrundlage, Empfänger, Speicherdauer, Rechte).
+
+⸻
+
+12) Akzeptanzkriterien (DoD)
+	•	Ohne Login sind alle Controls sichtbar, aber disabled (Overlay + Hinweis).
+	•	Login nur mit E-Mail + Testcode + Captcha; Rate-Limit aktiv.
+	•	Bei jedem Login geht sofort eine Admin-Mail raus.
+	•	Zwei strikt getrennte Varianten: Chatbot und VoiceBot (eigene Felder, eigene Vorschau, eigenes Speichern).
+	•	Farbauswahl funktioniert (Presets + Picker + Hex + Kontrastwarnung).
+	•	„Speichern & Bestätigen“ versendet:
+	•	Kund:in: reine Bestätigungs-E-Mail ohne JSON/Anhänge.
+	•	Admin: vollständige Konfiguration im E-Mail-Body.
+	•	Voice-Preview funktioniert (≤ 3 s, keine Persistenz).
+	•	Kein Download/Export/JSON im Client.
+	•	Quoten/Throttle greifen (429 bei Überschreitung).
+	•	Sicherheits-Header aktiv; keine Client-Secrets.
+
+⸻
+
+13) ENV-Platzhalter (Minimum)

@@ -126,6 +126,10 @@ export interface TestAccessGrant {
   token: string;
   createdAt: Date;
   expiresAt: Date;
+  // n8n Integration
+  n8nWebhookUrl?: string;
+  n8nBotName?: string;
+  n8nBotGreeting?: string;
 }
 
 export interface TestCodeInfo {
@@ -136,6 +140,10 @@ export interface TestCodeInfo {
   createdAt: Date;
   expiresAt: Date;
   isActive: boolean;
+  // n8n Integration
+  n8nWebhookUrl?: string;
+  n8nBotName?: string;
+  n8nBotGreeting?: string;
 }
 
 export interface TestCodeUsage {

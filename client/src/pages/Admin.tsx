@@ -27,7 +27,11 @@ const createTestCodeSchema = z.object({
   customerName: z.string().optional(),
   customerCompany: z.string().optional(),
   expiresInHours: z.coerce.number().min(1).max(168).default(72),
-  sendEmail: z.boolean().default(false)
+  sendEmail: z.boolean().default(false),
+  // n8n Integration
+  n8nWebhookUrl: z.string().url('Ungültige URL').optional().or(z.literal('')),
+  n8nBotName: z.string().optional(),
+  n8nBotGreeting: z.string().optional()
 });
 
 type AdminLoginForm = z.infer<typeof adminLoginSchema>;
@@ -41,6 +45,10 @@ interface TestCodeInfo {
   createdAt: string;
   expiresAt: string;
   isActive: boolean;
+  // n8n Integration
+  n8nWebhookUrl?: string;
+  n8nBotName?: string;
+  n8nBotGreeting?: string;
 }
 
 interface AdminSession {
@@ -70,7 +78,10 @@ export default function Admin() {
       customerName: '',
       customerCompany: '',
       expiresInHours: 72,
-      sendEmail: false
+      sendEmail: false,
+      n8nWebhookUrl: '',
+      n8nBotName: '',
+      n8nBotGreeting: ''
     }
   });
 
@@ -413,6 +424,65 @@ export default function Admin() {
                         </FormItem>
                       )}
                     />
+                  </div>
+
+                  {/* n8n Integration Section */}
+                  <div className="space-y-4 border-t pt-4">
+                    <h3 className="text-lg font-semibold text-foreground">n8n Chatbot-Konfiguration (Optional)</h3>
+                    
+                    <FormField
+                      control={testCodeForm.control}
+                      name="n8nWebhookUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>n8n Webhook URL</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="https://your-n8n.domain.com/webhook/chatbot-xyz"
+                              data-testid="input-n8n-webhook"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={testCodeForm.control}
+                        name="n8nBotName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Bot-Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Sophie Assistant"
+                                data-testid="input-n8n-bot-name"
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={testCodeForm.control}
+                        name="n8nBotGreeting"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Begrüßung</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Hallo! Wie kann ich Ihnen helfen?"
+                                data-testid="input-n8n-greeting"
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between">

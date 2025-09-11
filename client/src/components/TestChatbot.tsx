@@ -50,9 +50,13 @@ interface TestChatbotProps {
   onClose: () => void;
   authToken?: string;
   config: TestConfig;
+  // n8n Integration
+  n8nWebhookUrl?: string;
+  n8nBotName?: string;
+  n8nBotGreeting?: string;
 }
 
-export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotProps) {
+export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl, n8nBotName, n8nBotGreeting }: TestChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -124,23 +128,52 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
     setIsLoading(true);
 
     try {
-      // TEST-Bot responses (not your real bot)
-      const testResponses: { [key: string]: string } = {
-        "hallo": `Hallo! Ich bin ${currentConfig.name}, Ihr TEST-Assistent. Das ist nur eine Vorschau der Funktionalität.`,
-        "test": "Das ist ein Test-Bot zur Demonstration. Ihr echter Bot wird individuell konfiguriert und trainiert.",
-        "funktionen": "In der echten Version kann ich Ihre spezifischen Fragen beantworten, Termine buchen und vieles mehr.",
-        "kosten": "Für genaue Preise und Funktionen sprechen Sie bitte mit Zoë. Dies ist nur eine Demo.",
-        "voice": config.activeBot === "voicebot" ? "Ich kann sprechen! Probieren Sie die Sprachausgabe aus." : "Wechseln Sie zum Voicebot um die Sprachfunktion zu testen.",
-        "default": `Ich bin ${currentConfig.name}, Ihr digitaler Test-Assistent. In der echten Version werde ich mit Ihren spezifischen Inhalten und Workflows trainiert.`
-      };
-
-      const messageLower = messageToSend.toLowerCase();
-      let botResponse = testResponses.default;
+      let botResponse: string;
       
-      for (const [key, value] of Object.entries(testResponses)) {
-        if (messageLower.includes(key)) {
-          botResponse = value;
-          break;
+      // Use real n8n chatbot if configured, otherwise fallback to demo responses
+      if (n8nWebhookUrl) {
+        // Real n8n API Call
+        try {
+          const response = await fetch(n8nWebhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: messageToSend,
+              botName: n8nBotName || currentConfig.name
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            botResponse = data.response || data.message || 'Entschuldigung, keine Antwort erhalten.';
+          } else {
+            botResponse = `[n8n Fehler ${response.status}] Ihr Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL.`;
+          }
+        } catch (n8nError) {
+          console.error('n8n API Error:', n8nError);
+          botResponse = '[n8n Verbindungsfehler] Ihr Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL und Internetverbindung.';
+        }
+      } else {
+        // Fallback: Demo responses when no n8n webhook configured  
+        const testResponses: { [key: string]: string } = {
+          "hallo": `Hallo! Ich bin ${currentConfig.name}, Ihr TEST-Assistent. Das ist nur eine Vorschau der Funktionalität.`,
+          "test": "Das ist ein Test-Bot zur Demonstration. Ihr echter Bot wird individuell konfiguriert und trainiert.",
+          "funktionen": "In der echten Version kann ich Ihre spezifischen Fragen beantworten, Termine buchen und vieles mehr.",
+          "kosten": "Für genaue Preise und Funktionen sprechen Sie bitte mit Zoë. Dies ist nur eine Demo.",
+          "voice": config.activeBot === "voicebot" ? "Ich kann sprechen! Probieren Sie die Sprachausgabe aus." : "Wechseln Sie zum Voicebot um die Sprachfunktion zu testen.",
+          "default": `Ich bin ${currentConfig.name}, Ihr digitaler Test-Assistent. In der echten Version werde ich mit Ihren spezifischen Inhalten und Workflows trainiert.`
+        };
+
+        const messageLower = messageToSend.toLowerCase();
+        botResponse = testResponses.default;
+        
+        for (const [key, value] of Object.entries(testResponses)) {
+          if (messageLower.includes(key)) {
+            botResponse = value;
+            break;
+          }
         }
       }
 

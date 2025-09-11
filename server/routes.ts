@@ -135,7 +135,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json({ 
         success: true, 
         token: session.token,
-        expiresAt: session.expiresAt.toISOString()
+        expiresAt: session.expiresAt.toISOString(),
+        // Include n8n configuration from TestAccessGrant
+        n8nWebhookUrl: session.n8nWebhookUrl,
+        n8nBotName: session.n8nBotName,
+        n8nBotGreeting: session.n8nBotGreeting
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -322,9 +326,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ success: false, message: "Nicht autorisiert" });
       }
       
-      const { code, emails, customerName, customerCompany, expiresInHours, sendEmail } = req.body;
+      const { code, emails, customerName, customerCompany, expiresInHours, sendEmail, n8nWebhookUrl, n8nBotName, n8nBotGreeting } = req.body;
       
-      await storage.createTestCode(code, emails, customerName, customerCompany, expiresInHours);
+      await storage.createTestCode(code, emails, customerName, customerCompany, expiresInHours, n8nWebhookUrl, n8nBotName, n8nBotGreeting);
       
       // E-Mail versenden wenn gewünscht
       if (sendEmail && emails.length > 0) {

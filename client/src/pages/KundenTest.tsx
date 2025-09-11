@@ -58,6 +58,10 @@ interface TestSession {
   token: string;
   email: string;
   expiresAt: string;
+  // n8n Integration
+  n8nWebhookUrl?: string;
+  n8nBotName?: string;
+  n8nBotGreeting?: string;
 }
 
 // 10 webfähige Schriftvarianten + Schreibschrift
@@ -266,7 +270,11 @@ export default function KundenTest() {
         const sessionData: TestSession = {
           token: result.token,
           email: email.trim(),
-          expiresAt: result.expiresAt
+          expiresAt: result.expiresAt,
+          // n8n Integration from API response
+          n8nWebhookUrl: result.n8nWebhookUrl,
+          n8nBotName: result.n8nBotName,
+          n8nBotGreeting: result.n8nBotGreeting
         };
         
         setSession(sessionData);
@@ -1090,6 +1098,9 @@ export default function KundenTest() {
           onClose={() => setIsChatOpen(false)}
           authToken={session?.token}
           config={testConfig}
+          n8nWebhookUrl={session?.n8nWebhookUrl}
+          n8nBotName={session?.n8nBotName}
+          n8nBotGreeting={session?.n8nBotGreeting}
         />
       )}
       

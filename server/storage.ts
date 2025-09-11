@@ -30,7 +30,7 @@ export interface IStorage {
   validateAdminLogin(password: string): Promise<boolean>;
   createAdminSession(): Promise<string>;
   validateAdminSession(token: string): Promise<boolean>;
-  createTestCode(code: string, emails: string[], customerName?: string, customerCompany?: string, expiresInHours?: number): Promise<void>;
+  createTestCode(code: string, emails: string[], customerName?: string, customerCompany?: string, expiresInHours?: number, n8nWebhookUrl?: string, n8nBotName?: string, n8nBotGreeting?: string): Promise<void>;
   deleteTestCode(code: string): Promise<void>;
   getAllTestCodes(): Promise<TestCodeInfo[]>;
   getTestCodeUsage(code: string): Promise<TestCodeUsage>;
@@ -133,13 +133,20 @@ export class MemStorage implements IStorage {
     const createdAt = new Date();
     const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000); // 24 hours
 
+    // Get n8n configuration from test code details
+    const testCodeInfo = this.testCodeDetails.get(accessCode.toUpperCase().trim());
+    
     const session: TestAccessGrant = {
       id,
       email: email.toLowerCase().trim(),
       accessCode: accessCode.toUpperCase().trim(),
       token,
       createdAt,
-      expiresAt
+      expiresAt,
+      // n8n Integration from test code
+      n8nWebhookUrl: testCodeInfo?.n8nWebhookUrl,
+      n8nBotName: testCodeInfo?.n8nBotName,
+      n8nBotGreeting: testCodeInfo?.n8nBotGreeting
     };
 
     this.testSessions.set(token, session);
@@ -203,7 +210,10 @@ export class MemStorage implements IStorage {
     emails: string[], 
     customerName?: string, 
     customerCompany?: string, 
-    expiresInHours: number = 72
+    expiresInHours: number = 72,
+    n8nWebhookUrl?: string,
+    n8nBotName?: string,
+    n8nBotGreeting?: string
   ): Promise<void> {
     const normalizedCode = code.toUpperCase().trim();
     const normalizedEmails = emails.map(email => email.toLowerCase().trim());
@@ -217,7 +227,10 @@ export class MemStorage implements IStorage {
       customerCompany,
       createdAt: new Date(),
       expiresAt: new Date(Date.now() + expiresInHours * 60 * 60 * 1000),
-      isActive: true
+      isActive: true,
+      n8nWebhookUrl,
+      n8nBotName,
+      n8nBotGreeting
     };
     
     this.testCodeDetails.set(normalizedCode, testCodeInfo);

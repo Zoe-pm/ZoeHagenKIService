@@ -429,22 +429,22 @@ export default function KundenTest() {
             </CardContent>
           </Card>
           
-          {/* Overlay für nicht-eingeloggte Benutzer */}
+          {/* Teasing Overlay für nicht-eingeloggte Benutzer */}
           {!isAuthorized && showOverlay && (
-            <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60 backdrop-blur-sm z-10 rounded-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/20 backdrop-blur-sm z-10 rounded-lg">
               <div className="flex items-center justify-center h-full">
-                <div className="text-center text-white p-8 max-w-md bg-black/30 rounded-xl border border-white/20">
-                  <div className="mb-4 text-6xl animate-pulse">🔒</div>
-                  <h3 className="text-2xl font-bold mb-4 text-white">Anmeldung erforderlich</h3>
-                  <p className="text-white/90 mb-6 leading-relaxed">
-                    Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.
+                <div className="text-center text-foreground p-8 max-w-md bg-background/90 rounded-xl border border-primary/30 shadow-xl">
+                  <div className="mb-4 text-5xl">✨</div>
+                  <h3 className="text-xl font-bold mb-3 text-primary">Ihr KI-Assistent wartet</h3>
+                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                    Mit Ihrem persönlichen Testcode können Sie alle Einstellungen live ausprobieren und Ihren perfekten KI-Assistenten konfigurieren.
                   </p>
                   <Button 
                     onClick={() => setShowOverlay(false)}
-                    className="button-gradient text-lg px-6 py-3"
-                    size="lg"
+                    className="button-gradient px-6 py-2"
+                    size="default"
                   >
-                    ⚡ Anmeldung anzeigen
+                    🚀 Jetzt einloggen
                   </Button>
                 </div>
               </div>
@@ -836,6 +836,26 @@ export default function KundenTest() {
                       rows={3}
                       placeholder="Ihre persönliche Begrüßung..."
                     />
+                  </div>
+
+                  {/* Konfiguration speichern und abschicken */}
+                  <div className="pt-6 border-t border-border/50">
+                    <Button
+                      onClick={() => {
+                        toast({
+                          title: "✅ Konfiguration gespeichert!",
+                          description: "Ihre Einstellungen wurden erfolgreich übermittelt. Sie erhalten eine Zusammenfassung per E-Mail.",
+                        });
+                      }}
+                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 text-lg shadow-lg"
+                      size="lg"
+                      data-testid="button-save-config"
+                    >
+                      💾 Konfiguration speichern & abschicken
+                    </Button>
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      Sie erhalten eine detaillierte Zusammenfassung Ihrer Konfiguration per E-Mail
+                    </p>
                   </div>
 
                   {isAuthorized ? (

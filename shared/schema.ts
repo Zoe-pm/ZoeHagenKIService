@@ -84,6 +84,41 @@ export const testSessionSchema = z.object({
 export type TestAccessRequest = z.infer<typeof testAccessSchema>;
 export type TestSession = z.infer<typeof testSessionSchema>;
 
+// Test accounts and sessions tables
+export const testAccounts = pgTable("test_accounts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull().unique(),
+  testCode: text("test_code").notNull().unique(),
+  customerName: text("customer_name"),
+  customerCompany: text("customer_company"),
+  isActive: text("is_active").notNull().default("true"), // "true" | "false"
+  createdAt: timestamp("created_at").defaultNow(),
+  expiresAt: timestamp("expires_at"),
+});
+
+export const testSessions = pgTable("test_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  testAccountId: varchar("test_account_id").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow(),
+  expiresAt: timestamp("expires_at").notNull(),
+});
+
+export const insertTestAccountSchema = createInsertSchema(testAccounts).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertTestSessionSchema = createInsertSchema(testSessions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertTestAccount = z.infer<typeof insertTestAccountSchema>;
+export type TestAccount = typeof testAccounts.$inferSelect;
+export type InsertTestSession = z.infer<typeof insertTestSessionSchema>;
+export type TestSessionDb = typeof testSessions.$inferSelect;
+
 export interface TestAccessGrant {
   id: string;
   email: string;

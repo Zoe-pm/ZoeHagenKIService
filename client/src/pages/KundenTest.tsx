@@ -291,10 +291,10 @@ export default function KundenTest() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
           
           {/* Login Card - immer sichtbar */}
-          <Card className="glass max-w-lg mx-auto mb-8 relative z-20">
+          <Card className="glass max-w-lg mx-auto mb-8 relative z-20 border-2 border-primary/20 shadow-2xl">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl mb-4">🔓 Anmeldung erforderlich</CardTitle>
-              <p className="text-muted-foreground mb-4">
+              <CardTitle className="text-2xl mb-4 text-primary">🔐 Testbereich-Anmeldung</CardTitle>
+              <p className="text-foreground mb-4 font-medium">
                 Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.
               </p>
             </CardHeader>
@@ -372,25 +372,35 @@ export default function KundenTest() {
                     <strong>Ihren Testcode erhalten Sie nach Auftragsvergabe.</strong>
                   </p>
                 </div>
+                
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <h4 className="font-semibold text-green-800 mb-2">🎯 Demo-Zugang (für sofortiges Testen)</h4>
+                  <div className="text-sm text-green-700 space-y-1">
+                    <p><strong>E-Mail:</strong> demo@kunde.de</p>
+                    <p><strong>Testcode:</strong> ZKS-DEMO-2024</p>
+                    <p className="text-xs text-green-600 mt-2">Dieser Demo-Zugang ist für alle Besucher verfügbar zum sofortigen Testen der Funktionalität.</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
           
           {/* Overlay für nicht-eingeloggte Benutzer */}
           {!isAuthorized && showOverlay && (
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-10 rounded-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60 backdrop-blur-sm z-10 rounded-lg">
               <div className="flex items-center justify-center h-full">
-                <div className="text-center text-white p-8 max-w-md">
-                  <div className="mb-4 text-6xl">🔒</div>
-                  <h3 className="text-xl font-bold mb-4">Anmeldung erforderlich</h3>
-                  <p className="text-white/90 mb-6">
+                <div className="text-center text-white p-8 max-w-md bg-black/30 rounded-xl border border-white/20">
+                  <div className="mb-4 text-6xl animate-pulse">🔒</div>
+                  <h3 className="text-2xl font-bold mb-4 text-white">Anmeldung erforderlich</h3>
+                  <p className="text-white/90 mb-6 leading-relaxed">
                     Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.
                   </p>
                   <Button 
                     onClick={() => setShowOverlay(false)}
-                    className="button-gradient"
+                    className="button-gradient text-lg px-6 py-3"
+                    size="lg"
                   >
-                    Anmeldung anzeigen
+                    ⚡ Anmeldung anzeigen
                   </Button>
                 </div>
               </div>

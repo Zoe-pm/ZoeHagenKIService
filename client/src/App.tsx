@@ -11,6 +11,7 @@ import KundenTest from "@/pages/KundenTest";
 import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
 import NotFound from "@/pages/not-found";
+import Admin from "@/pages/Admin";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function Router() {
       </Route>
       <Route path="/impressum" component={Impressum} />
       <Route path="/datenschutz" component={Datenschutz} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -42,8 +42,16 @@ interface VoicebotConfig {
 
 interface TestConfig {
   activeBot: "chatbot" | "voicebot";
-  chatbot: ChatbotConfig;
-  voicebot: VoicebotConfig;
+  chatbot: ChatbotConfig & {
+    logoUrl: string;
+    logoPosition: string; 
+    logoSize: string;
+  };
+  voicebot: VoicebotConfig & {
+    logoUrl: string;
+    logoPosition: string;
+    logoSize: string;
+  };
 }
 
 interface TestSession {
@@ -207,7 +215,10 @@ export default function KundenTest() {
         position: "bottom-right",
         greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
         title: "Willkommen!",
-        subtitle: "Ich helfe Ihnen gerne weiter"
+        subtitle: "Ich helfe Ihnen gerne weiter",
+        logoUrl: "",
+        logoPosition: "top-left",
+        logoSize: "medium"
       },
       voicebot: {
         name: "Juna",
@@ -220,7 +231,10 @@ export default function KundenTest() {
         elevenLabsVoiceId: "",
         greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
         title: "Sprachassistent",
-        subtitle: "Sprechen Sie mit mir!"
+        subtitle: "Sprechen Sie mit mir!",
+        logoUrl: "",
+        logoPosition: "top-left",
+        logoSize: "medium"
       }
     });
   };
@@ -713,6 +727,97 @@ export default function KundenTest() {
                       placeholder="z.B. Ich helfe Ihnen gerne weiter"
                       data-testid="input-bot-subtitle"
                     />
+                  </div>
+
+                  {/* Logo Upload */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Firmenlogo (optional)
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const logoUrl = event.target?.result as string;
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange('logoUrl', logoUrl);
+                            } else {
+                              handleVoicebotConfigChange('logoUrl', logoUrl);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      data-testid="input-logo"
+                    />
+                    {(testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl) && (
+                      <div className="mt-2">
+                        <img 
+                          src={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl}
+                          alt="Logo Vorschau"
+                          className="h-12 w-auto border rounded"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Logo Position */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Logo Position
+                    </label>
+                    <Select 
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoPosition : testConfig.voicebot.logoPosition}
+                      onValueChange={(value) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange('logoPosition', value);
+                        } else {
+                          handleVoicebotConfigChange('logoPosition', value);
+                        }
+                      }}
+                      data-testid="select-logo-position"
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="top-left">Oben Links</SelectItem>
+                        <SelectItem value="top-right">Oben Rechts</SelectItem>
+                        <SelectItem value="top-center">Oben Mitte</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Logo Size */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Logo Größe
+                    </label>
+                    <Select 
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoSize : testConfig.voicebot.logoSize}
+                      onValueChange={(value) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange('logoSize', value);
+                        } else {
+                          handleVoicebotConfigChange('logoSize', value);
+                        }
+                      }}
+                      data-testid="select-logo-size"
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="small">Klein (24px)</SelectItem>
+                        <SelectItem value="medium">Mittel (32px)</SelectItem>
+                        <SelectItem value="large">Groß (48px)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Custom Greeting */}

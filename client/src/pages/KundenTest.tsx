@@ -448,7 +448,7 @@ export default function KundenTest() {
                 
                 <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
                   <p className="text-sm text-blue-700">
-                    <strong>Ihren Testcode erhalten Sie nach Auftragsvergabe.</strong>
+                    <strong>Das Training des Chatbots erfolgt durch uns nach Testcode-Vergabe.</strong>
                   </p>
                 </div>
                 

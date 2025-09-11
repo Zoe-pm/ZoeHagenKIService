@@ -131,7 +131,7 @@ export default function Footer() {
         <div className="border-t border-border mt-12 pt-8">
           <div className="text-center space-y-2">
             <p className="text-muted-foreground" data-testid="footer-copyright">
-              © 2025 Zoe Hagen KI Consulting. Alle Rechte vorbehalten. 
+              © 2025 Zoë Hagen KI Consulting. Alle Rechte vorbehalten. 
               Made with <Heart className="inline-block w-4 h-4 text-secondary mx-1" /> in Deutschland
             </p>
             <p className="text-sm text-muted-foreground" data-testid="footer-accessibility">

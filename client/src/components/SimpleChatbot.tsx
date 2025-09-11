@@ -72,7 +72,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         },
         body: JSON.stringify({
           message: messageToSend,
-          botName: "Juna Zoes KI Studio",
+          botName: "Juna Zoës KI Studio",
           sessionId: getSessionId()
         })
       });
@@ -123,7 +123,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
           <h3 className="font-semibold">Juna</h3>
-          <p className="text-sm opacity-90">Zoes KI Studio</p>
+          <p className="text-sm opacity-90">Zoës KI Studio</p>
         </div>
         <Button
           variant="ghost"

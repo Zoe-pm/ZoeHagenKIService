@@ -6,17 +6,40 @@ import { SimpleChatbot } from "@/components/SimpleChatbot";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
-interface TestConfig {
-  theme: "light" | "dark" | "blue" | "green";
+interface ChatbotConfig {
+  name: string;
+  primaryColor: string;
+  backgroundColor: string;
+  textColor: string;
+  widgetSize: "small" | "medium" | "large";
+  fontFamily: string;
+  position: "bottom-right" | "bottom-left" | "center";
+  greeting: string;
+}
+
+interface VoicebotConfig {
+  name: string;
+  primaryColor: string;
+  backgroundColor: string;
+  widgetSize: "small" | "medium" | "large";
   position: "bottom-right" | "bottom-left" | "center";
   voiceSpeed: number[];
   voicePitch: number[];
+  elevenLabsVoiceId: string;
   greeting: string;
+}
+
+interface TestConfig {
+  activeBot: "chatbot" | "voicebot";
+  chatbot: ChatbotConfig;
+  voicebot: VoicebotConfig;
 }
 
 interface TestSession {
@@ -33,11 +56,28 @@ export default function KundenTest() {
   const [session, setSession] = useState<TestSession | null>(null);
   const [authError, setAuthError] = useState<string>("");
   const [testConfig, setTestConfig] = useState<TestConfig>({
-    theme: "blue",
-    position: "bottom-right",
-    voiceSpeed: [1],
-    voicePitch: [1],
-    greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
+    activeBot: "chatbot",
+    chatbot: {
+      name: "KI-Assistent",
+      primaryColor: "#3B82F6",
+      backgroundColor: "#FFFFFF",
+      textColor: "#1F2937",
+      widgetSize: "medium",
+      fontFamily: "Inter",
+      position: "bottom-right",
+      greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
+    },
+    voicebot: {
+      name: "Juna",
+      primaryColor: "#10B981",
+      backgroundColor: "#F3F4F6",
+      widgetSize: "medium",
+      position: "bottom-right",
+      voiceSpeed: [1],
+      voicePitch: [1],
+      elevenLabsVoiceId: "",
+      greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent."
+    }
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
   const { toast } = useToast();
@@ -90,21 +130,64 @@ export default function KundenTest() {
     }
   };
 
-  const handleConfigChange = (key: keyof TestConfig, value: any) => {
+  const handleChatbotConfigChange = (key: keyof ChatbotConfig, value: any) => {
     setTestConfig(prev => ({
       ...prev,
-      [key]: value
+      chatbot: {
+        ...prev.chatbot,
+        [key]: value
+      }
+    }));
+  };
+
+  const handleVoicebotConfigChange = (key: keyof VoicebotConfig, value: any) => {
+    setTestConfig(prev => ({
+      ...prev,
+      voicebot: {
+        ...prev.voicebot,
+        [key]: value
+      }
+    }));
+  };
+
+  const handleActiveBotChange = (bot: "chatbot" | "voicebot") => {
+    setTestConfig(prev => ({
+      ...prev,
+      activeBot: bot
     }));
   };
 
   const resetConfig = () => {
     setTestConfig({
-      theme: "blue",
-      position: "bottom-right", 
-      voiceSpeed: [1],
-      voicePitch: [1],
-      greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
+      activeBot: "chatbot",
+      chatbot: {
+        name: "KI-Assistent",
+        primaryColor: "#3B82F6",
+        backgroundColor: "#FFFFFF",
+        textColor: "#1F2937",
+        widgetSize: "medium",
+        fontFamily: "Inter",
+        position: "bottom-right",
+        greeting: "Hallo! Wie kann ich Ihnen heute helfen?"
+      },
+      voicebot: {
+        name: "Juna",
+        primaryColor: "#10B981",
+        backgroundColor: "#F3F4F6",
+        widgetSize: "medium",
+        position: "bottom-right",
+        voiceSpeed: [1],
+        voicePitch: [1],
+        elevenLabsVoiceId: "",
+        greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent."
+      }
     });
+  };
+
+  const generateNameSuggestions = (type: "chatbot" | "voicebot") => {
+    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Zoe", "Sam", "Rio"];
+    const voicebotNames = ["Juna", "Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
+    return type === "chatbot" ? chatbotNames : voicebotNames;
   };
 
   const handleAccessRequest = async () => {
@@ -184,7 +267,7 @@ export default function KundenTest() {
         <section className="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              🚀 Ihr KI-Assistent wartet auf Sie
+              Hier testen Sie Ihre neuen digitalen Mitarbeiter
             </h1>
             <p className="text-xl text-white/90 mb-8">
               Entdecken Sie, wie Ihr persönlicher Chatbot aussehen und klingen wird. 
@@ -201,76 +284,74 @@ export default function KundenTest() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           
-          {!isAuthorized ? (
-            /* Authentifizierung für Chatbot-Zugang */
-            <Card className="glass max-w-lg mx-auto mb-8">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl mb-4">🔓 Chatbot freischalten</CardTitle>
-                <p className="text-muted-foreground">
-                  Sie können alle Einstellungen sehen und anpassen. 
-                  Für den Chat benötigen Sie einen Testcode.
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {authError && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-                    <p className="text-sm text-red-600">{authError}</p>
-                  </div>
-                )}
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email-Adresse</label>
-                  <Input 
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="ihre@email.de"
-                    data-testid="email-input"
-                  />
+          {/* Immer sichtbare Eingabefelder */}
+          <Card className="glass max-w-lg mx-auto mb-8">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl mb-4">🔓 Zugang zum Testbereich</CardTitle>
+              <p className="text-muted-foreground">
+                Geben Sie Ihre Testdaten ein, um die digitalen Mitarbeiter zu testen.
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {authError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-sm text-red-600">{authError}</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Testcode</label>
-                  <Input 
-                    type="text"
-                    value={accessCode}
-                    onChange={(e) => setAccessCode(e.target.value)}
-                    placeholder="ZKS-DEMO-2024"
-                    data-testid="access-code-input"
-                  />
-                </div>
+              )}
+              <div>
+                <label className="block text-sm font-medium mb-2">Testcode eingeben</label>
+                <Input 
+                  type="text"
+                  value={accessCode}
+                  onChange={(e) => setAccessCode(e.target.value)}
+                  placeholder="Testcode hier eingeben"
+                  data-testid="access-code-input"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">E-Mail eingeben</label>
+                <Input 
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="ihre@email.de"
+                  data-testid="email-input"
+                />
+              </div>
+              
+              {!isAuthorized ? (
                 <Button 
                   onClick={handleAccessRequest}
                   disabled={!email || !accessCode || isValidating}
                   className="w-full button-gradient"
                   data-testid="unlock-chatbot"
                 >
-                  {isValidating ? "Wird geprüft..." : "🤖 Chatbot freischalten"}
+                  {isValidating ? "Wird geprüft..." : "🤖 Zugang freischalten"}
                 </Button>
-                <p className="text-xs text-muted-foreground text-center">
-                  Noch keinen Testcode? <a href="/kontakt" className="text-primary hover:underline">Jetzt anfordern</a>
+              ) : (
+                <div className="space-y-3">
+                  <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                    <p className="text-green-700 font-medium">✅ Zugang freigeschaltet!</p>
+                    <p className="text-sm text-green-600 mt-1">Sie können jetzt alle Funktionen testen.</p>
+                  </div>
+                  <Button 
+                    onClick={handleLogout}
+                    variant="outline"
+                    className="w-full"
+                    data-testid="logout-button"
+                  >
+                    🔒 Abmelden
+                  </Button>
+                </div>
+              )}
+              
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                <p className="text-sm text-blue-700">
+                  <strong>Den Testcode erhalten Sie nach Auftragsvergabe.</strong>
                 </p>
-              </CardContent>
-            </Card>
-          ) : (
-            /* Authentifiziert - Zeige Logout Option */
-            <Card className="glass max-w-lg mx-auto mb-8">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl mb-4">✅ Zugang gewährt</CardTitle>
-                <p className="text-muted-foreground">
-                  Sie sind als {session?.email} angemeldet und können den Chatbot testen.
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button 
-                  onClick={handleLogout}
-                  variant="outline"
-                  className="w-full"
-                  data-testid="logout-button"
-                >
-                  🔒 Abmelden
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+            </CardContent>
+          </Card>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
@@ -290,26 +371,86 @@ export default function KundenTest() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   
-                  {/* Design Theme */}
+                  {/* Bot Type Switcher */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Design-Theme</label>
-                    <Select value={testConfig.theme} onValueChange={(value: any) => handleConfigChange('theme', value)}>
+                    <label className="block text-sm font-medium mb-2">Bot-Typ</label>
+                    <Select value={testConfig.activeBot} onValueChange={(value: any) => handleActiveBotChange(value)}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Theme wählen" />
+                        <SelectValue placeholder="Bot-Typ wählen" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="light">Hell</SelectItem>
-                        <SelectItem value="dark">Dunkel</SelectItem>
-                        <SelectItem value="blue">Blau (Standard)</SelectItem>
-                        <SelectItem value="green">Grün</SelectItem>
+                        <SelectItem value="chatbot">💬 Chatbot</SelectItem>
+                        <SelectItem value="voicebot">🎤 Voicebot</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  {/* Bot Name with Suggestions */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Bot-Name</label>
+                    <div className="space-y-2">
+                      <Input
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.name : testConfig.voicebot.name}
+                        onChange={(e) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("name", e.target.value);
+                          } else {
+                            handleVoicebotConfigChange("name", e.target.value);
+                          }
+                        }}
+                        placeholder="Bot-Name eingeben"
+                      />
+                      <div className="flex flex-wrap gap-1">
+                        <span className="text-xs text-muted-foreground mr-2">Vorschläge:</span>
+                        {generateNameSuggestions(testConfig.activeBot).slice(0, 4).map((name) => (
+                          <Badge 
+                            key={name}
+                            variant="outline" 
+                            className="cursor-pointer text-xs hover:bg-primary hover:text-primary-foreground"
+                            onClick={() => {
+                              if (testConfig.activeBot === "chatbot") {
+                                handleChatbotConfigChange("name", name);
+                              } else {
+                                handleVoicebotConfigChange("name", name);
+                              }
+                            }}
+                          >
+                            {name}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Primary Color */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Primärfarbe</label>
+                    <Input
+                      type="color"
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor}
+                      onChange={(e) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange("primaryColor", e.target.value);
+                        } else {
+                          handleVoicebotConfigChange("primaryColor", e.target.value);
+                        }
+                      }}
+                    />
                   </div>
 
                   {/* Position */}
                   <div>
                     <label className="block text-sm font-medium mb-2">Position</label>
-                    <Select value={testConfig.position} onValueChange={(value: any) => handleConfigChange('position', value)}>
+                    <Select 
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position} 
+                      onValueChange={(value: any) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange("position", value);
+                        } else {
+                          handleVoicebotConfigChange("position", value);
+                        }
+                      }}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Position wählen" />
                       </SelectTrigger>
@@ -321,42 +462,133 @@ export default function KundenTest() {
                     </Select>
                   </div>
 
-                  {/* Voice Speed */}
+                  {/* Widget Size */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Sprachgeschwindigkeit: {testConfig.voiceSpeed[0]}x
-                    </label>
-                    <Slider
-                      value={testConfig.voiceSpeed}
-                      onValueChange={(value) => handleConfigChange('voiceSpeed', value)}
-                      max={2}
-                      min={0.5}
-                      step={0.1}
-                      className="w-full"
-                    />
+                    <label className="block text-sm font-medium mb-2">Widget-Größe</label>
+                    <Select 
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.widgetSize : testConfig.voicebot.widgetSize} 
+                      onValueChange={(value: any) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange("widgetSize", value);
+                        } else {
+                          handleVoicebotConfigChange("widgetSize", value);
+                        }
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Größe wählen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="small">Klein</SelectItem>
+                        <SelectItem value="medium">Mittel</SelectItem>
+                        <SelectItem value="large">Groß</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Voice Pitch */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Stimmlage: {testConfig.voicePitch[0]}x
-                    </label>
-                    <Slider
-                      value={testConfig.voicePitch}
-                      onValueChange={(value) => handleConfigChange('voicePitch', value)}
-                      max={2}
-                      min={0.5}
-                      step={0.1}
-                      className="w-full"
-                    />
-                  </div>
+                  {/* Voice Speed - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Sprachgeschwindigkeit: {testConfig.voicebot.voiceSpeed[0]}x
+                      </label>
+                      <Slider
+                        value={testConfig.voicebot.voiceSpeed}
+                        onValueChange={(value) => handleVoicebotConfigChange("voiceSpeed", value)}
+                        max={2}
+                        min={0.5}
+                        step={0.1}
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+
+                  {/* Voice Pitch - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Stimmlage: {testConfig.voicebot.voicePitch[0]}x
+                      </label>
+                      <Slider
+                        value={testConfig.voicebot.voicePitch}
+                        onValueChange={(value) => handleVoicebotConfigChange("voicePitch", value)}
+                        max={2}
+                        min={0.5}
+                        step={0.1}
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+
+                  {/* ElevenLabs Voice ID - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">ElevenLabs Voice ID</label>
+                      <Input
+                        value={testConfig.voicebot.elevenLabsVoiceId}
+                        onChange={(e) => handleVoicebotConfigChange("elevenLabsVoiceId", e.target.value)}
+                        placeholder="Voice ID hier eingeben (wird noch geliefert)"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Die Voice ID erhalten Sie nach der Einrichtung von ElevenLabs
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Background Color - Only for Chatbot */}
+                  {testConfig.activeBot === "chatbot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Hintergrundfarbe</label>
+                      <Input
+                        type="color"
+                        value={testConfig.chatbot.backgroundColor}
+                        onChange={(e) => handleChatbotConfigChange("backgroundColor", e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  {/* Text Color - Only for Chatbot */}
+                  {testConfig.activeBot === "chatbot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Textfarbe</label>
+                      <Input
+                        type="color"
+                        value={testConfig.chatbot.textColor}
+                        onChange={(e) => handleChatbotConfigChange("textColor", e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  {/* Font Family - Only for Chatbot */}
+                  {testConfig.activeBot === "chatbot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Schriftart</label>
+                      <Select value={testConfig.chatbot.fontFamily} onValueChange={(value: any) => handleChatbotConfigChange("fontFamily", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Schriftart wählen" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Inter">Inter</SelectItem>
+                          <SelectItem value="Arial">Arial</SelectItem>
+                          <SelectItem value="Helvetica">Helvetica</SelectItem>
+                          <SelectItem value="Times New Roman">Times New Roman</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
                   {/* Custom Greeting */}
                   <div>
                     <label className="block text-sm font-medium mb-2">Begrüßungstext</label>
                     <textarea
-                      value={testConfig.greeting}
-                      onChange={(e) => handleConfigChange('greeting', e.target.value)}
+                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.greeting : testConfig.voicebot.greeting}
+                      onChange={(e) => {
+                        if (testConfig.activeBot === "chatbot") {
+                          handleChatbotConfigChange("greeting", e.target.value);
+                        } else {
+                          handleVoicebotConfigChange("greeting", e.target.value);
+                        }
+                      }}
                       className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                       rows={3}
                       placeholder="Ihre persönliche Begrüßung..."
@@ -397,36 +629,34 @@ export default function KundenTest() {
                 <CardContent className="min-h-[500px] relative">
                   <div 
                     className={`
-                      p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[400px] relative overflow-hidden
-                      ${testConfig.theme === 'dark' ? 'bg-gray-900' : testConfig.theme === 'blue' ? 'bg-blue-50' : testConfig.theme === 'green' ? 'bg-green-50' : 'bg-white'}
+                      p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[400px] relative overflow-hidden bg-white
                     `}
                   >
                     <div className="text-center text-muted-foreground py-20">
                       <p className="mb-4">Ihre Website-Vorschau</p>
                       <p className="text-sm">Der Chatbot erscheint je nach Position unten rechts, links oder zentral.</p>
                       
-                      {/* Simulierter Chatbot Button */}
+                      {/* Simulierter Bot Button */}
                       <div 
                         className={`
                           fixed rounded-full w-16 h-16 flex items-center justify-center text-white font-bold text-xl shadow-lg cursor-pointer z-10
-                          ${testConfig.position === 'bottom-right' ? 'bottom-4 right-4' : 
-                            testConfig.position === 'bottom-left' ? 'bottom-4 left-4' : 
+                          ${(testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position) === 'bottom-right' ? 'bottom-4 right-4' : 
+                            (testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position) === 'bottom-left' ? 'bottom-4 left-4' : 
                             'bottom-4 left-1/2 transform -translate-x-1/2'}
-                          ${testConfig.theme === 'blue' ? 'bg-blue-500 hover:bg-blue-600' : 
-                            testConfig.theme === 'green' ? 'bg-green-500 hover:bg-green-600' : 
-                            testConfig.theme === 'dark' ? 'bg-gray-700 hover:bg-gray-800' : 
-                            'bg-primary hover:bg-primary/90'}
                         `}
+                        style={{
+                          backgroundColor: testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor
+                        }}
                         onClick={() => isAuthorized && setIsChatOpen(true)}
                       >
-                        💬
+                        {testConfig.activeBot === "chatbot" ? "💬" : "🎤"}
                       </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Test Results */}
+              {/* Configuration Overview */}
               <Card className="glass mt-6">
                 <CardHeader>
                   <CardTitle>📊 Konfiguration im Überblick</CardTitle>
@@ -434,25 +664,53 @@ export default function KundenTest() {
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-sm text-muted-foreground">Theme:</span>
-                      <p className="font-medium">{testConfig.theme}</p>
+                      <span className="text-sm text-muted-foreground">Bot-Typ:</span>
+                      <p className="font-medium">{testConfig.activeBot === "chatbot" ? "💬 Chatbot" : "🎤 Voicebot"}</p>
+                    </div>
+                    <div>
+                      <span className="text-sm text-muted-foreground">Name:</span>
+                      <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.name : testConfig.voicebot.name}</p>
                     </div>
                     <div>
                       <span className="text-sm text-muted-foreground">Position:</span>
-                      <p className="font-medium">{testConfig.position}</p>
+                      <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position}</p>
                     </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">Sprachgeschwindigkeit:</span>
-                      <p className="font-medium">{testConfig.voiceSpeed[0]}x</p>
+                      <span className="text-sm text-muted-foreground">Widget-Größe:</span>
+                      <p className="font-medium">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.widgetSize : testConfig.voicebot.widgetSize}</p>
                     </div>
-                    <div>
-                      <span className="text-sm text-muted-foreground">Stimmlage:</span>
-                      <p className="font-medium">{testConfig.voicePitch[0]}x</p>
+                    {testConfig.activeBot === "voicebot" && (
+                      <>
+                        <div>
+                          <span className="text-sm text-muted-foreground">Sprachgeschwindigkeit:</span>
+                          <p className="font-medium">{testConfig.voicebot.voiceSpeed[0]}x</p>
+                        </div>
+                        <div>
+                          <span className="text-sm text-muted-foreground">Stimmlage:</span>
+                          <p className="font-medium">{testConfig.voicebot.voicePitch[0]}x</p>
+                        </div>
+                      </>
+                    )}
+                    {testConfig.activeBot === "chatbot" && (
+                      <div>
+                        <span className="text-sm text-muted-foreground">Schriftart:</span>
+                        <p className="font-medium">{testConfig.chatbot.fontFamily}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4">
+                    <span className="text-sm text-muted-foreground">Primärfarbe:</span>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div 
+                        className="w-4 h-4 rounded border" 
+                        style={{ backgroundColor: testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor }}
+                      ></div>
+                      <p className="font-medium text-sm">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor}</p>
                     </div>
                   </div>
                   <div className="mt-4">
                     <span className="text-sm text-muted-foreground">Begrüßung:</span>
-                    <p className="font-medium mt-1 p-2 bg-muted rounded text-sm">{testConfig.greeting}</p>
+                    <p className="font-medium mt-1 p-2 bg-muted rounded text-sm">{testConfig.activeBot === "chatbot" ? testConfig.chatbot.greeting : testConfig.voicebot.greeting}</p>
                   </div>
                 </CardContent>
               </Card>

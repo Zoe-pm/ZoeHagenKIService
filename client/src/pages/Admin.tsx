@@ -92,6 +92,13 @@ export default function Admin() {
           title: "Erfolgreich angemeldet",
           description: "Willkommen im Admin-Bereich!",
         });
+      } else {
+        // Handle login failure
+        toast({
+          variant: "destructive",
+          title: "Anmeldung fehlgeschlagen",
+          description: data.message || "Ungültiges Admin-Passwort",
+        });
       }
     },
     onError: () => {

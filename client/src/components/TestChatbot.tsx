@@ -16,6 +16,7 @@ interface TestConfig {
     name: string;
     primaryColor: string;
     backgroundColor: string;
+    textColor: string;
     widgetSize: string;
     fontFamily: string;
     position: string;
@@ -308,10 +309,19 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
             <div
               className={`max-w-[80%] p-3 rounded-lg ${
                 message.sender === 'user'
-                  ? 'text-white'
-                  : 'bg-muted text-foreground'
+                  ? ''
+                  : 'bg-muted'
               }`}
-              style={message.sender === 'user' ? { backgroundColor: currentConfig.primaryColor } : {}}
+              style={
+                message.sender === 'user' 
+                  ? { 
+                      backgroundColor: currentConfig.primaryColor,
+                      color: config.activeBot === "chatbot" && config.chatbot.textColor ? config.chatbot.textColor : '#FFFFFF'
+                    } 
+                  : {
+                      color: config.activeBot === "chatbot" && config.chatbot.textColor ? config.chatbot.textColor : undefined
+                    }
+              }
             >
               <p className="text-sm">{message.text}</p>
               <p className="text-xs mt-1 opacity-60">

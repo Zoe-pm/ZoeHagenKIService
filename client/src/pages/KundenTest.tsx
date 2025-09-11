@@ -85,19 +85,19 @@ export default function KundenTest() {
   const [testConfig, setTestConfig] = useState<TestConfig>({
     activeBot: "chatbot",
     chatbot: {
-      name: "KI-Assistent",
-      primaryColor: "#3B82F6",
-      backgroundColor: "#FFFFFF",
+      name: "Zoe",
+      primaryColor: "#fdff06",
+      backgroundColor: "#cbffb3",
       textColor: "#1F2937",
       widgetSize: "medium",
-      fontFamily: "Inter",
-      position: "bottom-right",
+      fontFamily: "Merriweather, serif",
+      position: "center",
       greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
-      title: "Willkommen!",
-      subtitle: "Ich helfe Ihnen gerne weiter",
+      title: "Willk",
+      subtitle: "247",
       logoUrl: "",
       logoPosition: "top-left",
-      logoSize: "medium"
+      logoSize: "large"
     },
     voicebot: {
       name: "Juna",

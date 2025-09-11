@@ -138,6 +138,7 @@ export const testConfigSaveSchema = z.object({
       name: z.string(),
       primaryColor: z.string(),
       backgroundColor: z.string(),
+      textColor: z.string(),
       widgetSize: z.string(),
       fontFamily: z.string(),
       position: z.string(),

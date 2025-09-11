@@ -37,8 +37,12 @@ export default function Navigation() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
+                {/* Aktuelle Seite immer zuerst anzeigen */}
                 {location === "/" ? (
                   <>
+                    <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
+                      Startseite
+                    </span>
                     <button 
                       onClick={() => scrollToSection('produkte')}
                       className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
@@ -58,18 +62,38 @@ export default function Navigation() {
                   </>
                 ) : (
                   <>
+                    {/* Aktuelle Seite zuerst, dann andere */}
+                    {location === "/ueber-uns" ? (
+                      <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
+                        Über uns
+                      </span>
+                    ) : location === "/test" ? (
+                      <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
+                        Testbereich
+                      </span>
+                    ) : location === "/kontakt" ? (
+                      <span className="text-foreground px-3 py-2 rounded-md text-sm font-medium bg-primary/10 border border-primary/20" data-testid="nav-current">
+                        Kontakt
+                      </span>
+                    ) : null}
                     <Link href="/" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-home">
                       Startseite
                     </Link>
-                    <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns-alt">
-                      Über uns
-                    </Link>
-                    <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test-alt">
-                      Testbereich
-                    </Link>
-                    <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt-alt">
-                      Kontakt
-                    </Link>
+                    {location !== "/ueber-uns" && (
+                      <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns-alt">
+                        Über uns
+                      </Link>
+                    )}
+                    {location !== "/test" && (
+                      <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test-alt">
+                        Testbereich
+                      </Link>
+                    )}
+                    {location !== "/kontakt" && (
+                      <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt-alt">
+                        Kontakt
+                      </Link>
+                    )}
                   </>
                 )}
               </div>
@@ -94,8 +118,12 @@ export default function Navigation() {
       {isMobileMenuOpen && (
         <div className="glass fixed top-16 left-0 right-0 z-30 md:hidden backdrop-blur-md bg-background/95" data-testid="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {/* Mobile: Aktuelle Seite zuerst */}
             {location === "/" ? (
               <>
+                <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
+                  Startseite
+                </div>
                 <button 
                   onClick={() => scrollToSection('produkte')}
                   className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium w-full text-left"
@@ -115,18 +143,38 @@ export default function Navigation() {
               </>
             ) : (
               <>
+                {/* Mobile: Aktuelle Seite zuerst anzeigen */}
+                {location === "/ueber-uns" ? (
+                  <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
+                    Über uns
+                  </div>
+                ) : location === "/test" ? (
+                  <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
+                    Testbereich
+                  </div>
+                ) : location === "/kontakt" ? (
+                  <div className="text-foreground block px-3 py-2 rounded-md text-base font-medium bg-primary/10 border border-primary/20 mb-2" data-testid="mobile-nav-current">
+                    Kontakt
+                  </div>
+                ) : null}
                 <Link href="/" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-home">
                   Startseite
                 </Link>
-                <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns-alt">
-                  Über uns
-                </Link>
-                <Link href="/test" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test-alt">
-                  Testbereich
-                </Link>
-                <Link href="/kontakt" className="button-gradient block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-kontakt-alt">
-                  Kontakt
-                </Link>
+                {location !== "/ueber-uns" && (
+                  <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns-alt">
+                    Über uns
+                  </Link>
+                )}
+                {location !== "/test" && (
+                  <Link href="/test" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test-alt">
+                    Testbereich
+                  </Link>
+                )}
+                {location !== "/kontakt" && (
+                  <Link href="/kontakt" className="button-gradient block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-kontakt-alt">
+                    Kontakt
+                  </Link>
+                )}
               </>
             )}
           </div>

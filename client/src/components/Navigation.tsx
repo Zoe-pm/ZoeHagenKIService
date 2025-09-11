@@ -36,9 +36,9 @@ export default function Navigation() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {/* Immer gleiche Menüführung ohne Hervorhebung */}
+                {/* Neue Menü-Reihenfolge wie gewünscht */}
                 <Link href="/" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-home">
-                  Startseite
+                  Start
                 </Link>
                 {location === "/" && (
                   <button 
@@ -52,10 +52,10 @@ export default function Navigation() {
                 <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
                   Über uns
                 </Link>
-                <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test">
-                  Testbereich
+                <Link href="/test" className="bg-gradient-to-r from-yellow-400 to-green-500 text-black px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring hover:from-yellow-500 hover:to-green-600" data-testid="nav-test">
+                  Konfiguration Bots
                 </Link>
-                <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
+                <Link href="/kontakt" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
                   Kontakt
                 </Link>
                 <Link href="/admin" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-admin">
@@ -90,7 +90,7 @@ export default function Navigation() {
                 data-testid="mobile-nav-home"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Startseite
+                Start
               </Link>
               {location === "/" && (
                 <button 
@@ -111,15 +111,15 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/test" 
-                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className="bg-gradient-to-r from-yellow-400 to-green-500 text-black block px-3 py-2 rounded-md text-base font-medium transition-colors"
                 data-testid="mobile-nav-test"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Testbereich
+                Konfiguration Bots
               </Link>
               <Link 
                 href="/kontakt" 
-                className="button-gradient block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
                 data-testid="mobile-nav-kontakt"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

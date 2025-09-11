@@ -47,7 +47,7 @@ export class MemStorage implements IStorage {
   private testCodeDetails: Map<string, TestCodeInfo>;
   private adminSessions: Map<string, { token: string; expiresAt: Date }>;
   private testCodeUsageStats: Map<string, { logins: Set<string>; lastAccess?: Date }>;
-  private readonly adminPassword = process.env.ADMIN_PASSWORD || 'fallback-password'; // Admin-Passwort aus Umgebungsvariable
+  private readonly adminPassword = process.env.ADMIN_PASSWORD || 'ZKS-Admin2024!'; // Temporäres Admin-Passwort
 
   constructor() {
     this.users = new Map();

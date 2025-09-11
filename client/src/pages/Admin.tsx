@@ -225,10 +225,10 @@ export default function Admin() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-              <Shield className="w-8 h-8 text-white" />
+            <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-br from-yellow-400 to-green-500 rounded-full flex items-center justify-center">
+              <Shield className="w-8 h-8 text-black" />
             </div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-green-500 bg-clip-text text-transparent">
               Admin-Login
             </CardTitle>
           </CardHeader>
@@ -255,7 +255,7 @@ export default function Admin() {
                 />
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="w-full bg-gradient-to-r from-yellow-400 to-green-500 hover:from-yellow-500 hover:to-green-600 text-black"
                   disabled={loginMutation.isPending}
                   data-testid="button-admin-login"
                 >
@@ -286,8 +286,8 @@ export default function Admin() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Admin Dashboard
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-green-500 bg-clip-text text-transparent">
+                Zoë's KI Studio - Admin Dashboard
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
                 Verwalten Sie Test-Codes und Kundenzugänge
@@ -441,7 +441,7 @@ export default function Admin() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-green-500 hover:from-yellow-500 hover:to-green-600 text-black"
                     disabled={createTestCodeMutation.isPending}
                     data-testid="button-create-testcode"
                   >

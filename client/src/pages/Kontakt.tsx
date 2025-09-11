@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { SimpleChatbot } from "@/components/SimpleChatbot";
+import { useLocation } from "wouter";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -7,6 +10,8 @@ import ChatbotWidget from "@/components/ChatbotWidget";
 
 export default function Kontakt() {
   const [calendlyLoaded, setCalendlyLoaded] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [, setLocation] = useLocation();
   const calendlyUrl = import.meta.env.VITE_CALENDLY_URL;
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Kontaktseite
@@ -102,86 +107,6 @@ export default function Kontakt() {
             </div>
           </section>
         )}
-        
-        {/* Terminbuchung */}
-        <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="booking-section">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4 text-primary">📅 {calendlyUrl ? 'Alternative Buchungsmöglichkeiten' : 'Termin buchen'}</h2>
-              <p className="text-lg text-muted-foreground">
-                {calendlyUrl ? 'Oder wählen Sie Ihren bevorzugten Kontaktweg' : 'Wählen Sie Ihren bevorzugten Weg für die Terminbuchung'}
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* E-Mail Buchung */}
-              <div className="glass p-6 rounded-lg">
-                <h3 className="text-xl font-semibold mb-4 text-primary">✉️ Per E-Mail buchen</h3>
-                <p className="text-muted-foreground mb-4">
-                  Senden Sie uns eine E-Mail mit Ihren Wunschterminen und wir melden uns schnellstmöglich zurück.
-                </p>
-                <div className="space-y-3">
-                  <p className="text-sm"><strong>E-Mail:</strong> zoe-kiconsulting@pm.me</p>
-                  <p className="text-sm"><strong>Betreff:</strong> Erstgespräch Terminanfrage</p>
-                  <p className="text-sm"><strong>Antwortzeit:</strong> Binnen 24 Stunden</p>
-                </div>
-                <a 
-                  href="mailto:zoe-kiconsulting@pm.me?subject=Erstgespräch Terminanfrage&body=Hallo Zoë,%0D%0A%0D%0AIch interessiere mich für ein kostenloses Erstgespräch.%0D%0A%0D%0AMeine Wunschtermine:%0D%0A- Termin 1: %0D%0A- Termin 2: %0D%0A- Termin 3: %0D%0A%0D%0AKurze Beschreibung meines Projekts:%0D%0A%0D%0A%0D%0AViele Grüße"
-                  className="inline-block mt-4 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300 font-medium"
-                  data-testid="email-booking-button"
-                >
-                  E-Mail senden
-                </a>
-              </div>
-              
-              {/* Online Kalender Status */}
-              <div className="glass p-6 rounded-lg">
-                <h3 className="text-xl font-semibold mb-4 text-primary">🗓️ Online-Kalender</h3>
-                {calendlyUrl ? (
-                  <>
-                    <p className="text-muted-foreground mb-4">
-                      Wählen Sie einen passenden Zeitpunkt direkt in unserem Online-Kalender oben.
-                    </p>
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800 mb-4">
-                      <p className="text-sm font-medium">✓ Kalender verfügbar</p>
-                      <p className="text-sm mt-1">
-                        Direkte Terminbuchung ist aktiviert.
-                      </p>
-                    </div>
-                    <a 
-                      href={calendlyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300 font-medium"
-                      data-testid="calendar-booking-button"
-                    >
-                      Neues Fenster öffnen
-                    </a>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-muted-foreground mb-4">
-                      Für die Aktivierung des Online-Kalenders muss die VITE_CALENDLY_URL konfiguriert werden.
-                    </p>
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-800">
-                      <p className="text-sm font-medium">⚡ Konfiguration erforderlich</p>
-                      <p className="text-sm mt-1">
-                        Setzen Sie VITE_CALENDLY_URL in den Environment Variables.
-                      </p>
-                    </div>
-                    <button 
-                      disabled
-                      className="mt-4 bg-gray-300 text-gray-500 px-6 py-3 rounded-lg cursor-not-allowed font-medium"
-                      data-testid="calendar-booking-button"
-                    >
-                      Konfiguration erforderlich
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Additional Contact Info */}
         <section className="py-8 px-4 sm:px-6 lg:px-8" data-testid="contact-info-section">
@@ -189,23 +114,32 @@ export default function Kontakt() {
             <div className="glass p-8 rounded-lg text-center">
               <h2 className="text-2xl font-bold mb-6 text-primary">Weitere Kontaktmöglichkeiten</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="glass p-4 rounded border border-primary/20">
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors" onClick={() => setIsChatOpen(true)}>
                   <h3 className="font-semibold text-foreground mb-2">Sofortiger Support</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Nutzen Sie unseren Chatbot für schnelle Antworten auf häufige Fragen.
                   </p>
+                  <Button size="sm" className="bg-primary hover:bg-primary/90" data-testid="open-chatbot-support">
+                    Chat starten
+                  </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20">
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors" onClick={() => window.open(calendlyUrl || 'mailto:zoe-kiconsulting@pm.me?subject=Individuelle Beratung', '_blank')}>
                   <h3 className="font-semibold text-foreground mb-2">Individuelle Beratung</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Persönliches Erstgespräch für maßgeschneiderte KI-Lösungen.
                   </p>
+                  <Button size="sm" className="bg-secondary hover:bg-secondary/90" data-testid="book-consultation">
+                    {calendlyUrl ? 'Termin buchen' : 'E-Mail senden'}
+                  </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20">
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors" onClick={() => setLocation('/kunden-test')}>
                   <h3 className="font-semibold text-foreground mb-2">Demo & Test</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Erleben Sie unsere KI-Assistenten live in einer persönlichen Demo.
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Testen Sie unsere KI-Assistenten direkt auf der Konfigurationsseite.
                   </p>
+                  <Button size="sm" className="bg-accent hover:bg-accent/90" data-testid="demo-test">
+                    Zur Demo-Seite
+                  </Button>
                 </div>
               </div>
             </div>
@@ -213,6 +147,7 @@ export default function Kontakt() {
         </section>
       </main>
       
+      <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       <ChatbotWidget />
       
       <Footer />

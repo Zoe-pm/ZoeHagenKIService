@@ -59,6 +59,11 @@ export default function ContactForm() {
   });
 
   const handleQuickAction = async (action: string) => {
+    if (action === "Anrufen") {
+      window.open('tel:+4917198627773');
+      return;
+    }
+    
     if (action === "15-Min Demo") {
       const calendlyDemoUrl = import.meta.env.VITE_CALENDLY_DEMO_URL || import.meta.env.VITE_CALENDLY_URL;
       
@@ -259,11 +264,11 @@ export default function ContactForm() {
                   </Button>
                   <Button
                     className="w-full button-gradient py-3 px-4 font-medium"
-                    onClick={() => handleQuickAction("Produktbroschüre")}
-                    data-testid="quick-action-brochure"
+                    onClick={() => handleQuickAction("Anrufen")}
+                    data-testid="quick-action-call"
                   >
-                    <Download className="mr-2 h-4 w-4" />
-                    Broschüre
+                    <Phone className="mr-2 h-4 w-4" />
+                    Anrufen
                   </Button>
                 </div>
               </CardContent>

@@ -54,40 +54,36 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     setIsLoading(true);
 
     try {
-      // Check if authentication token is available
-      if (!authToken) {
-        throw new Error('Authentifizierung erforderlich');
-      }
-
-      // Use secure server endpoint
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          message: messageToSend,
-          token: authToken
-        }),
-      });
-
-      const data = await response.json();
+      let botResponse: string;
       
-      if (response.ok && data.success) {
-        const botResponse = data.response || 'Entschuldigung, ich konnte keine Antwort generieren.';
+      // Production chatbot uses demo responses (stable, no external dependencies)
+      const responses: { [key: string]: string } = {
+        "hallo": "Hallo! Schön, dass Sie da sind. Wie kann ich Ihnen heute helfen?",
+        "service": "Wir bieten AI-Assistenten für Ihr Unternehmen. Chatbots, Voicebots, Avatare und Wissensbots.",
+        "kontakt": "Gerne! Buchen Sie ein kostenloses 15-minütiges Erstgespräch über unsere Kontaktseite.",
+        "preise": "Unsere Lösungen sind individuell konfiguriert. Lassen Sie uns in einem kurzen Gespräch Ihre Anforderungen besprechen.",
+        "termin": "Perfekt! Nutzen Sie einfach unsere Kontaktseite um einen Termin zu buchen.",
+        "hilfe": "Ich helfe Ihnen gerne weiter! Fragen Sie mich zu unseren AI-Lösungen oder buchen Sie direkt einen Beratungstermin.",
+        "default": "Vielen Dank für Ihre Nachricht. Für detaillierte Informationen zu unseren AI-Lösungen buchen Sie gerne ein kostenloses Erstgespräch!"
+      };
 
-        const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: botResponse,
-          sender: 'bot',
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, botMessage]);
-      } else {
-        const errorText = data?.message || `HTTP ${response.status} Error`;
-        throw new Error(`Chat Error (${response.status}): ${errorText}`);
+      const messageLower = messageToSend.toLowerCase();
+      botResponse = responses.default;
+      
+      for (const [key, value] of Object.entries(responses)) {
+        if (messageLower.includes(key)) {
+          botResponse = value;
+          break;
+        }
       }
+
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: botResponse,
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Chatbot error:', error);
       

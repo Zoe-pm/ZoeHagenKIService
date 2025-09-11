@@ -58,6 +58,9 @@ export default function Navigation() {
                 <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
                   Kontakt
                 </Link>
+                <Link href="/admin" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-admin">
+                  Admin
+                </Link>
               </div>
             </div>
 
@@ -121,6 +124,14 @@ export default function Navigation() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Kontakt
+              </Link>
+              <Link 
+                href="/admin" 
+                className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium transition-colors"
+                data-testid="mobile-nav-admin"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
               </Link>
             </div>
           </div>

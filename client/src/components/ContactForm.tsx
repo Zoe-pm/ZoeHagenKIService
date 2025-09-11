@@ -17,24 +17,29 @@ export default function ContactForm() {
   return (
     <section id="kontakt" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="contact-section">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10 relative pt-4">
-          {/* Zoë's Photo - oben rechts, richtig positioniert */}
-          <div className="absolute -top-2 right-0 sm:right-4 w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg bg-white z-10">
-            <img 
-              src={zoePhoto}
-              alt="Zoë Hagen - Gründerin von Zoë's KI Studio"
-              className="w-full h-full object-cover object-top"
-              style={{ objectPosition: '50% 20%' }}
-              data-testid="zoe-contact-photo"
-            />
+        {/* Header mit Foto rechts ohne Überlagerung */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 mb-10">
+          <div className="flex-1 text-center lg:text-left">
+            <h2 className="text-3xl font-bold mb-4" data-testid="contact-title">
+              Bereit für Ihren KI-Assistenten?
+            </h2>
+            <p className="text-muted-foreground text-lg" data-testid="contact-subtitle">
+              Lassen Sie uns gemeinsam die perfekte Lösung für Ihr Unternehmen finden
+            </p>
           </div>
           
-          <h2 className="text-3xl font-bold mb-4" data-testid="contact-title">
-            Bereit für Ihren KI-Assistenten?
-          </h2>
-          <p className="text-muted-foreground" data-testid="contact-subtitle">
-            Lassen Sie uns gemeinsam die perfekte Lösung für Ihr Unternehmen finden
-          </p>
+          {/* Zoë's Photo - klar rechts ohne Textüberlagerung */}
+          <div className="flex-shrink-0">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white">
+              <img 
+                src={zoePhoto}
+                alt="Zoë Hagen - Gründerin von Zoë's KI Studio"
+                className="w-full h-full object-cover object-top"
+                style={{ objectPosition: '50% 20%' }}
+                data-testid="zoe-contact-photo"
+              />
+            </div>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

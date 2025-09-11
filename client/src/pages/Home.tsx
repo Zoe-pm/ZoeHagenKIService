@@ -10,7 +10,7 @@ import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
-import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
+import ChatbotWidget from "@/components/ChatbotWidget";
 import { useState, useEffect } from "react";
 
 const products = [
@@ -57,7 +57,6 @@ const products = [
 ];
 
 export default function Home() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [, setLocation] = useLocation();
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
@@ -73,13 +72,8 @@ export default function Home() {
   };
 
   const handleProductButtonClick = (productId: string) => {
-    if (productId === 'chatbot') {
-      // Open chatbot directly
-      setIsChatOpen(true);
-    } else {
-      // For other products, navigate to contact page
-      setLocation('/kontakt');
-    }
+    // For all products, navigate to contact page
+    setLocation('/kontakt');
   };
 
   return (
@@ -247,8 +241,7 @@ export default function Home() {
 
       </main>
 
-      <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      <ChatbotButton onClick={() => setIsChatOpen(true)} />
+      <ChatbotWidget />
       
       <Footer />
     </div>

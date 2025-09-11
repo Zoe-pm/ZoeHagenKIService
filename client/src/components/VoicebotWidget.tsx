@@ -37,6 +37,8 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
     // Use VAPI_PUBLIC_KEY - needs VITE_ prefix for frontend access
     const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
     
+    console.log('ZOIA: Initializing with key:', publicKey ? 'KEY_PROVIDED' : 'NO_KEY');
+    
     if (!publicKey) {
       console.warn('ZOIA: VITE_VAPI_PUBLIC_KEY not found. Voice assistant will show error.');
       setError('Voice-System benötigt API-Schlüssel Konfiguration.');

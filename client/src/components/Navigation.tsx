@@ -49,7 +49,7 @@ export default function Navigation() {
                     <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns">
                       Über uns
                     </Link>
-                    <Link href="/kundentest" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test">
+                    <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test">
                       Testbereich
                     </Link>
                     <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt">
@@ -64,7 +64,7 @@ export default function Navigation() {
                     <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-ueber-uns-alt">
                       Über uns
                     </Link>
-                    <Link href="/kundentest" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test-alt">
+                    <Link href="/test" className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-test-alt">
                       Testbereich
                     </Link>
                     <Link href="/kontakt" className="button-gradient px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring" data-testid="nav-kontakt-alt">
@@ -106,7 +106,7 @@ export default function Navigation() {
                 <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns">
                   Über uns
                 </Link>
-                <Link href="/kundentest" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test">
+                <Link href="/test" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test">
                   Testbereich
                 </Link>
                 <Link href="/kontakt" className="button-gradient block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-kontakt">
@@ -121,7 +121,7 @@ export default function Navigation() {
                 <Link href="/ueber-uns" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-ueber-uns-alt">
                   Über uns
                 </Link>
-                <Link href="/kundentest" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test-alt">
+                <Link href="/test" className="text-muted-foreground hover:text-foreground block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-test-alt">
                   Testbereich
                 </Link>
                 <Link href="/kontakt" className="button-gradient block px-3 py-2 rounded-md text-base font-medium" data-testid="mobile-nav-kontakt-alt">

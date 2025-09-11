@@ -19,7 +19,16 @@ function Router() {
       <Route path="/produkte/:id" component={ProductDetail} />
       <Route path="/ueber-uns" component={UeberUns} />
       <Route path="/kontakt" component={Kontakt} />
-      <Route path="/kundentest" component={KundenTest} />
+      <Route path="/test" component={KundenTest} />
+      <Route path="/kundentest">
+        {() => {
+          // SPA-friendly redirect to new route
+          if (typeof window !== 'undefined') {
+            window.history.replaceState(null, '', '/test');
+          }
+          return <Route path="/test" component={KundenTest} />;
+        }}
+      </Route>
       <Route path="/impressum" component={Impressum} />
       <Route path="/datenschutz" component={Datenschutz} />
       <Route component={NotFound} />

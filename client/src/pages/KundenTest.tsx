@@ -80,6 +80,7 @@ export default function KundenTest() {
     }
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
   const { toast } = useToast();
 
   // Check for existing session on mount
@@ -100,6 +101,13 @@ export default function KundenTest() {
       }
     }
   }, []);
+
+  // Auto-hide overlay when authorized
+  useEffect(() => {
+    if (isAuthorized) {
+      setShowOverlay(false);
+    }
+  }, [isAuthorized]);
 
   const validateSession = async (token: string) => {
     try {
@@ -267,12 +275,10 @@ export default function KundenTest() {
         <section className="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Hier testen Sie Ihre neuen digitalen Mitarbeiter
+              Hier testen Sie Ihr digitales neues Teammitglied
             </h1>
             <p className="text-xl text-white/90 mb-8">
-              Entdecken Sie, wie Ihr persönlicher Chatbot aussehen und klingen wird. 
-              Testen Sie verschiedene Designs, Stimmen und Begrüßungen – 
-              <span className="font-semibold"> alles live und interaktiv!</span>
+              Hier konfigurieren Sie Ihr digitales neues Teammitglied. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. Änderungen sehen Sie live in der Vorschau. Mit „Speichern & Bestätigen" erhalten Sie eine Zusammenfassung per E-Mail.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/80 text-sm max-w-2xl mx-auto">
               <div>✨ Live-Vorschau</div>
@@ -282,14 +288,14 @@ export default function KundenTest() {
           </div>
         </section>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
           
-          {/* Immer sichtbare Eingabefelder */}
-          <Card className="glass max-w-lg mx-auto mb-8">
+          {/* Login Card - immer sichtbar */}
+          <Card className="glass max-w-lg mx-auto mb-8 relative z-20">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl mb-4">🔓 Zugang zum Testbereich</CardTitle>
-              <p className="text-muted-foreground">
-                Geben Sie Ihre Testdaten ein, um die digitalen Mitarbeiter zu testen.
+              <CardTitle className="text-2xl mb-4">🔓 Anmeldung erforderlich</CardTitle>
+              <p className="text-muted-foreground mb-4">
+                Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -345,14 +351,52 @@ export default function KundenTest() {
                 </div>
               )}
               
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-                <p className="text-sm text-blue-700">
-                  <strong>Den Testcode erhalten Sie nach Auftragsvergabe.</strong>
-                </p>
+              {/* Honeypot field - hidden */}
+              <input
+                type="text"
+                name="website"
+                style={{ display: 'none' }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+              
+              <div className="space-y-3">
+                <div className="p-3 bg-amber-50 rounded-lg border-l-4 border-amber-400">
+                  <p className="text-sm text-amber-700">
+                    <strong>Zum Schutz vor Missbrauch setzen wir eine kurze Sicherheitsprüfung ein.</strong> Nach erfolgreichem Login werden alle Funktionen freigeschaltet.
+                  </p>
+                </div>
+                
+                <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                  <p className="text-sm text-blue-700">
+                    <strong>Ihren Testcode erhalten Sie nach Auftragsvergabe.</strong>
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
           
+          {/* Overlay für nicht-eingeloggte Benutzer */}
+          {!isAuthorized && showOverlay && (
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-10 rounded-lg">
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center text-white p-8 max-w-md">
+                  <div className="mb-4 text-6xl">🔒</div>
+                  <h3 className="text-xl font-bold mb-4">Anmeldung erforderlich</h3>
+                  <p className="text-white/90 mb-6">
+                    Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.
+                  </p>
+                  <Button 
+                    onClick={() => setShowOverlay(false)}
+                    className="button-gradient"
+                  >
+                    Anmeldung anzeigen
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Konfiguration */}
@@ -369,6 +413,7 @@ export default function KundenTest() {
                     Sehen Sie sofort, wie Ihre Änderungen wirken
                   </p>
                 </CardHeader>
+                <fieldset disabled={!isAuthorized} className={!isAuthorized ? 'opacity-50' : ''}>
                 <CardContent className="space-y-6">
                   
                   {/* Bot Type Switcher */}
@@ -601,19 +646,20 @@ export default function KundenTest() {
                       className="w-full button-gradient"
                       size="lg"
                     >
-                      🤖 Chatbot testen
+                      🤖 {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} testen
                     </Button>
                   ) : (
                     <Button 
                       disabled
-                      className="w-full"
+                      className="w-full opacity-50 cursor-not-allowed"
                       size="lg"
                     >
-                      🔒 Erst Code eingeben
+                      🔒 Anmeldung erforderlich
                     </Button>
                   )}
 
                 </CardContent>
+                </fieldset>
               </Card>
             </div>
 
@@ -626,7 +672,7 @@ export default function KundenTest() {
                     So wird Ihr Chatbot auf der Website erscheinen:
                   </p>
                 </CardHeader>
-                <CardContent className="min-h-[500px] relative">
+                <CardContent className={`min-h-[500px] relative ${!isAuthorized ? 'opacity-50' : ''}`}>
                   <div 
                     className={`
                       p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[400px] relative overflow-hidden bg-white
@@ -716,6 +762,24 @@ export default function KundenTest() {
               </Card>
             </div>
           </div>
+          
+          {/* Content-Lieferungs-Hinweis */}
+          <section className="mt-16 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <Card className="glass">
+                <CardContent className="p-8">
+                  <h3 className="text-xl font-semibold mb-4 text-primary">
+                    📄 Wichtiger Hinweis zur inhaltlichen Befüllung
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Die fachlichen Inhalte (z. B. FAQs, Produktinfos, Prozesse, Dokumente) stellen Sie uns separat bereit. 
+                    Nach Bestätigung erhalten Sie automatisch eine E-Mail mit sicheren Upload-Optionen und einer Vorlage, 
+                    welche Informationen wir benötigen. Die inhaltliche Befüllung erfolgt getrennt von Design & Stimme.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
         </div>
       </main>
 

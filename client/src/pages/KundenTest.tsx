@@ -86,7 +86,10 @@ export default function KundenTest() {
       position: "bottom-right",
       greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
       title: "Willkommen!",
-      subtitle: "Ich helfe Ihnen gerne weiter"
+      subtitle: "Ich helfe Ihnen gerne weiter",
+      logoUrl: "",
+      logoPosition: "top-left",
+      logoSize: "medium"
     },
     voicebot: {
       name: "Juna",
@@ -99,7 +102,10 @@ export default function KundenTest() {
       elevenLabsVoiceId: "",
       greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
       title: "Sprachassistent",
-      subtitle: "Sprechen Sie mit mir!"
+      subtitle: "Sprechen Sie mit mir!",
+      logoUrl: "",
+      logoPosition: "top-left",
+      logoSize: "medium"
     }
   });
   const [isChatOpen, setIsChatOpen] = useState(false);

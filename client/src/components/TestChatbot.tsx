@@ -22,6 +22,9 @@ interface TestConfig {
     greeting: string;
     title: string;
     subtitle: string;
+    logoUrl: string;
+    logoPosition: string;
+    logoSize: string;
   };
   voicebot: {
     name: string;
@@ -35,6 +38,9 @@ interface TestConfig {
     greeting: string;
     title: string;
     subtitle: string;
+    logoUrl: string;
+    logoPosition: string;
+    logoSize: string;
   };
 }
 

@@ -69,7 +69,8 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
             },
             body: JSON.stringify({
               message: messageToSend,
-              botName: "Zoë KI Studio Assistant"
+              botName: "Zoë KI Studio Assistant",
+              sessionId: "zoe-ki-studio-prod-session"
             })
           });
           

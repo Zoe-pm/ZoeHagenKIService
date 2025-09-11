@@ -48,7 +48,7 @@ export default function UeberUns() {
               </p>
               <div>
                 <a
-                  href="/#kontakt"
+                  href="/kontakt"
                   role="button"
                   className="inline-flex items-center rounded-md button-gradient px-6 py-3 font-medium shadow-lg"
                   data-testid="contact-cta"
@@ -161,7 +161,7 @@ export default function UeberUns() {
               bis zur Umsetzung – und bleiben als Partner an Ihrer Seite.
             </p>
             <a
-              href="/#kontakt"
+              href="/kontakt"
               role="button"
               className="inline-flex items-center rounded-md button-gradient px-6 py-3 font-medium shadow-lg"
               data-testid="consultation-cta"

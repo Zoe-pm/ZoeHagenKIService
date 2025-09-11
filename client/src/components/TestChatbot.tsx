@@ -57,6 +57,17 @@ interface TestChatbotProps {
 }
 
 export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl, n8nBotName, n8nBotGreeting }: TestChatbotProps) {
+  // Stable session ID for Test Chatbots (per webhook/authToken)
+  const getTestSessionId = () => {
+    const sessionKey = `testSessionId-${authToken || 'default'}`;
+    let sessionId = localStorage.getItem(sessionKey);
+    if (!sessionId) {
+      sessionId = `test-${authToken || 'guest'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem(sessionKey, sessionId);
+    }
+    return sessionId;
+  };
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -158,20 +169,26 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       if (n8nWebhookUrl) {
         // Real n8n API Call
         try {
+          const testSessionId = getTestSessionId();
           const response = await fetch(n8nWebhookUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'x-session-id': testSessionId
             },
             body: JSON.stringify({
               message: messageToSend,
-              botName: n8nBotName || currentConfig.name
+              botName: n8nBotName || currentConfig.name,
+              sessionId: testSessionId,
+              session_id: testSessionId,
+              timestamp: new Date().toISOString(),
+              source: 'website-chatbot'
             })
           });
           
           if (response.ok) {
             const data = await response.json();
-            botResponse = data.response || data.message || 'Entschuldigung, keine Antwort erhalten.';
+            botResponse = data.output || data.response || data.message || data.text || data.answer || 'Entschuldigung, keine Antwort erhalten.';
           } else {
             botResponse = `[n8n Fehler ${response.status}] Ihr Chatbot ist nicht erreichbar. Bitte prüfen Sie die Webhook-URL.`;
           }

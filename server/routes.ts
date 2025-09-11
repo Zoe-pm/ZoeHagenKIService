@@ -405,11 +405,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Production chatbot endpoint (n8n webhook proxy)
   app.post("/api/prod-chatbot", async (req, res) => {
     try {
-      const { message } = req.body;
-      
-      if (!message || typeof message !== 'string') {
-        return res.status(400).json({ success: false, message: "Message ist erforderlich" });
-      }
+      // Validate request body
+      const prodChatSchema = z.object({
+        message: z.string().min(1, "Message ist erforderlich").max(2000, "Message zu lang"),
+        botName: z.string().optional(),
+        sessionId: z.string().optional()
+      });
+
+      const validatedData = prodChatSchema.parse(req.body);
+      const { message } = validatedData;
 
       const webhookUrl = process.env.N8N_WEBHOOK_URL_PROD;
       if (!webhookUrl) {
@@ -433,19 +437,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         signal: AbortSignal.timeout(10000) // 10 second timeout
       });
 
-      console.log('JUNA: n8n Request sent with sessionId:', req.body.sessionId);
-
       if (!response.ok) {
         return res.status(502).json({ success: false, message: "Chatbot ist momentan nicht erreichbar" });
       }
 
       const data = await response.json();
-      console.log('JUNA: n8n Raw Response:', JSON.stringify(data, null, 2));
       
-      // Try multiple possible response field names
-      const botResponse = data.response || data.message || data.output || data.text || data.answer || 'Entschuldigung, keine Antwort erhalten.';
-      
-      console.log('JUNA: Extracted botResponse:', botResponse);
+      // Parse n8n response - try multiple field names for compatibility
+      const botResponse = data.output || data.response || data.message || data.text || data.answer || 'Entschuldigung, keine Antwort erhalten.';
 
       res.json({ success: true, response: botResponse });
       

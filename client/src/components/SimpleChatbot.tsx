@@ -65,8 +65,6 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     try {
       let botResponse: string;
       
-      console.log('JUNA: Verwende Server-Endpoint für sicheren Webhook-Aufruf');
-      
       const response = await fetch('/api/prod-chatbot', {
         method: 'POST',
         headers: {
@@ -78,8 +76,6 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
           sessionId: getSessionId()
         })
       });
-      
-      console.log('JUNA: Request mit sessionId:', getSessionId());
       
       const data = await response.json();
       

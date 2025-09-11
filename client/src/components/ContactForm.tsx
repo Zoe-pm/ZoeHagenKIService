@@ -67,20 +67,23 @@ export default function ContactForm() {
     if (action === "15-Min Demo") {
       const calendlyDemoUrl = import.meta.env.VITE_CALENDLY_DEMO_URL || import.meta.env.VITE_CALENDLY_URL;
       
-      if (calendlyDemoUrl && window.Calendly) {
+      if (!calendlyDemoUrl) {
+        toast({
+          title: "Calendly nicht konfiguriert",
+          description: "Bitte setzen Sie VITE_CALENDLY_URL in den Environment Variables für die Online-Terminbuchung.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      if (window.Calendly) {
         // Calendly Popup öffnen
         window.Calendly.initPopupWidget({
           url: calendlyDemoUrl
         });
-      } else if (calendlyDemoUrl) {
+      } else {
         // Fallback zu direktem Link
         window.open(calendlyDemoUrl, '_blank');
-      } else {
-        // E-Mail für Terminbuchung öffnen
-        const emailBody = encodeURIComponent(
-          `Hallo Zoë,\n\nIch interessiere mich für eine 15-minütige Demo Ihrer KI-Lösungen.\n\nMeine Wunschtermine:\n- Termin 1: \n- Termin 2: \n- Termin 3: \n\nBranche/Interesse: \n\nViele Grüße`
-        );
-        window.open(`mailto:zoe-kiconsulting@pm.me?subject=15-Min Demo Anfrage&body=${emailBody}`, '_blank');
       }
     } else {
       toast({

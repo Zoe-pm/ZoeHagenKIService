@@ -114,30 +114,30 @@ export default function Kontakt() {
             <div className="glass p-8 rounded-lg text-center">
               <h2 className="text-2xl font-bold mb-6 text-primary">Weitere Kontaktmöglichkeiten</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors" onClick={() => setIsChatOpen(true)}>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setIsChatOpen(true)}>
                   <h3 className="font-semibold text-foreground mb-2">Sofortiger Support</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-sm text-muted-foreground mb-4 flex-grow">
                     Nutzen Sie unseren Chatbot für schnelle Antworten auf häufige Fragen.
                   </p>
-                  <Button size="sm" className="bg-primary hover:bg-primary/90" data-testid="open-chatbot-support">
+                  <Button size="sm" className="button-gradient w-full" data-testid="open-chatbot-support">
                     Chat starten
                   </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors" onClick={() => window.open(calendlyUrl || 'mailto:zoe-kiconsulting@pm.me?subject=Individuelle Beratung', '_blank')}>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.open(calendlyUrl || 'mailto:zoe-kiconsulting@pm.me?subject=Individuelle Beratung', '_blank')}>
                   <h3 className="font-semibold text-foreground mb-2">Individuelle Beratung</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-sm text-muted-foreground mb-4 flex-grow">
                     Persönliches Erstgespräch für maßgeschneiderte KI-Lösungen.
                   </p>
-                  <Button size="sm" className="bg-secondary hover:bg-secondary/90" data-testid="book-consultation">
+                  <Button size="sm" className="button-gradient w-full" data-testid="book-consultation">
                     {calendlyUrl ? 'Termin buchen' : 'E-Mail senden'}
                   </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors" onClick={() => setLocation('/kunden-test')}>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setLocation('/kunden-test')}>
                   <h3 className="font-semibold text-foreground mb-2">Demo & Test</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-sm text-muted-foreground mb-4 flex-grow">
                     Testen Sie unsere KI-Assistenten direkt auf der Konfigurationsseite.
                   </p>
-                  <Button size="sm" className="bg-accent hover:bg-accent/90" data-testid="demo-test">
+                  <Button size="sm" className="button-gradient w-full" data-testid="demo-test">
                     Zur Demo-Seite
                   </Button>
                 </div>

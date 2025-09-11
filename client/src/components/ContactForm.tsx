@@ -60,14 +60,22 @@ export default function ContactForm() {
 
   const handleQuickAction = async (action: string) => {
     if (action === "15-Min Demo") {
-      // Calendly Popup öffnen
-      if (window.Calendly) {
+      const calendlyDemoUrl = import.meta.env.VITE_CALENDLY_DEMO_URL || import.meta.env.VITE_CALENDLY_URL;
+      
+      if (calendlyDemoUrl && window.Calendly) {
+        // Calendly Popup öffnen
         window.Calendly.initPopupWidget({
-          url: 'https://calendly.com/zoe-kiconsulting/15min-demo'
+          url: calendlyDemoUrl
         });
-      } else {
+      } else if (calendlyDemoUrl) {
         // Fallback zu direktem Link
-        window.open('https://calendly.com/zoe-kiconsulting/15min-demo', '_blank');
+        window.open(calendlyDemoUrl, '_blank');
+      } else {
+        // E-Mail für Terminbuchung öffnen
+        const emailBody = encodeURIComponent(
+          `Hallo Zoë,\n\nIch interessiere mich für eine 15-minütige Demo Ihrer KI-Lösungen.\n\nMeine Wunschtermine:\n- Termin 1: \n- Termin 2: \n- Termin 3: \n\nBranche/Interesse: \n\nViele Grüße`
+        );
+        window.open(`mailto:zoe-kiconsulting@pm.me?subject=15-Min Demo Anfrage&body=${emailBody}`, '_blank');
       }
     } else {
       toast({

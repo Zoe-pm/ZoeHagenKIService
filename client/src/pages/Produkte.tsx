@@ -73,7 +73,7 @@ export default function Produkte() {
     <div className="min-h-screen">
       <Navigation />
       
-      <main className="pt-20">
+      <main className="pt-32">
         {/* Hero Section */}
         <section className="hero-gradient py-20 px-4 sm:px-6 lg:px-8" data-testid="products-hero-section">
           <div className="max-w-4xl mx-auto text-center">
@@ -115,7 +115,7 @@ export default function Produkte() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {products.map((product, index) => (
-                <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 glass border-primary/20" data-testid={`product-card-${product.id}`}>
+                <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 glass border-primary/20 flex flex-col" data-testid={`product-card-${product.id}`}>
                   <CardContent className="p-0">
                     <div className="relative overflow-hidden rounded-t-lg">
                       <img 
@@ -129,7 +129,7 @@ export default function Produkte() {
                       </div>
                     </div>
                     
-                    <div className="p-6">
+                    <div className="p-6 flex flex-col h-full">
                       <h3 className="text-2xl font-bold mb-3" data-testid={`product-title-${product.id}`}>
                         {product.title}
                       </h3>
@@ -137,7 +137,7 @@ export default function Produkte() {
                         {product.description}
                       </p>
                       
-                      <div className="space-y-2 mb-6">
+                      <div className="space-y-2 mb-6 flex-grow">
                         {product.features.map((feature, idx) => (
                           <div key={idx} className="flex items-start gap-2" data-testid={`product-feature-${product.id}-${idx}`}>
                             <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
@@ -147,7 +147,7 @@ export default function Produkte() {
                       </div>
                       
                       <Button 
-                        className={`w-full ${product.gradient} text-white font-semibold group-hover:opacity-90 transition-opacity`}
+                        className={`w-full ${product.gradient} text-white font-semibold group-hover:opacity-90 transition-opacity mt-auto`}
                         onClick={() => handleProductButtonClick(product.id)}
                         data-testid={`product-button-${product.id}`}
                       >

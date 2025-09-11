@@ -402,6 +402,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Production chatbot endpoint (n8n webhook proxy)
+  app.post("/api/prod-chatbot", async (req, res) => {
+    try {
+      const { message } = req.body;
+      
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({ success: false, message: "Message ist erforderlich" });
+      }
+
+      const webhookUrl = process.env.N8N_WEBHOOK_URL_PROD;
+      if (!webhookUrl) {
+        return res.status(500).json({ success: false, message: "Produktions-Webhook nicht konfiguriert" });
+      }
+
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message,
+          botName: "Zoë KI Studio Assistant"
+        }),
+        signal: AbortSignal.timeout(10000) // 10 second timeout
+      });
+
+      if (!response.ok) {
+        return res.status(502).json({ success: false, message: "Chatbot ist momentan nicht erreichbar" });
+      }
+
+      const data = await response.json();
+      const botResponse = data.response || data.message || 'Entschuldigung, keine Antwort erhalten.';
+
+      res.json({ success: true, response: botResponse });
+      
+    } catch (error) {
+      console.error('Production chatbot error:', error);
+      res.status(502).json({ 
+        success: false, 
+        message: "Chatbot ist momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773" 
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

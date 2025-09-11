@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -5,6 +6,11 @@ import ContactForm from "@/components/ContactForm";
 import ChatbotWidget from "@/components/ChatbotWidget";
 
 export default function Kontakt() {
+  // Automatisch zum Seitenbeginn scrollen beim Laden der Kontaktseite
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return (
     <>
       <SEOHelmet 

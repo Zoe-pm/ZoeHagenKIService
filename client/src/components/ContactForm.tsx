@@ -17,9 +17,9 @@ export default function ContactForm() {
   return (
     <section id="kontakt" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="contact-section">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10 relative">
-          {/* Zoë's Photo - oben rechts */}
-          <div className="absolute top-0 right-4 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg bg-white">
+        <div className="text-center mb-10 relative pt-4">
+          {/* Zoë's Photo - oben rechts, richtig positioniert */}
+          <div className="absolute -top-2 right-0 sm:right-4 w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg bg-white z-10">
             <img 
               src={zoePhoto}
               alt="Zoë Hagen - Gründerin von Zoë's KI Studio"

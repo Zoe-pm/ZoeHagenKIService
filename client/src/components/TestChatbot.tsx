@@ -64,12 +64,10 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
 
   // Initialize with configured greeting including subtitle
   useEffect(() => {
-    const subtitle = config.activeBot === "chatbot" ? config.chatbot.subtitle : config.voicebot.subtitle;
-    const greetingText = subtitle ? `${subtitle}\n\n${currentConfig.greeting}` : currentConfig.greeting;
-    
+    // Untertitel sollte nur im Header erscheinen, nicht im Begrüßungstext
     const initialMessage: Message = {
       id: '1',
-      text: greetingText,
+      text: currentConfig.greeting,
       sender: 'bot',
       timestamp: new Date()
     };
@@ -226,15 +224,15 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
         className="flex items-center justify-between p-4 border-b text-white rounded-t-lg relative min-h-[60px]"
         style={{ backgroundColor: currentConfig.primaryColor }}
       >
-        {/* Logo positioned based on config - ensure it doesn't overlap content */}
+        {/* Logo positioned based on config - behind content to prevent overlap */}
         {(config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl) && (
           <div 
-            className={`absolute z-10 ${
-              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-left' ? 'left-2 top-1' :
-              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-right' ? 'right-2 top-1' : 
+            className={`absolute z-0 ${
+              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-left' ? 'left-1 top-1' :
+              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-right' ? 'right-1 top-1' : 
               'left-1/2 top-1 transform -translate-x-1/2'
             }`}
-            style={{ pointerEvents: 'none' }}
+            style={{ pointerEvents: 'none', opacity: 0.7 }}
           >
             <img 
               src={config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl}
@@ -249,7 +247,14 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
           </div>
         )}
         
-        <div className="flex items-center gap-2 flex-1">
+        <div className={`flex items-center gap-2 flex-1 relative z-20 ${
+          (config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl) && 
+          (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-left' ? 'pl-10' :
+          (config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl) && 
+          (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-right' ? 'pr-10' :
+          (config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl) && 
+          (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'center' ? 'pt-3' : ''
+        }`}>
           {config.activeBot === "chatbot" ? (
             <MessageCircle className="w-5 h-5" />
           ) : (

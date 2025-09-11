@@ -429,11 +429,11 @@ export default function KundenTest() {
             </CardContent>
           </Card>
           
-          {/* Teasing Overlay für nicht-eingeloggte Benutzer */}
+          {/* Subtle Teasing Overlay für nicht-eingeloggte Benutzer */}
           {!isAuthorized && showOverlay && (
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/20 backdrop-blur-sm z-10 rounded-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 backdrop-blur-[1px] z-10 rounded-lg">
               <div className="flex items-center justify-center h-full">
-                <div className="text-center text-foreground p-8 max-w-md bg-background/90 rounded-xl border border-primary/30 shadow-xl">
+                <div className="text-center text-foreground p-6 max-w-sm bg-background/70 rounded-xl border border-primary/20 shadow-md">
                   <div className="mb-4 text-5xl">✨</div>
                   <h3 className="text-xl font-bold mb-3 text-primary">Ihr KI-Assistent wartet</h3>
                   <p className="text-muted-foreground mb-6 text-sm leading-relaxed">

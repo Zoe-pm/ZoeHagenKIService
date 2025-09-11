@@ -223,17 +223,18 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
     >
       {/* Header */}
       <div 
-        className="flex items-center justify-between p-4 border-b text-white rounded-t-lg relative"
+        className="flex items-center justify-between p-4 border-b text-white rounded-t-lg relative min-h-[60px]"
         style={{ backgroundColor: currentConfig.primaryColor }}
       >
-        {/* Logo positioned based on config */}
+        {/* Logo positioned based on config - ensure it doesn't overlap content */}
         {(config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl) && (
           <div 
-            className={`absolute ${
-              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-left' ? 'left-2 top-2' :
-              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-right' ? 'right-2 top-2' : 
-              'left-1/2 top-2 transform -translate-x-1/2'
+            className={`absolute z-10 ${
+              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-left' ? 'left-2 top-1' :
+              (config.activeBot === "chatbot" ? config.chatbot.logoPosition : config.voicebot.logoPosition) === 'top-right' ? 'right-2 top-1' : 
+              'left-1/2 top-1 transform -translate-x-1/2'
             }`}
+            style={{ pointerEvents: 'none' }}
           >
             <img 
               src={config.activeBot === "chatbot" ? config.chatbot.logoUrl : config.voicebot.logoUrl}
@@ -248,15 +249,17 @@ export function TestChatbot({ isOpen, onClose, authToken, config }: TestChatbotP
           </div>
         )}
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-1">
           {config.activeBot === "chatbot" ? (
             <MessageCircle className="w-5 h-5" />
           ) : (
             <Volume2 className="w-5 h-5" />
           )}
-          <div>
+          <div className="flex-1">
             <div className="font-semibold">{currentConfig.name} (TEST)</div>
-            <div className="text-xs text-white/80">{config.activeBot === "chatbot" ? config.chatbot.title : config.voicebot.title}</div>
+            {(config.activeBot === "chatbot" ? config.chatbot.subtitle : config.voicebot.subtitle) && (
+              <div className="text-xs text-white/80">{config.activeBot === "chatbot" ? config.chatbot.subtitle : config.voicebot.subtitle}</div>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">

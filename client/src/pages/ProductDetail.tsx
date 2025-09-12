@@ -13,6 +13,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
+import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
 
 const productData: { [key: string]: any } = {
   chatbot: {
@@ -68,7 +69,7 @@ const productData: { [key: string]: any } = {
     description: "Intelligente Telefon-Assistenz für professionellen Kundenservice",
     price: "ab 599€/Monat",
     implementationTime: "3 Wochen",
-    image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
+    image: voicebotImage,
     keyFacts: [
       "Zweck: Automatisierte Telefon-Kundenbetreuung",
       "Zielgruppe: Anrufer und Bestandskunden",

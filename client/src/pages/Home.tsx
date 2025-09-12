@@ -15,6 +15,7 @@ import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
 import VoicebotWidget from "@/components/VoicebotWidget";
 import { useState, useEffect } from "react";
 import { endianness } from "os";
+import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
 
 const products = [
   {
@@ -33,7 +34,7 @@ const products = [
     description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
     features: ["Sprechen wie mit einem Menschen", "Einbindung in Website und über Telefon möglich", "Kein: Drücken Sie die eins... mehr", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     icon: <Mic className="text-secondary" />,
-    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: voicebotImage,
     gradient: "bg-gradient-to-r from-secondary to-accent",
     buttonText: "Sprechen Sie mit Juna"
   },

@@ -16,6 +16,7 @@ import VoicebotWidget from "@/components/VoicebotWidget";
 import { useState, useEffect } from "react";
 import { endianness } from "os";
 import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
+import avatarImage from "@assets/0_2_640_N_1757681281015.webp";
 
 const products = [
   {
@@ -44,7 +45,7 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     icon: <UserCircle className="text-accent" />,
-    image: "/images/avatar.jpg",
+    image: avatarImage,
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben"
   },

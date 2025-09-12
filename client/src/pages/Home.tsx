@@ -19,7 +19,7 @@ const products = [
   {
     id: "chatbot",
     title: "Chatbot – Antworten ohne Suchen",
-    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads und reduziert Standardanfragen.",
+    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads und nimmt Ihnen Standardanfragen einfach ab.",
     features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Lead-Qualifizierung", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",

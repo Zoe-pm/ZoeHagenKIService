@@ -20,7 +20,9 @@ interface CallState {
 
 const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
   const [vapi, setVapi] = useState<Vapi | null>(null);
-  const [callState, setCallState] = useState<CallState>({
+  
+  // Initial call state
+  const getInitialCallState = (): CallState => ({
     isConnected: false,
     isConnecting: false,
     isMuted: false,
@@ -28,7 +30,18 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
     isAssistantSpeaking: false,
     callDuration: 0
   });
+  
+  const [callState, setCallState] = useState<CallState>(getInitialCallState());
   const [error, setError] = useState<string | null>(null);
+
+  // Reset function to clear all state
+  const resetWidget = useCallback(() => {
+    setCallState(getInitialCallState());
+    setError(null);
+    if (vapi) {
+      vapi.stop();
+    }
+  }, [vapi]);
 
   // Initialize Vapi client
   useEffect(() => {
@@ -117,6 +130,13 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       }
     };
   }, [isOpen]);
+
+  // Reset widget when closing
+  useEffect(() => {
+    if (!isOpen) {
+      resetWidget();
+    }
+  }, [isOpen, resetWidget]);
 
   // Call duration timer
   useEffect(() => {

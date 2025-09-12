@@ -18,10 +18,39 @@ interface SimpleChatbotProps {
 }
 
 export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps) {
-  const handleClose = () => {
+  // Initial message
+  const getInitialMessages = (): Message[] => [
+    {
+      id: '1',
+      text: "Hey! Ich bin Juna und beantworte gern Fragen rund um Zoë's KI Service.",
+      sender: 'bot',
+      timestamp: new Date()
+    }
+  ];
+
+  const [messages, setMessages] = useState(getInitialMessages);
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showCalendly, setShowCalendly] = useState(false);
+
+  // Reset chat function
+  const resetChat = () => {
+    setMessages(getInitialMessages());
+    setInputText('');
+    setIsLoading(false);
     setShowCalendly(false);
+  };
+
+  const handleClose = () => {
+    resetChat();
     onClose();
   };
+
+  const handleCalendlyClose = () => {
+    setShowCalendly(false);
+    resetChat(); // Reset chat after Calendly closes
+  };
+
   // Stable session ID for Juna Chat
   const getSessionId = () => {
     let sessionId = localStorage.getItem('junaSessionId');
@@ -31,18 +60,6 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     }
     return sessionId;
   };
-
-  const [messages, setMessages] = useState([
-    {
-      id: '1',
-      text: "Hey! Ich bin Juna und beantworte gern Fragen rund um Zoë's KI Service.",
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ] as Message[]);
-  const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showCalendly, setShowCalendly] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -155,7 +172,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     <>
       <CalendlyWidget 
         isOpen={showCalendly}
-        onClose={() => setShowCalendly(false)}
+        onClose={handleCalendlyClose}
         calendlyUrl="https://calendly.com/zoeskistudio"
       />
     <div className="fixed bottom-24 right-4 z-40 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-[32rem] max-h-[calc(100vh-6rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col">

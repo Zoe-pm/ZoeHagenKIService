@@ -428,7 +428,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
         body: JSON.stringify({
           message: message,
-          botName: req.body.botName || "Juna Zoes KI Studio Assistant",
+          botName: req.body.botName || "Juna Zoës KI Studio Assistant",
           sessionId: req.body.sessionId || 'juna-fallback-session',
           session_id: req.body.sessionId || 'juna-fallback-session',
           timestamp: new Date().toISOString(),

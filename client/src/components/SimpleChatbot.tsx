@@ -30,7 +30,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hey! Ich bin Juna und beantworte gern Fragen rund um Zoes KI Service. Womit kann ich helfen?',
+      text: 'Hey! Ich bin Juna und beantworte gern Fragen rund um Zoës KI Service. Womit kann ich helfen?',
       sender: 'bot',
       timestamp: new Date()
     }

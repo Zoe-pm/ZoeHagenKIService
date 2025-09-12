@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { Heart } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -56,24 +57,18 @@ export default function Footer() {
             >
               Cookies
             </a>
-            
-            <span className="text-muted-foreground/60">•</span>
-            
-            <span 
-              className="hover:text-accent transition-colors cursor-default px-1"
-              data-testid="footer-copyright"
-            >
-              © 2025 Zoë Hagen KI Consulting
-            </span>
-            
-            <span className="text-muted-foreground/60">•</span>
-            
-            <span 
-              className="hover:text-accent transition-colors cursor-default px-1"
-              data-testid="footer-accessibility"
-            >
-              Barrierefreiheit
-            </span>
+          </div>
+          
+          <div className="border-t border-border mt-8 pt-6">
+            <div className="space-y-2">
+              <p className="text-muted-foreground" data-testid="footer-copyright">
+                © 2025 Zoë Hagen KI Consulting. Alle Rechte vorbehalten. 
+                Made with <Heart className="inline-block w-4 h-4 text-secondary mx-1" /> in Deutschland
+              </p>
+              <p className="text-sm text-muted-foreground" data-testid="footer-accessibility">
+                Diese Website ist barrierefrei nach WCAG 2.1 AA gestaltet
+              </p>
+            </div>
           </div>
         </div>
       </div>

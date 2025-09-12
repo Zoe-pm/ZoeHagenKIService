@@ -87,8 +87,8 @@ export default function Datenschutz() {
                   <div className="space-y-2 mb-4">
                     <p><strong>Zoë Hagen KI Consulting</strong></p>
                     <p>Zoë Hagen</p>
-                    <p>[Straße und Hausnummer]</p>
-                    <p>[PLZ und Ort]</p>
+                    <p>Jägerweg 28</p>
+                    <p>13503 Berlin</p>
                     <p>Deutschland</p>
                     <p><strong>Telefon:</strong> 01719862773</p>
                     <p><strong>E-Mail:</strong> zoe-kiconsulting@pm.me</p>

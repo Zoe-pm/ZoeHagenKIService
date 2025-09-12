@@ -17,7 +17,7 @@ interface SimpleChatbotProps {
 }
 
 export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps) {
-  // Stable session ID for Juna
+  // Stable session ID for Juna Chat
   const getSessionId = () => {
     let sessionId = localStorage.getItem('junaSessionId');
     if (!sessionId) {
@@ -30,7 +30,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hallo! Ich bin Juna, Ihre digitale Unterstützung. Womit kann ich helfen?',
+      text: 'Hallo! Ich bin Juna Chat, Ihre digitale Unterstützung. Womit kann ich helfen?',
       sender: 'bot',
       timestamp: new Date()
     }
@@ -72,7 +72,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         },
         body: JSON.stringify({
           message: messageToSend,
-          botName: "Juna Zoës KI Studio",
+          botName: "Juna Chat Zoës KI Service",
           sessionId: getSessionId()
         })
       });
@@ -83,7 +83,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         botResponse = data.response || 'Entschuldigung, keine Antwort erhalten.';
       } else {
         console.error('JUNA: Server Error:', data);
-        botResponse = `[Server Fehler ${response.status}] Juna ist nicht erreichbar.`;
+        botResponse = `[Server Fehler ${response.status}] Juna Chat ist nicht erreichbar.`;
       }
 
       const botMessage: Message = {
@@ -122,8 +122,8 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
-          <h3 className="font-semibold">Juna</h3>
-          <p className="text-sm opacity-90">Zoës KI Studio</p>
+          <h3 className="font-semibold">Juna Chat</h3>
+          <p className="text-sm opacity-90">Zoës KI Service</p>
         </div>
         <Button
           variant="ghost"

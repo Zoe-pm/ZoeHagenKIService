@@ -10,7 +10,7 @@ export default function VoiceDemo() {
   const { toast } = useToast();
 
   const handleVoiceDemo = () => {
-    // Open Juna Voicebot Widget directly
+    // Open Juna Voice Voicebot Widget directly
     setIsVoiceOpen(true);
   };
 
@@ -22,24 +22,24 @@ export default function VoiceDemo() {
             <CardContent className="p-4 text-center">
               <h2 className="text-2xl font-bold mb-4" data-testid="voice-demo-title">
                 <Volume2 className="inline-block text-secondary mr-3" />
-                Sprechen Sie mit Juna
+                Sprechen Sie mit Juna Voice
               </h2>
               <p className="text-muted-foreground mb-4" data-testid="voice-demo-description">
-                Juna beantwortet alle Ihre Fragen. Sie können Sie jederzeit unterbrechen oder auflegen. Ganz einfach.
+                Juna Voice beantwortet alle Ihre Fragen. Sie können Sie jederzeit unterbrechen oder auflegen. Ganz einfach.
               </p>
               
               <div className="flex flex-col items-center space-y-6">
                 <Button
                   className="voice-pulse bg-gradient-to-r from-secondary to-accent p-6 rounded-full text-4xl hover:scale-110 transition-transform"
                   onClick={handleVoiceDemo}
-                  aria-label="Juna Voicebot starten"
+                  aria-label="Juna Voice Voicebot starten"
                   data-testid="voice-demo-mic-button"
                 >
                   <Mic />
                 </Button>
                 
                 <p className="text-sm text-muted-foreground" data-testid="voice-demo-instruction">
-                  Klicken und mit Juna sprechen
+                  Klicken und mit Juna Voice sprechen
                 </p>
                 
               </div>
@@ -48,7 +48,7 @@ export default function VoiceDemo() {
         </div>
       </section>
 
-      {/* Juna Voicebot Widget */}
+      {/* Juna Voice Voicebot Widget */}
       <VoicebotWidget 
         isOpen={isVoiceOpen} 
         onClose={() => setIsVoiceOpen(false)} 

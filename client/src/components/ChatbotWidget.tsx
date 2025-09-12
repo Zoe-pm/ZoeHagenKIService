@@ -24,11 +24,11 @@ export default function ChatbotWidget() {
 
   return (
     <>
-      {/* Juna - Text Chatbot */}
+      {/* Juna Chat - Text Chatbot */}
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       <ChatbotButton onClick={() => setIsChatOpen(true)} />
       
-      {/* Juna - Voice Assistant */}
+      {/* Juna Voice - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
       <VoiceButton onClick={() => setIsVoiceOpen(true)} />
     </>

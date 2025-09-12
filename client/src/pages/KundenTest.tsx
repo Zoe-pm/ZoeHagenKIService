@@ -104,7 +104,7 @@ export default function KundenTest() {
       logoSize: "large"
     },
     voicebot: {
-      name: "Juna",
+      name: "Juna Voice",
       primaryColor: "#10B981",
       backgroundColor: "#F3F4F6",
       widgetSize: "medium",
@@ -112,7 +112,7 @@ export default function KundenTest() {
       voiceSpeed: [1],
       voicePitch: [1],
       elevenLabsVoiceId: "",
-      greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
+      greeting: "Hallo! Ich bin Juna Voice, Ihr Sprach-Assistent.",
       title: "Sprachassistent",
       subtitle: "Sprechen Sie mit mir!",
       logoUrl: "",
@@ -244,7 +244,7 @@ export default function KundenTest() {
         logoSize: "medium"
       },
       voicebot: {
-        name: "Juna",
+        name: "Juna Voice",
         primaryColor: "#10B981",
         backgroundColor: "#F3F4F6",
         widgetSize: "medium",
@@ -252,7 +252,7 @@ export default function KundenTest() {
         voiceSpeed: [1],
         voicePitch: [1],
         elevenLabsVoiceId: "",
-        greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
+        greeting: "Hallo! Ich bin Juna Voice, Ihr Sprach-Assistent.",
         title: "Sprachassistent",
         subtitle: "Sprechen Sie mit mir!",
         logoUrl: "",
@@ -263,8 +263,8 @@ export default function KundenTest() {
   };
 
   const generateNameSuggestions = (type: "chatbot" | "voicebot") => {
-    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Juna", "Sam", "Rio"];
-    const voicebotNames = ["Juna", "Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
+    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Juna Chat", "Sam", "Rio"];
+    const voicebotNames = ["Juna Voice", "Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
     return type === "chatbot" ? chatbotNames : voicebotNames;
   };
 

@@ -30,7 +30,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hey! Ich bin Juna und beantworte gern Fragen rund um Zoës KI Service. Womit kann ich helfen?',
+      text: 'Hey! Ich bin Juna und beantworte gern Fragen rund um Zoës KI Service.',
       sender: 'bot',
       timestamp: new Date()
     }
@@ -178,7 +178,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Was möchten Sie wissen?"
+            placeholder="Womit kann ich helfen?"
             disabled={isLoading}
             className="flex-1"
             data-testid="input-chat"

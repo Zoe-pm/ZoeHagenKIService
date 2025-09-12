@@ -51,7 +51,7 @@ const products = [
     id: "wissensbot",
     title: "Wissensbot – Wissen, das bleibt",
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
-    features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität", "Prozess-Kontinuität"],
+    features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität", "Onboarding leicht gemacht"],
     icon: <Brain className="text-primary" />,
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",

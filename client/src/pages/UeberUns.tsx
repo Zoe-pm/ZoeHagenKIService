@@ -93,7 +93,7 @@ export default function UeberUns() {
                     className="text-primary hover:underline font-medium"
                     data-testid="krawall-link"
                   >Krawall Designbüro</a> bieten wir modernes, professionelles Webdesign. 
-                  Sie sorgt für individuell designte, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
+                  Sie sorgen für individuell designte, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
                 </p>
               </div>
               
@@ -107,7 +107,7 @@ export default function UeberUns() {
                     className="text-primary hover:underline font-medium"
                     data-testid="patrick-weber-link"
                   >Patrick Weber</a> von erpa.web GmbH kümmert sich um DSGVO-konformes Hosting, Datenschutz und IT-Security, 
-                  damit deine Website jederzeit sicher und zuverlässig läuft.
+                  damit Ihre Website jederzeit sicher und zuverlässig läuft.
                 </p>
               </div>
             </div>

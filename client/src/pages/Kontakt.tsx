@@ -7,7 +7,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 import ChatbotWidget from "@/components/ChatbotWidget";
-import zoePhoto from "@assets/Zoe_Website_1757416756555.jpg";
+import zoePhoto from "@assets/Zoe Website_bus_klein_1757678971314.webp";
 
 export default function Kontakt() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -86,16 +86,16 @@ export default function Kontakt() {
                     Nutzen Sie unseren Chatbot für schnelle Antworten auf häufige Fragen.
                   </p>
                   <Button size="sm" className="button-gradient w-full" data-testid="open-chatbot-support">
-                    Chat starten
+                    Los geht´s!
                   </Button>
                 </div>
                 <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setLocation('/kunden-test')}>
                   <h3 className="font-semibold text-foreground mb-2">Mit Juna sprechen</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                    Sprechen Sie direkt mit unserem Voicebot Juna.
+                    Sprechen Sie direkt mit Juna. Sie ist 24/7 für Sie am Start.
                   </p>
                   <Button size="sm" className="button-gradient w-full" data-testid="speak-with-juna">
-                    Voicebot starten
+                    Los geht´s!
                   </Button>
                 </div>
                 <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.open('tel:+4917198627773')}>
@@ -104,7 +104,7 @@ export default function Kontakt() {
                     Wenn Sie lieber mit mir direkt sprechen wollen, scheuen Sie sich nicht einfach anzurufen. Ich freue mich auf Sie!
                   </p>
                   <Button size="sm" className="button-gradient w-full" data-testid="direct-call">
-                    Jetzt anrufen
+                    Los geht´s!
                   </Button>
                 </div>
               </div>

@@ -30,8 +30,8 @@ const products = [
   {
     id: "voicebot",
     title: "Voicebot – sprechen statt tippen", 
-    description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt Anrufe entgegen und vereinbart Termine.",
-    features: ["Natürliche Sprachverarbeitung", "Einbindung in WEbsite und über Telefon möglich", "Terminvereinbarung", "Kein: Drücken Sie die eins... mehr"],
+    description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
+    features: ["Sprechen wie mit einem Menschen", "Einbindung in Website und über Telefon möglich", "Effektive Terminvereinbarung", "Kein: Drücken Sie die eins... mehr", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Personalengpass ade.", "Jederzeit erreichbar"],
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",

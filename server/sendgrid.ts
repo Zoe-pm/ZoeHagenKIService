@@ -66,7 +66,7 @@ export async function sendTestCodeEmail(data: TestCodeEmailData): Promise<boolea
       <div style="background: white; padding: 30px; border-radius: 10px; margin: 2px;">
         <div style="text-align: center; margin-bottom: 30px;">
           <h1 style="background: linear-gradient(135deg, #0ea5e9, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; font-size: 28px;">
-            Zoë's KI Studio
+            Zoë's KI Service
           </h1>
           <p style="color: #6b7280; margin: 5px 0 0 0;">Ihr persönlicher Test-Zugang</p>
         </div>
@@ -111,7 +111,7 @@ export async function sendTestCodeEmail(data: TestCodeEmailData): Promise<boolea
           <p>Bei Fragen erreichen Sie mich unter:</p>
           <p><strong>📞 +49 171 9862773</strong> | <strong>📧 zoe-kiconsulting@pm.me</strong></p>
           <p style="margin-top: 15px;">
-            <em>Zoë Hagen - Gründerin Zoë's KI Studio</em>
+            <em>Zoë Hagen - Gründerin Zoë's KI Service</em>
           </p>
         </div>
       </div>
@@ -119,7 +119,7 @@ export async function sendTestCodeEmail(data: TestCodeEmailData): Promise<boolea
   `;
 
   const textContent = `
-Willkommen bei Zoë's KI Studio!
+Willkommen bei Zoë's KI Service!
 
 Hallo ${data.customerName},
 
@@ -143,7 +143,7 @@ Bei Fragen:
 📧 zoe-kiconsulting@pm.me
 
 Viel Spaß beim Testen!
-Zoë Hagen - Gründerin Zoë's KI Studio
+Zoë Hagen - Gründerin Zoë's KI Service
   `;
 
   return await sendEmail({

@@ -28,7 +28,7 @@ export default function ChatbotWidget() {
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       <ChatbotButton onClick={() => setIsChatOpen(true)} />
       
-      {/* Zoia - Voice Assistant */}
+      {/* Juna - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
       <VoiceButton onClick={() => setIsVoiceOpen(true)} />
     </>

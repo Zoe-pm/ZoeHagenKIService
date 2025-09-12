@@ -44,9 +44,9 @@ export default function Kontakt() {
   return (
     <>
       <SEOHelmet 
-        title="Kontakt – Zoë's KI Studio | Erstgespräch vereinbaren"
-        description="Kontaktieren Sie Zoë's KI Studio für Ihr persönliches Erstgespräch. Professionelle KI-Lösungen: Chatbot, Voicebot, Avatar und Wissensbot."
-        keywords="Kontakt, Erstgespräch, Beratung, KI-Lösungen, Chatbot, Voicebot"
+        title="Kontakt – Zoë's KI Service | Gespräch vereinbaren"
+        description="Kontaktieren Sie Zoë's KI Service für Ihr persönliches Gespräch. Professionelle KI-Lösungen: Chatbot, Voicebot, Avatar und Wissensbot."
+        keywords="Kontakt, Gespräch, Beratung, KI-Lösungen, Chatbot, Voicebot"
       />
       
       <Navigation />
@@ -59,7 +59,7 @@ export default function Kontakt() {
               Lassen Sie uns sprechen
             </h1>
             <p className="text-xl text-white/90 mb-8" data-testid="contact-subtitle">
-              In einem unverbindlichen Erstgespräch finden wir heraus, welche KI-Lösung 
+              In einem unverbindlichen Gespräch finden wir heraus, welche KI-Lösung 
               perfekt zu Ihren Bedürfnissen passt.
             </p>
             <div className="max-w-2xl mx-auto">
@@ -86,7 +86,7 @@ export default function Kontakt() {
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-4 text-primary">📅 Termin direkt buchen</h2>
                 <p className="text-lg text-muted-foreground">
-                  Wählen Sie einen passenden Zeitpunkt für Ihr kostenloses Erstgespräch
+                  Wählen Sie einen passenden Zeitpunkt für Ihr kostenloses Gespräch
                 </p>
               </div>
               <div className="glass p-2 rounded-lg">
@@ -126,7 +126,7 @@ export default function Kontakt() {
                 <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.open(calendlyUrl || 'mailto:zoe-kiconsulting@pm.me?subject=Individuelle Beratung', '_blank')}>
                   <h3 className="font-semibold text-foreground mb-2">Individuelle Beratung</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                    Persönliches Erstgespräch für maßgeschneiderte KI-Lösungen.
+                    Persönliches Gespräch für maßgeschneiderte KI-Lösungen.
                   </p>
                   <Button size="sm" className="button-gradient w-full" data-testid="book-consultation">
                     {calendlyUrl ? 'Termin buchen' : 'E-Mail senden'}

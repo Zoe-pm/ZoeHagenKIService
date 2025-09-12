@@ -5,7 +5,7 @@ const timelineSteps = [
   {
     number: "1",
     title: "Beratung & Konzept",
-    description: "Unverbindliches Erstgespräch zur Analyse Ihrer Anforderungen und Auswahl der optimalen KI-Lösung.",
+    description: "Unverbindliches Gespräch zur Analyse Ihrer Anforderungen und Auswahl der optimalen KI-Lösung.",
     duration: "1-2 Tage",
     color: "text-primary"
   },

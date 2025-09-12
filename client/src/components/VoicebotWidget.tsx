@@ -37,10 +37,10 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
     // Use VAPI_PUBLIC_KEY - needs VITE_ prefix for frontend access
     const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY;
     
-    console.log('ZOIA: Initializing with key:', publicKey ? 'KEY_PROVIDED' : 'NO_KEY');
+    console.log('JUNA: Initializing with key:', publicKey ? 'KEY_PROVIDED' : 'NO_KEY');
     
     if (!publicKey) {
-      console.warn('ZOIA: VITE_VAPI_PUBLIC_KEY not found. Voice assistant will show error.');
+      console.warn('JUNA: VITE_VAPI_PUBLIC_KEY not found. Voice assistant will show error.');
       setError('Voice-System benötigt API-Schlüssel Konfiguration.');
       return;
     }
@@ -50,7 +50,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       
       // Set up event listeners
       vapiClient.on('call-start', () => {
-        console.log('ZOIA: Voice call started');
+        console.log('JUNA: Voice call started');
         setCallState(prev => ({ 
           ...prev, 
           isConnected: true, 
@@ -60,7 +60,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       });
 
       vapiClient.on('call-end', () => {
-        console.log('ZOIA: Voice call ended');
+        console.log('JUNA: Voice call ended');
         setCallState(prev => ({ 
           ...prev, 
           isConnected: false, 
@@ -70,7 +70,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       });
 
       vapiClient.on('speech-start', () => {
-        console.log('ZOIA: Assistant speaking');
+        console.log('JUNA: Assistant speaking');
         setCallState(prev => ({ 
           ...prev, 
           isAssistantSpeaking: true 
@@ -78,7 +78,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       });
 
       vapiClient.on('speech-end', () => {
-        console.log('ZOIA: Assistant finished speaking');
+        console.log('JUNA: Assistant finished speaking');
         setCallState(prev => ({ 
           ...prev, 
           isAssistantSpeaking: false 
@@ -86,7 +86,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       });
 
       vapiClient.on('message', (message) => {
-        console.log('ZOIA: Transcript update:', message);
+        console.log('JUNA: Transcript update:', message);
         if (message.type === 'transcript' && message.transcript) {
           setCallState(prev => ({
             ...prev,
@@ -96,7 +96,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       });
 
       vapiClient.on('error', (error) => {
-        console.error('ZOIA: Voice call error:', error);
+        console.error('JUNA: Voice call error:', error);
         setError('Verbindungsfehler. Bitte versuchen Sie es erneut.');
         setCallState(prev => ({ 
           ...prev, 
@@ -107,7 +107,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
 
       setVapi(vapiClient);
     } catch (err) {
-      console.error('ZOIA: Failed to initialize Vapi:', err);
+      console.error('JUNA: Failed to initialize Vapi:', err);
       setError('Voice-System konnte nicht gestartet werden.');
     }
 
@@ -148,11 +148,11 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       
       if (assistantId) {
         // Use pre-configured assistant from Vapi dashboard
-        console.log('ZOIA: Using configured assistant:', assistantId);
+        console.log('JUNA: Using configured assistant:', assistantId);
         await vapi.start(assistantId);
       } else {
         // Fallback to inline configuration
-        console.log('ZOIA: Using inline configuration (no assistant ID provided)');
+        console.log('JUNA: Using inline configuration (no assistant ID provided)');
         await vapi.start({
           model: {
             provider: "openai",
@@ -160,7 +160,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
             messages: [
               {
                 role: "system",
-                content: `Du bist Zoia, die freundliche Voice-Assistentin von Zoës KI Studio. 
+                content: `Du bist Juna, die freundliche Voice-Assistentin von Zoë's KI Service. 
                 Du hilfst Kunden bei Fragen zu unseren KI-Produkten: Chatbot, Voicebot, Avatar und Wissensbot.
                 Antworte kurz, freundlich und auf Deutsch. Stelle gezielt Rückfragen um zu helfen.
                 Du bist die Voice-Version - erwähne dass es auch Juna gibt, den Text-Chatbot.`
@@ -174,7 +174,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
         });
       }
     } catch (err) {
-      console.error('ZOIA: Failed to start call:', err);
+      console.error('JUNA: Failed to start call:', err);
       setError('Anruf konnte nicht gestartet werden. Prüfen Sie Ihr Mikrofon.');
       setCallState(prev => ({ ...prev, isConnecting: false }));
     }
@@ -213,7 +213,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
                 <Volume2 className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h3 className="font-semibold text-foreground">Zoia</h3>
+                <h3 className="font-semibold text-foreground">Juna</h3>
                 <p className="text-sm text-muted-foreground">Voice Assistant</p>
               </div>
             </div>
@@ -255,7 +255,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
                 
                 {callState.isAssistantSpeaking && (
                   <div className="flex items-center justify-center space-x-1">
-                    <span className="text-xs text-primary">🎙️ Zoia spricht...</span>
+                    <span className="text-xs text-primary">🎙️ Juna spricht...</span>
                   </div>
                 )}
               </div>
@@ -263,7 +263,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
 
             {!callState.isConnected && !callState.isConnecting && (
               <p className="text-sm text-muted-foreground">
-                Bereit für Ihren Sprachchat mit Zoia
+                Bereit für Ihren Sprachchat mit Juna
               </p>
             )}
           </div>
@@ -317,7 +317,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
           {/* Info Text */}
           <div className="mt-4 text-center">
             <p className="text-xs text-muted-foreground">
-              Sprechen Sie mit Zoia über unsere KI-Lösungen
+              Sprechen Sie mit Juna über unsere KI-Lösungen
             </p>
           </div>
         </CardContent>

@@ -155,7 +155,7 @@ export default function ContactForm() {
             <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white">
               <img 
                 src={zoePhoto}
-                alt="Zoë Hagen - Gründerin von Zoë's KI Studio"
+                alt="Zoë Hagen - Gründerin von Zoë's KI Service"
                 className="w-full h-full object-cover object-top"
                 style={{ objectPosition: '50% 20%' }}
                 data-testid="zoe-contact-photo"

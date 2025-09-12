@@ -24,7 +24,7 @@ const products = [
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
-    buttonText: "Jetzt chatten"
+    buttonText: "Jetzt Juna schreiben"
   },
   {
     id: "voicebot",
@@ -34,7 +34,7 @@ const products = [
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
-    buttonText: "Sprechen Sie mit Zoia"
+    buttonText: "Sprechen Sie mit Juna"
   },
   {
     id: "avatar",
@@ -54,7 +54,7 @@ const products = [
     icon: <Brain className="text-primary" />,
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
-    buttonText: "Beratung buchen"
+    buttonText: "Gespräch vereinbaren"
   }
 ];
 
@@ -80,7 +80,7 @@ export default function Home() {
       // Open Juna chatbot directly
       setIsChatOpen(true);
     } else if (productId === 'voicebot') {
-      // Open Zoia voicebot directly
+      // Open Juna voicebot directly
       setIsVoiceOpen(true);
     } else {
       // For other products, navigate to contact page
@@ -125,15 +125,6 @@ export default function Home() {
                   Ihre digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/kontakt">
-                    <Button 
-                      size="lg" 
-                      className="button-gradient px-8 py-4 text-lg font-semibold"
-                      data-testid="cta-primary"
-                    >
-                      Jetzt Erstgespräch buchen
-                    </Button>
-                  </Link>
                 </div>
               </div>
             </div>
@@ -171,7 +162,7 @@ export default function Home() {
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
                         1
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-center text-lg">Erstgespräch</h3>
+                      <h3 className="font-bold text-gray-800 mb-3 text-center text-lg">Gespräch</h3>
                       <p className="text-gray-600 mb-2 text-center text-sm">(30 Min.)</p>
                       <p className="text-gray-700 text-center text-sm flex-grow">Ziele & Use-Cases klären</p>
                     </div>
@@ -240,7 +231,7 @@ export default function Home() {
                     className="button-gradient px-12 py-6 text-xl"
                     data-testid="central-cta-button"
                   >
-                    Jetzt Erstgespräch buchen
+                    Gespräch vereinbaren
                   </Button>
                 </Link>
                 <p className="text-sm text-muted-foreground mt-4">

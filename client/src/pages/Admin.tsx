@@ -312,7 +312,7 @@ export default function Admin() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] bg-clip-text text-transparent">
-                  Zoë's KI Studio - Admin Dashboard
+                  Zoë's KI Service - Admin Dashboard
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-2">
                   Verwalten Sie Test-Codes und Kundenzugänge

@@ -202,7 +202,7 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
           "hallo": currentConfig.greeting || `Hallo! Ich bin ${currentConfig.name}, wie kann ich Ihnen helfen?`,
           "test": "Das ist eine Vorschau der Funktionalität. Ihr echter Bot wird individuell konfiguriert.",
           "funktionen": "In der echten Version kann ich Ihre spezifischen Fragen beantworten und vieles mehr.",
-          "kosten": "Für genaue Informationen sprechen Sie bitte mit Zoë's KI Studio.",
+          "kosten": "Für genaue Informationen sprechen Sie bitte mit Zoë's KI Service.",
           "voice": config.activeBot === "voicebot" ? "Ich kann sprechen! Probieren Sie die Sprachausgabe aus." : "Wechseln Sie zum Voicebot um die Sprachfunktion zu testen.",
           "default": currentConfig.greeting || `Hallo! Ich bin ${currentConfig.name}, wie kann ich Ihnen helfen?`
         };

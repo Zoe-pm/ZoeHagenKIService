@@ -18,7 +18,7 @@ export default function Navigation() {
   // Styling für normale Links
   const normalLinkClass = "text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring";
   
-  // Styling für aktuelle Seite - Exakt wie "Jetzt Erstgespräch buchen" Button
+  // Styling für aktuelle Seite - Exakt wie "Gespräch vereinbaren" Button
   const activeLinkClass = "px-3 py-2 rounded-md text-sm font-medium font-semibold shadow-md text-gray-800" + " " +
     "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E]";
 
@@ -36,7 +36,7 @@ export default function Navigation() {
                   data-testid="logo"
                 />
                 <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent" data-testid="company-name">
-                  Zoë's KI Studio
+                  Zoë's KI Service
                 </span>
               </Link>
             </div>

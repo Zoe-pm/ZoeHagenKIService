@@ -263,7 +263,7 @@ export default function KundenTest() {
   };
 
   const generateNameSuggestions = (type: "chatbot" | "voicebot") => {
-    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Zoia", "Sam", "Rio"];
+    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Juna", "Sam", "Rio"];
     const voicebotNames = ["Juna", "Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
     return type === "chatbot" ? chatbotNames : voicebotNames;
   };
@@ -308,7 +308,7 @@ export default function KundenTest() {
         });
       }
     } catch (error: any) {
-      const errorMessage = error?.message || "Ungültiger Code oder Email. Bitte kontaktieren Sie Zoë's KI Studio für einen gültigen Testzugang.";
+      const errorMessage = error?.message || "Ungültiger Code oder Email. Bitte kontaktieren Sie Zoë's KI Service für einen gültigen Testzugang.";
       setAuthError(errorMessage);
       
       toast({
@@ -338,7 +338,7 @@ export default function KundenTest() {
   return (
     <>
       <SEOHelmet 
-        title="KI-Assistent Testbereich – Zoë's KI Studio"
+        title="KI-Assistent Testbereich – Zoë's KI Service"
         description="Testen Sie Ihren persönlichen KI-Assistenten und passen Sie ihn an Ihre Bedürfnisse an"
       />
       

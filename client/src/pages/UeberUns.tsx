@@ -42,7 +42,7 @@ export default function UeberUns() {
                 <span className="text-white"> – von Menschen für Menschen</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed" data-testid="intro-text">
-                Ich bin Zoë Hagen, Gründerin von Zoë's KI Studio.
+                Ich bin Zoë Hagen, Gründerin von Zoë's KI Service.
                 Meine Mission: KI so gestalten, dass sie Unternehmen entlastet, Abläufe vereinfacht
                 und Menschen mehr Freiraum gibt – verständlich, sicher und persönlich.
               </p>
@@ -166,7 +166,7 @@ export default function UeberUns() {
               className="inline-flex items-center rounded-md button-gradient px-6 py-3 font-medium shadow-lg"
               data-testid="consultation-cta"
             >
-              Erstgespräch vereinbaren
+              Gespräch vereinbaren
             </a>
           </div>
         </section>

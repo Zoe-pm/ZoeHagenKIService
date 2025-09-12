@@ -86,14 +86,14 @@ export default function UeberUns() {
               <div className="glass p-4 rounded border border-primary/20">
                 <h3 className="font-semibold text-primary mb-2">Webdesign & UX</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Gemeinsam mit der Webdesign-Firma <a 
+                  Gemeinsam mit  <a 
                     href="https://www.krawall-frankfurt.de/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary hover:underline font-medium"
                     data-testid="krawall-link"
-                  >Krawall aus Frankfurt</a> bieten wir modernes, professionelles Webdesign. 
-                  Lisa Erwall sorgt für individuell designte, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
+                  >Krawall Designbüro</a> bieten wir modernes, professionelles Webdesign. 
+                  Sie sorgt für individuell designte, benutzerfreundliche und barrierefreie Websites, die auf allen Geräten überzeugen.
                 </p>
               </div>
               

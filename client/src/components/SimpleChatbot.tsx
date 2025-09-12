@@ -27,14 +27,14 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     return sessionId;
   };
 
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState([
     {
       id: '1',
-      text: 'Hey! Ich bin Juna und beantworte gern Fragen rund um Zoës KI Service.',
+      text: "Hey! Ich bin Juna und beantworte gern Fragen rund um Zoë's KI Service.",
       sender: 'bot',
       timestamp: new Date()
     }
-  ]);
+  ] as Message[]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         },
         body: JSON.stringify({
           message: messageToSend,
-          botName: "Juna Chat Zoës KI Service",
+          botName: "Juna Chat Zoë's KI Service",
           sessionId: getSessionId()
         })
       });
@@ -123,7 +123,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
           <h3 className="font-semibold">Juna- 24/7 für Sie da.</h3>
-          <p className="text-sm opacity-90">Zoës KI Service</p>
+          <p className="text-sm opacity-90">Zoë's KI Service</p>
         </div>
         <Button
           variant="ghost"

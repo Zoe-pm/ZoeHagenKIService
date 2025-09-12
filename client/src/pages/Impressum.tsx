@@ -43,7 +43,7 @@ export default function Impressum() {
                   <div className="space-y-4">
                     <p className="text-foreground">
                       <strong>Zoë Hagen – Einzelunternehmerin (Kleinunternehmerin nach § 19 UStG)</strong><br />
-                      Zoës KI Studio / Zoë Hagen KI Consulting<br />
+                      Zoë's KI Studio / Zoë Hagen KI Consulting<br />
                       Jägerweg 28, 13503 Berlin<br />
                       E-Mail: <a href="mailto:zoehagenkiconsulting@pm.me" className="text-accent hover:underline">zoehagenkiconsulting@pm.me</a>
                     </p>

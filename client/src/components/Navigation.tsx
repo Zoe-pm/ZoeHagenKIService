@@ -59,18 +59,18 @@ export default function Navigation() {
                   Über uns
                 </Link>
                 <Link 
-                  href="/test" 
-                  className={location === "/test" ? activeLinkClass : normalLinkClass}
-                  data-testid="nav-test"
-                >
-                  Spielwiese für Kunden
-                </Link>
-                <Link 
                   href="/kontakt" 
                   className={location === "/kontakt" ? activeLinkClass : normalLinkClass}
                   data-testid="nav-kontakt"
                 >
                   Kontakt
+                </Link>
+                <Link 
+                  href="/test" 
+                  className={location === "/test" ? activeLinkClass : normalLinkClass}
+                  data-testid="nav-test"
+                >
+                  Spielwiese für Kunden
                 </Link>
                 <Link 
                   href="/admin" 
@@ -119,20 +119,20 @@ export default function Navigation() {
                 Über uns
               </Link>
               <Link 
-                href="/test" 
-                className={`${location === "/test" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
-                data-testid="mobile-nav-test"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Spielwiese für Kunden
-              </Link>
-              <Link 
                 href="/kontakt" 
                 className={`${location === "/kontakt" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-kontakt"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Kontakt
+              </Link>
+              <Link 
+                href="/test" 
+                className={`${location === "/test" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                data-testid="mobile-nav-test"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Spielwiese für Kunden
               </Link>
               <Link 
                 href="/admin" 

@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { CalendlyWidget, CalendlyButton } from './CalendlyWidget';
 
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: 'user' | 'bot' | 'calendly_button';
   timestamp: Date;
 }
 
@@ -17,6 +18,10 @@ interface SimpleChatbotProps {
 }
 
 export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps) {
+  const handleClose = () => {
+    setShowCalendly(false);
+    onClose();
+  };
   // Stable session ID for Juna Chat
   const getSessionId = () => {
     let sessionId = localStorage.getItem('junaSessionId');
@@ -37,6 +42,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   ] as Message[]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showCalendly, setShowCalendly] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -81,18 +87,46 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       
       if (response.ok && data.success) {
         botResponse = data.response || 'Entschuldigung, keine Antwort erhalten.';
+        
+        // Check if bot suggests appointment booking
+        const shouldShowCalendly = data.showCalendly || 
+          botResponse.toLowerCase().includes('termin') || 
+          botResponse.toLowerCase().includes('beratung') || 
+          botResponse.toLowerCase().includes('gespräch') ||
+          botResponse.toLowerCase().includes('demo') ||
+          messageToSend.toLowerCase().includes('termin') ||
+          messageToSend.toLowerCase().includes('beratung');
+          
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: botResponse,
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        
+        if (shouldShowCalendly) {
+          const calendlyMessage: Message = {
+            id: (Date.now() + 2).toString(),
+            text: 'Möchten Sie direkt einen Termin vereinbaren?',
+            sender: 'calendly_button',
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, botMessage, calendlyMessage]);
+        } else {
+          setMessages(prev => [...prev, botMessage]);
+        }
       } else {
         console.error('JUNA: Server Error:', data);
         botResponse = `[Server Fehler ${response.status}] Juna ist nicht erreichbar.`;
+        
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: botResponse,
+          sender: 'bot',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, botMessage]);
       }
-
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: botResponse,
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
       
     } catch (error) {
       console.error('JUNA: Chatbot error:', error);
@@ -118,6 +152,12 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   if (!isOpen) return null;
 
   return (
+    <>
+      <CalendlyWidget 
+        isOpen={showCalendly}
+        onClose={() => setShowCalendly(false)}
+        calendlyUrl="https://calendly.com/zoeskistudio"
+      />
     <div className="fixed bottom-24 right-4 z-40 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-[32rem] max-h-[calc(100vh-6rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col">
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
@@ -143,18 +183,32 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
             key={message.id}
             className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div
-              className={`max-w-[80%] rounded-lg p-3 ${
-                message.sender === 'user'
-                  ? 'bg-primary text-primary-foreground ml-4'
-                  : 'bg-muted mr-4'
-              }`}
-            >
-              <p className="text-sm">{message.text}</p>
-              <span className="text-xs opacity-70 mt-1 block">
-                {message.timestamp.toLocaleTimeString()}
-              </span>
-            </div>
+            {message.sender === 'calendly_button' ? (
+              <div className="max-w-[80%] rounded-lg p-3 bg-muted mr-4 space-y-3">
+                <p className="text-sm">{message.text}</p>
+                <CalendlyButton 
+                  onClick={() => setShowCalendly(true)}
+                  text="Termin vereinbaren"
+                  variant="outline"
+                />
+                <span className="text-xs opacity-70 block">
+                  {message.timestamp.toLocaleTimeString()}
+                </span>
+              </div>
+            ) : (
+              <div
+                className={`max-w-[80%] rounded-lg p-3 ${
+                  message.sender === 'user'
+                    ? 'bg-primary text-primary-foreground ml-4'
+                    : 'bg-muted mr-4'
+                }`}
+              >
+                <p className="text-sm">{message.text}</p>
+                <span className="text-xs opacity-70 mt-1 block">
+                  {message.timestamp.toLocaleTimeString()}
+                </span>
+              </div>
+            )}
           </div>
         ))}
         {isLoading && (
@@ -195,6 +249,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         </div>
       </div>
     </div>
+    </>
   );
 }
 

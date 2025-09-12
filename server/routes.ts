@@ -446,7 +446,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Parse n8n response - try multiple field names for compatibility
       const botResponse = data.output || data.response || data.message || data.text || data.answer || 'Entschuldigung, keine Antwort erhalten.';
 
-      res.json({ success: true, response: botResponse });
+      // Check for appointment booking keywords
+      const appointmentKeywords = ['termin', 'beratung', 'gespräch', 'demo', 'meeting', 'appointment'];
+      const userMessage = message.toLowerCase();
+      const responseText = botResponse.toLowerCase();
+      
+      const shouldShowCalendly = 
+        appointmentKeywords.some(keyword => 
+          userMessage.includes(keyword) || responseText.includes(keyword)
+        ) && 
+        // Avoid false positives with negations
+        !userMessage.includes('kein') && 
+        !userMessage.includes('nicht') && 
+        !responseText.includes('kein') && 
+        !responseText.includes('nicht');
+
+      res.json({ 
+        success: true, 
+        response: botResponse,
+        showCalendly: shouldShowCalendly 
+      });
       
     } catch (error) {
       console.error('Production chatbot error:', error);

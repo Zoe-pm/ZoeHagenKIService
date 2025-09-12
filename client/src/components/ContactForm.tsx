@@ -3,22 +3,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Phone, Mail, Video, Download, Send, Loader2 } from "lucide-react";
+import { Phone, Mail, Download, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
-import zoePhoto from "@assets/Zoe_Website_1757416756555.jpg";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-// Calendly global type
-declare global {
-  interface Window {
-    Calendly: any;
-  }
-}
 
 // Contact form schema
 const contactSchema = z.object({
@@ -29,27 +22,6 @@ const contactSchema = z.object({
 
 export default function ContactForm() {
   const { toast } = useToast();
-  const [calendlyLoaded, setCalendlyLoaded] = useState(false);
-  
-  // Calendly Script laden
-  useEffect(() => {
-    if (window.Calendly) {
-      setCalendlyLoaded(true);
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
-    script.onload = () => {
-      setCalendlyLoaded(true);
-    };
-    document.head.appendChild(script);
-    
-    return () => {
-      // Cleanup: Script nicht entfernen da global benötigt
-    };
-  }, []);
   
   const contactForm = useForm({
     resolver: zodResolver(contactSchema),
@@ -85,51 +57,6 @@ export default function ContactForm() {
       window.open('tel:+4917198627773');
       return;
     }
-    
-    if (action === "15-Min Demo") {
-      const calendlyDemoUrl = import.meta.env.VITE_CALENDLY_DEMO_URL || import.meta.env.VITE_CALENDLY_URL;
-      
-      if (!calendlyDemoUrl) {
-        toast({
-          title: "Calendly nicht konfiguriert",
-          description: "Bitte setzen Sie VITE_CALENDLY_URL in den Environment Variables für die Online-Terminbuchung.",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      if (!calendlyLoaded || !window.Calendly) {
-        toast({
-          title: "Calendly lädt...",
-          description: "Bitte warten Sie einen Moment, bis Calendly vollständig geladen ist.",
-        });
-        // Retry nach kurzer Wartezeit
-        setTimeout(() => {
-          if (window.Calendly) {
-            window.Calendly.initPopupWidget({ url: calendlyDemoUrl });
-          } else {
-            window.open(calendlyDemoUrl, '_blank');
-          }
-        }, 1000);
-        return;
-      }
-      
-      try {
-        // Calendly Popup öffnen
-        window.Calendly.initPopupWidget({
-          url: calendlyDemoUrl
-        });
-      } catch (error) {
-        console.error('Calendly Popup Error:', error);
-        // Fallback zu direktem Link
-        window.open(calendlyDemoUrl, '_blank');
-      }
-    } else {
-      toast({
-        title: "Demo verfügbar",
-        description: `${action} wird in Kürze verfügbar sein. Kontaktieren Sie uns gerne direkt.`,
-      });
-    }
   };
 
   const onSubmitContact = (data: z.infer<typeof contactSchema>) => {
@@ -139,30 +66,6 @@ export default function ContactForm() {
   return (
     <section id="kontakt" className="py-12 px-4 sm:px-6 lg:px-8" data-testid="contact-section">
       <div className="max-w-4xl mx-auto">
-        {/* Header mit Foto rechts ohne Überlagerung */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 mb-10">
-          <div className="flex-1 text-center lg:text-left">
-            <h2 className="text-3xl font-bold mb-4" data-testid="contact-title">
-              Bereit für Ihren KI-Assistenten?
-            </h2>
-            <p className="text-muted-foreground text-lg" data-testid="contact-subtitle">
-              Lassen Sie uns gemeinsam die perfekte Lösung für Ihr Unternehmen finden.
-            </p>
-          </div>
-          
-          {/* Zoë's Photo - klar rechts ohne Textüberlagerung */}
-          <div className="flex-shrink-0">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white">
-              <img 
-                src={zoePhoto}
-                alt="Zoë Hagen - Gründerin von Zoë's KI Service"
-                className="w-full h-full object-cover object-top"
-                style={{ objectPosition: '50% 20%' }}
-                data-testid="zoe-contact-photo"
-              />
-            </div>
-          </div>
-        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
@@ -298,11 +201,11 @@ export default function ContactForm() {
                 <div className="space-y-3">
                   <Button
                     className="w-full button-gradient py-3 px-4 font-medium"
-                    onClick={() => handleQuickAction("15-Min Demo")}
+                    onClick={() => window.open('mailto:zoe-kiconsulting@pm.me', '_blank')}
                     data-testid="quick-action-demo"
                   >
-                    <Video className="mr-2 h-4 w-4" />
-                    15-Min Demo
+                    <Mail className="mr-2 h-4 w-4" />
+                    E-Mail schreiben
                   </Button>
                   <Button
                     className="w-full button-gradient py-3 px-4 font-medium"

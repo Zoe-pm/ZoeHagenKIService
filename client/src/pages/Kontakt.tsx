@@ -7,39 +7,16 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 import ChatbotWidget from "@/components/ChatbotWidget";
+import zoePhoto from "@assets/Zoe_Website_1757416756555.jpg";
 
 export default function Kontakt() {
-  const [calendlyLoaded, setCalendlyLoaded] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [, setLocation] = useLocation();
-  const calendlyUrl = import.meta.env.VITE_CALENDLY_URL;
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Kontaktseite
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Nur Calendly laden wenn URL konfiguriert ist
-    if (calendlyUrl) {
-      // Calendly Script laden
-      const script = document.createElement('script');
-      script.src = 'https://assets.calendly.com/assets/external/widget.js';
-      script.async = true;
-      script.onload = () => {
-        // Calendly Widget initialisieren
-        const timer = setTimeout(() => {
-          if (window.Calendly) {
-            window.Calendly.initInlineWidget({
-              url: calendlyUrl,
-              parentElement: document.getElementById('calendly-inline-widget')
-            });
-            setCalendlyLoaded(true);
-          }
-        }, 500);
-        return () => clearTimeout(timer);
-      };
-      document.head.appendChild(script);
-    }
-  }, [calendlyUrl]);
+  }, []);
 
   return (
     <>
@@ -52,21 +29,38 @@ export default function Kontakt() {
       <Navigation />
       
       <main className="min-h-screen pt-20">
-        {/* Hero */}
+        {/* Hero with Photo */}
         <section className="hero-gradient py-16 px-4 sm:px-6 lg:px-8" data-testid="contact-hero">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6" data-testid="contact-title">
-              Lassen Sie uns sprechen
-            </h1>
-            <p className="text-xl text-white/90 mb-8" data-testid="contact-subtitle">
-              In einem unverbindlichen Gespräch finden wir heraus, welche KI-Lösung 
-              perfekt zu Ihren Bedürfnissen passt.
-            </p>
-            <div className="max-w-2xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/80 text-sm">
-                <div>✓ 30 Minuten kostenlos</div>
-                <div>✓ Unverbindliche Beratung</div>
-                <div>✓ Konkrete Lösungsvorschläge</div>
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 mb-8">
+              {/* Photo at the top */}
+              <div className="flex-shrink-0 order-first lg:order-last">
+                <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white">
+                  <img 
+                    src={zoePhoto}
+                    alt="Zoë Hagen - Gründerin von Zoë's KI Service"
+                    className="w-full h-full object-cover object-top"
+                    style={{ objectPosition: '50% 20%' }}
+                    data-testid="zoe-contact-photo"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex-1 text-center lg:text-left">
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-6" data-testid="contact-title">
+                  Lassen Sie uns sprechen
+                </h1>
+                <p className="text-xl text-white/90 mb-8" data-testid="contact-subtitle">
+                  In einem unverbindlichen Gespräch finden wir heraus, welche KI-Lösung 
+                  perfekt zu Ihren Bedürfnissen passt.
+                </p>
+                <div className="max-w-2xl mx-auto lg:mx-0">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/80 text-sm">
+                    <div>✓ 30 Minuten kostenlos</div>
+                    <div>✓ Unverbindliche Beratung</div>
+                    <div>✓ Konkrete Lösungsvorschläge</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -79,40 +73,12 @@ export default function Kontakt() {
           </div>
         </section>
 
-        {/* Calendly Inline Widget */}
-        {calendlyUrl && (
-          <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="calendly-section">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4 text-primary">📅 Termin direkt buchen</h2>
-                <p className="text-lg text-muted-foreground">
-                  Wählen Sie einen passenden Zeitpunkt für Ihr kostenloses Gespräch
-                </p>
-              </div>
-              <div className="glass p-2 rounded-lg">
-                <div 
-                  id="calendly-inline-widget" 
-                  style={{minWidth: '320px', height: '700px'}}
-                  data-testid="calendly-widget"
-                ></div>
-                {!calendlyLoaded && (
-                  <div className="flex items-center justify-center h-96">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                      <p className="text-muted-foreground">Kalender wird geladen...</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* Additional Contact Info */}
         <section className="py-8 px-4 sm:px-6 lg:px-8" data-testid="contact-info-section">
           <div className="max-w-4xl mx-auto">
             <div className="glass p-8 rounded-lg text-center">
-              <h2 className="text-2xl font-bold mb-6 text-primary">Weitere Kontaktmöglichkeiten</h2>
+              <h2 className="text-2xl font-bold mb-6 text-primary">Weitere Information erhalten</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setIsChatOpen(true)}>
                   <h3 className="font-semibold text-foreground mb-2">Sofortiger Support</h3>
@@ -123,22 +89,22 @@ export default function Kontakt() {
                     Chat starten
                   </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.open(calendlyUrl || 'mailto:zoe-kiconsulting@pm.me?subject=Individuelle Beratung', '_blank')}>
-                  <h3 className="font-semibold text-foreground mb-2">Individuelle Beratung</h3>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setLocation('/kunden-test')}>
+                  <h3 className="font-semibold text-foreground mb-2">Mit Juna sprechen</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                    Persönliches Gespräch für maßgeschneiderte KI-Lösungen.
+                    Sprechen Sie direkt mit unserem Voicebot Juna.
                   </p>
-                  <Button size="sm" className="button-gradient w-full" data-testid="book-consultation">
-                    {calendlyUrl ? 'Termin buchen' : 'E-Mail senden'}
+                  <Button size="sm" className="button-gradient w-full" data-testid="speak-with-juna">
+                    Voicebot starten
                   </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setLocation('/kunden-test')}>
-                  <h3 className="font-semibold text-foreground mb-2">Demo & Test</h3>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.open('tel:+4917198627773')}>
+                  <h3 className="font-semibold text-foreground mb-2">Einfach anrufen</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                    Testen Sie unsere KI-Assistenten direkt auf der Konfigurationsseite.
+                    Wenn Sie lieber mit mir direkt sprechen wollen, scheuen Sie sich nicht einfach anzurufen. Ich freue mich auf Sie!
                   </p>
-                  <Button size="sm" className="button-gradient w-full" data-testid="demo-test">
-                    Zur Demo-Seite
+                  <Button size="sm" className="button-gradient w-full" data-testid="direct-call">
+                    Jetzt anrufen
                   </Button>
                 </div>
               </div>

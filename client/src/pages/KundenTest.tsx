@@ -1101,7 +1101,7 @@ export default function KundenTest() {
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Die fachlichen Inhalte (z. B. FAQs, Produktinfos, Prozesse, Dokumente) stellen Sie uns separat bereit. 
-                    Das Training des Chatbots erfolgt durch uns und getrennt von Design & Stimme.
+                    Das Training der KI erfolgt durch uns und getrennt von Design & Stimme.
                   </p>
                 </CardContent>
               </Card>

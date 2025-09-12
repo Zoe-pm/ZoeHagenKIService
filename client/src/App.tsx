@@ -10,6 +10,7 @@ import Kontakt from "@/pages/Kontakt";
 import KundenTest from "@/pages/KundenTest";
 import Impressum from "@/pages/Impressum";
 import Datenschutz from "@/pages/Datenschutz";
+import Bildnachweise from "@/pages/Bildnachweise";
 import NotFound from "@/pages/not-found";
 import Admin from "@/pages/Admin";
 
@@ -32,6 +33,7 @@ function Router() {
       </Route>
       <Route path="/impressum" component={Impressum} />
       <Route path="/datenschutz" component={Datenschutz} />
+      <Route path="/bildnachweise" component={Bildnachweise} />
       <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>

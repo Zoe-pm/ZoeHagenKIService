@@ -40,6 +40,16 @@ export default function Footer() {
             
             <span className="text-muted-foreground/60">•</span>
             
+            <Link 
+              href="/bildnachweise" 
+              className="hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded px-1"
+              data-testid="footer-bildnachweise"
+            >
+              Bildnachweise
+            </Link>
+            
+            <span className="text-muted-foreground/60">•</span>
+            
             <a 
               href="#" 
               className="hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded px-1"

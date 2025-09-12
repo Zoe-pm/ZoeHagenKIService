@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { endianness } from "os";
 import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
 import avatarImage from "@assets/0_2_640_N_1757681281015.webp";
+import chatbotImage from "@assets/0_2_640_N_1757682466574.webp";
 
 const products = [
   {
@@ -25,7 +26,7 @@ const products = [
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
     features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Schafft Ihnen Zeit für Ihre eigentlichen Aufgaben", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+    image: chatbotImage,
     gradient: "bg-gradient-to-r from-primary to-secondary",
     buttonText: "hier ausprobieren"
   },

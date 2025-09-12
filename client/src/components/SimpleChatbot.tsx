@@ -30,7 +30,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hallo! Ich bin Juna, Ihre digitale Unterstützung. Womit kann ich helfen?',
+      text: 'Hey! Ich bin Juna und beantworte gern Fragen rund um Zoes KI Service. Womit kann ich helfen?',
       sender: 'bot',
       timestamp: new Date()
     }
@@ -122,7 +122,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
-          <h3 className="font-semibold">Juna</h3>
+          <h3 className="font-semibold">Juna- 24/7 für Sie da.</h3>
           <p className="text-sm opacity-90">Zoës KI Service</p>
         </div>
         <Button
@@ -178,7 +178,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Fragen Sie mich was..."
+            placeholder="Was möchten Sie wissen?"
             disabled={isLoading}
             className="flex-1"
             data-testid="input-chat"

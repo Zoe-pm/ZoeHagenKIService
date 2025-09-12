@@ -22,24 +22,24 @@ export default function VoiceDemo() {
             <CardContent className="p-4 text-center">
               <h2 className="text-2xl font-bold mb-4" data-testid="voice-demo-title">
                 <Volume2 className="inline-block text-secondary mr-3" />
-                Sprechen Sie mit Juna Voice
+                Sprechen Sie mit Juna
               </h2>
               <p className="text-muted-foreground mb-4" data-testid="voice-demo-description">
-                Juna Voice beantwortet alle Ihre Fragen. Sie können Sie jederzeit unterbrechen oder auflegen. Ganz einfach.
+                Juna beantwortet alle Ihre Fragen. Sie können Sie jederzeit unterbrechen oder auflegen. Ganz einfach.
               </p>
               
               <div className="flex flex-col items-center space-y-6">
                 <Button
                   className="voice-pulse bg-gradient-to-r from-secondary to-accent p-6 rounded-full text-4xl hover:scale-110 transition-transform"
                   onClick={handleVoiceDemo}
-                  aria-label="Juna Voice Voicebot starten"
+                  aria-label="Juna Voicebot starten"
                   data-testid="voice-demo-mic-button"
                 >
                   <Mic />
                 </Button>
                 
                 <p className="text-sm text-muted-foreground" data-testid="voice-demo-instruction">
-                  Klicken und mit Juna Voice sprechen
+                  Klicken und mit Juna sprechen
                 </p>
                 
               </div>

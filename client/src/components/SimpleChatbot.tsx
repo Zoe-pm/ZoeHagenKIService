@@ -30,7 +30,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hallo! Ich bin Juna Chat, Ihre digitale Unterstützung. Womit kann ich helfen?',
+      text: 'Hallo! Ich bin Juna, Ihre digitale Unterstützung. Womit kann ich helfen?',
       sender: 'bot',
       timestamp: new Date()
     }
@@ -83,7 +83,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         botResponse = data.response || 'Entschuldigung, keine Antwort erhalten.';
       } else {
         console.error('JUNA: Server Error:', data);
-        botResponse = `[Server Fehler ${response.status}] Juna Chat ist nicht erreichbar.`;
+        botResponse = `[Server Fehler ${response.status}] Juna ist nicht erreichbar.`;
       }
 
       const botMessage: Message = {
@@ -122,7 +122,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
-          <h3 className="font-semibold">Juna Chat</h3>
+          <h3 className="font-semibold">Juna</h3>
           <p className="text-sm opacity-90">Zoës KI Service</p>
         </div>
         <Button

@@ -24,7 +24,7 @@ const products = [
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
-    buttonText: "Jetzt Juna Chat schreiben"
+    buttonText: "hier ausprobieren"
   },
   {
     id: "voicebot",
@@ -34,7 +34,7 @@ const products = [
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",
-    buttonText: "Sprechen Sie mit Juna Voice"
+    buttonText: "Sprechen Sie mit Juna"
   },
   {
     id: "avatar",

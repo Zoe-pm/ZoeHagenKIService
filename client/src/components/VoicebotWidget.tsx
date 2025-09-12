@@ -160,10 +160,10 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
             messages: [
               {
                 role: "system",
-                content: `Du bist Juna Voice, die freundliche Voice-Assistentin von Zoë's KI Service. 
+                content: `Du bist Juna, die freundliche Voice-Assistentin von Zoë's KI Service. 
                 Du hilfst Kunden bei Fragen zu unseren KI-Produkten: Chatbot, Voicebot, Avatar und Wissensbot.
                 Antworte kurz, freundlich und auf Deutsch. Stelle gezielt Rückfragen um zu helfen.
-                Du bist die Voice-Version - erwähne dass es auch Juna Chat gibt, den Text-Chatbot.`
+                Du bist die Voice-Version - erwähne dass es auch den Text-Chatbot gibt.`
               }
             ]
           },
@@ -213,7 +213,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
                 <Volume2 className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h3 className="font-semibold text-foreground">Juna Voice</h3>
+                <h3 className="font-semibold text-foreground">Juna</h3>
                 <p className="text-sm text-muted-foreground">Voice Assistant</p>
               </div>
             </div>
@@ -255,7 +255,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
                 
                 {callState.isAssistantSpeaking && (
                   <div className="flex items-center justify-center space-x-1">
-                    <span className="text-xs text-primary">🎙️ Juna Voice spricht...</span>
+                    <span className="text-xs text-primary">🎙️ Juna spricht...</span>
                   </div>
                 )}
               </div>
@@ -263,7 +263,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
 
             {!callState.isConnected && !callState.isConnecting && (
               <p className="text-sm text-muted-foreground">
-                Bereit für Ihren Sprachchat mit Juna Voice
+                Bereit für Ihren Sprachchat mit Juna
               </p>
             )}
           </div>
@@ -317,7 +317,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
           {/* Info Text */}
           <div className="mt-4 text-center">
             <p className="text-xs text-muted-foreground">
-              Sprechen Sie mit Juna Voice über unsere KI-Lösungen
+              Sprechen Sie mit Juna über unsere KI-Lösungen
             </p>
           </div>
         </CardContent>

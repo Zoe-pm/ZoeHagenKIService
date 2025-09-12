@@ -7,7 +7,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 import ChatbotWidget from "@/components/ChatbotWidget";
-import zoePhoto from "@assets/Zoe Website_bus_klein_1757678971314.webp";
+import zoePhoto from "@assets/Zoe_Website_mitt_1757679360853.jpg";
 
 export default function Kontakt() {
   const [isChatOpen, setIsChatOpen] = useState(false);

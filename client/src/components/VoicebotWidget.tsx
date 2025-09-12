@@ -293,14 +293,6 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
             )}
           </div>
 
-          {/* Transcript */}
-          {callState.transcript && (
-            <div className="mb-4 max-h-24 overflow-y-auto">
-              <div className="text-xs text-muted-foreground bg-muted/50 rounded p-2">
-                {callState.transcript}
-              </div>
-            </div>
-          )}
 
           {/* Controls */}
           <div className="flex justify-center space-x-3">

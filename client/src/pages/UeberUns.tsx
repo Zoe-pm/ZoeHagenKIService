@@ -65,9 +65,9 @@ export default function UeberUns() {
           <div className="glass p-6 rounded-lg">
             <h2 className="text-2xl font-bold mb-4 text-primary">Herz & Hirn: verständlich, sicher, persönlich</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Ich verbinde klare Umsetzung mit einem systemischen Blick auf Prozesse und Menschen.
-              Ziel ist immer ein Service, der sich leicht anfühlt und verlässlich funktioniert – ohne Hürden
-              und ohne Fachsprache. Lösungen sollen im Alltag helfen, nicht beschäftigen.
+              Service liegt mir im Blut.
+              Meine Mission ist immer ein Ergebnis, das sich leicht anfühlt und verlässlich funktioniert – ohne Hürden
+              und ohne Fachsprache. Lösungen sollen im Alltag helfen, nicht beschäftigen. Dafür gehe ich jede Extra-Meile
             </p>
           </div>
         </section>
@@ -106,7 +106,7 @@ export default function UeberUns() {
                     rel="noopener noreferrer"
                     className="text-primary hover:underline font-medium"
                     data-testid="patrick-weber-link"
-                  >Patrick Weber</a> kümmert sich um DSGVO-konformes Hosting, Datenschutz und IT-Security, 
+                  >Patrick Weber</a> von erpa.web GmbH kümmert sich um DSGVO-konformes Hosting, Datenschutz und IT-Security, 
                   damit deine Website jederzeit sicher und zuverlässig läuft.
                 </p>
               </div>

@@ -63,7 +63,7 @@ export default function Navigation() {
                   className={location === "/test" ? activeLinkClass : normalLinkClass}
                   data-testid="nav-test"
                 >
-                  Konfiguration Bots
+                  Spielwiese für Kunden
                 </Link>
                 <Link 
                   href="/kontakt" 
@@ -124,7 +124,7 @@ export default function Navigation() {
                 data-testid="mobile-nav-test"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Konfiguration Bots
+                Spielwiese für Kunden
               </Link>
               <Link 
                 href="/kontakt" 

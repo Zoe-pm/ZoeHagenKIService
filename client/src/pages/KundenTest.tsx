@@ -112,7 +112,7 @@ export default function KundenTest() {
       voiceSpeed: [1],
       voicePitch: [1],
       elevenLabsVoiceId: "",
-      greeting: "Hallo! Ich bin Juna Voice, Ihr Sprach-Assistent.",
+      greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
       title: "Sprachassistent",
       subtitle: "Sprechen Sie mit mir!",
       logoUrl: "",
@@ -349,10 +349,11 @@ export default function KundenTest() {
         <section className="hero-gradient py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Hier testen Sie Ihr neues Teammitglied
+              Wir bieten full Service- Sie können sich hier gern inspirieren lassen.
             </h1>
             <p className="text-xl text-white/90 mb-6">
-              Hier konfigurieren Sie Ihr neues Teammitglied. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. Änderungen sehen Sie live in der Vorschau. Mit „Speichern & Bestätigen" erhalten Sie eine Zusammenfassung per E-Mail.
+              Sie können alles uns überlassen. Oder nach Auftragsvergabe Ihr neues Teammitglied selbst gestalten. Wählen Sie Farben, Schrift, Begrüßungstext und – für die Voice-Variante – die Stimme. 
+              
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8 border border-white/20">
               <p className="text-white/95 text-sm">

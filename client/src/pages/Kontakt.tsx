@@ -40,7 +40,7 @@ export default function Kontakt() {
                     src={zoePhoto}
                     alt="Zoë Hagen - Gründerin von Zoë's KI Service"
                     className="w-full h-full object-cover object-top"
-                    style={{ objectPosition: '50% 20%' }}
+                    style={{ objectPosition: '60% 20%' }}
                     data-testid="zoe-contact-photo"
                   />
                 </div>

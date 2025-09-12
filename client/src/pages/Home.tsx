@@ -14,13 +14,14 @@ import ChatbotWidget from "@/components/ChatbotWidget";
 import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
 import VoicebotWidget from "@/components/VoicebotWidget";
 import { useState, useEffect } from "react";
+import { endianness } from "os";
 
 const products = [
   {
     id: "chatbot",
     title: "Chatbot – Antworten ohne Suchen",
-    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Generiert Leads und nimmt Ihnen Standardanfragen einfach ab.",
-    features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Lead-Qualifizierung", "Terminbuchung"],
+    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
+    features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Schafft Ihnen Zeit für Ihre eigentlichen Aufgaben", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-secondary",
@@ -30,7 +31,7 @@ const products = [
     id: "voicebot",
     title: "Voicebot – sprechen statt tippen", 
     description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt Anrufe entgegen und vereinbart Termine.",
-    features: ["Natürliche Sprachverarbeitung", "Anrufannahme & Rückruf", "Terminvereinbarung", "Lead-Erfassung"],
+    features: ["Natürliche Sprachverarbeitung", "Anrufannahme & Rückruf", "Terminvereinbarung", "Kein: Drücken Sie die eins... mehr"],
     icon: <Mic className="text-secondary" />,
     image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-secondary to-accent",

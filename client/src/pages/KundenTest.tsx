@@ -97,14 +97,14 @@ export default function KundenTest() {
       fontFamily: "Merriweather, serif",
       position: "center",
       greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
-      title: "Willk",
-      subtitle: "247",
+      title: "Willkommen!",
+      subtitle: "24/7 erreichbar",
       logoUrl: "",
       logoPosition: "top-left",
       logoSize: "large"
     },
     voicebot: {
-      name: "Juna Voice",
+      name: "Kira",
       primaryColor: "#10B981",
       backgroundColor: "#F3F4F6",
       widgetSize: "medium",
@@ -112,9 +112,9 @@ export default function KundenTest() {
       voiceSpeed: [1],
       voicePitch: [1],
       elevenLabsVoiceId: "",
-      greeting: "Hallo! Ich bin Juna, Ihr Sprach-Assistent.",
-      title: "Sprachassistent",
-      subtitle: "Sprechen Sie mit mir!",
+      greeting: "Hallo! Ich bin Kira, Ihr KI-Ratgeber.",
+      title: "Immer für Sie da.",
+      subtitle: "Womit kann ich helfen?",
       logoUrl: "",
       logoPosition: "top-left",
       logoSize: "medium"
@@ -229,14 +229,14 @@ export default function KundenTest() {
     setTestConfig({
       activeBot: "chatbot",
       chatbot: {
-        name: "KI-Assistent",
+        name: "Kira",
         primaryColor: "#3B82F6",
         backgroundColor: "#FFFFFF",
         textColor: "#1F2937",
         widgetSize: "medium",
         fontFamily: "Inter",
         position: "bottom-right",
-        greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
+        greeting: "Hallo! Womit kann ich helfen?",
         title: "Willkommen!",
         subtitle: "Ich helfe Ihnen gerne weiter",
         logoUrl: "",
@@ -263,8 +263,8 @@ export default function KundenTest() {
   };
 
   const generateNameSuggestions = (type: "chatbot" | "voicebot") => {
-    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Juna Chat", "Sam", "Rio"];
-    const voicebotNames = ["Juna Voice", "Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
+    const chatbotNames = ["Alex", "Max", "Luna", "Nova", "Kai", "Sam", "Rio"];
+    const voicebotNames = ["Aria", "Echo", "Sage", "Vale", "Nova", "Zara", "Mira"];
     return type === "chatbot" ? chatbotNames : voicebotNames;
   };
 

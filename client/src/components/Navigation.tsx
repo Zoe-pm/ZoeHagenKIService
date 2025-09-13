@@ -15,20 +15,19 @@ export default function Navigation() {
   };
 
   // Styling für normale Links
-  const normalLinkClass = "text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring";
+  const normalLinkClass = "text-white/80 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-white";
   
-  // Styling für aktuelle Seite - Exakt wie "Gespräch vereinbaren" Button
-  const activeLinkClass = "px-3 py-2 rounded-md text-sm font-medium font-semibold shadow-md text-gray-800" + " " +
-    "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E]";
+  // Styling für aktuelle Seite
+  const activeLinkClass = "px-3 py-2 rounded-md text-sm font-medium font-semibold text-blue-600 bg-white shadow-md";
 
   return (
     <>
-      <nav className="glass fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-background/80" role="navigation" aria-label="Hauptnavigation">
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-blue-600" role="navigation" aria-label="Hauptnavigation">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
-                <span className="text-lg font-medium text-muted-foreground" data-testid="company-name">
+                <span className="text-lg font-medium text-white" data-testid="company-name">
                   Zoë Hagen Ki Consulting
                 </span>
               </Link>
@@ -78,7 +77,7 @@ export default function Navigation() {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring"
+                className="inline-flex items-center justify-center p-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white"
                 data-testid="mobile-menu-button"
               >
                 {isMobileMenuOpen ? (
@@ -93,11 +92,11 @@ export default function Navigation() {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden glass backdrop-blur-md bg-background/95">
+          <div className="md:hidden bg-blue-600">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link 
                 href="/" 
-                className={`${location === "/" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-home"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -105,7 +104,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/ueber-uns" 
-                className={`${location === "/ueber-uns" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/ueber-uns" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-ueber-uns"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -113,7 +112,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/kontakt" 
-                className={`${location === "/kontakt" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/kontakt" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-kontakt"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -121,7 +120,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/test" 
-                className={`${location === "/test" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/test" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-test"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -129,7 +128,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/admin" 
-                className={`${location === "/admin" ? "bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] text-gray-800 font-semibold shadow-md" : "text-muted-foreground hover:text-foreground"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/admin" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-admin"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

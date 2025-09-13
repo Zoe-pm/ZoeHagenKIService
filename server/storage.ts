@@ -122,16 +122,8 @@ export class DatabaseStorage implements IStorage {
     const normalizedEmail = email.toLowerCase().trim();
     const upperCode = accessCode.toUpperCase().trim();
     
-    console.log('Validating test access:', { email: normalizedEmail, code: upperCode });
-    console.log('Available test codes:', Array.from(this.validTestCodes.keys()));
-    
     const allowedEmails = this.validTestCodes.get(upperCode);
-    console.log('Allowed emails for code:', allowedEmails);
-    
-    const isValid = allowedEmails ? allowedEmails.includes(normalizedEmail) : false;
-    console.log('Validation result:', isValid);
-    
-    return isValid;
+    return allowedEmails ? allowedEmails.includes(normalizedEmail) : false;
   }
 
   async createTestSession(email: string, accessCode: string): Promise<TestAccessGrant> {

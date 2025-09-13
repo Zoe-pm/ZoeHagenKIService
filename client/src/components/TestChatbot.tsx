@@ -119,7 +119,8 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
     // Safe guards for TTS functionality
     if (!('speechSynthesis' in window) || 
         typeof window.SpeechSynthesisUtterance === 'undefined' || 
-        config.activeBot !== "voicebot") {
+        config.activeBot !== "voicebot" ||
+        !voiceEnabled) {
       return;
     }
     
@@ -127,20 +128,30 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       // Cancel any ongoing speech
       speechSynthesis.cancel();
       
-      const utterance = new SpeechSynthesisUtterance(text);
-      // Safe access with fallback values
-      utterance.rate = config.voicebot?.voiceSpeed?.[0] ?? 1;
-      utterance.pitch = config.voicebot?.voicePitch?.[0] ?? 1;
-      utterance.lang = 'de-DE';
-      
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => {
-        setIsSpeaking(false);
-        console.warn('TTS Error - Speech synthesis failed');
-      };
-      
-      speechSynthesis.speak(utterance);
+      // Small delay to ensure cancellation completed
+      setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        // Safe access with fallback values
+        utterance.rate = config.voicebot?.voiceSpeed?.[0] ?? 1;
+        utterance.pitch = config.voicebot?.voicePitch?.[0] ?? 1;
+        utterance.lang = 'de-DE';
+        
+        // Find German voice if available
+        const voices = speechSynthesis.getVoices();
+        const germanVoice = voices.find(voice => voice.lang.startsWith('de'));
+        if (germanVoice) {
+          utterance.voice = germanVoice;
+        }
+        
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = (event) => {
+          setIsSpeaking(false);
+          console.warn('TTS Error:', event.error);
+        };
+        
+        speechSynthesis.speak(utterance);
+      }, 100);
     } catch (ttsError) {
       console.warn('TTS not available:', ttsError);
       setIsSpeaking(false);

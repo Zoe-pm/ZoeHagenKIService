@@ -28,7 +28,7 @@ export default function Navigation() {
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
-                <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent" data-testid="company-name">
+                <span className="text-xl font-bold text-foreground" data-testid="company-name">
                   Zoë Hagen Ki Condulting
                 </span>
               </Link>

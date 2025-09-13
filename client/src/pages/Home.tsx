@@ -22,8 +22,8 @@ import chatbotImage from "@assets/0_2_640_N_1757682466574.webp";
 const products = [
   {
     id: "chatbot",
-    title: "Chatbot – Antworten ohne Suchen",
-    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
+    title: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
+    description: "Chatbot – Antworten ohne Suchen",
     features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Schafft Ihnen Zeit für Ihre eigentlichen Aufgaben", "Terminbuchung"],
     icon: <MessageCircle className="text-primary" />,
     image: chatbotImage,
@@ -32,8 +32,8 @@ const products = [
   },
   {
     id: "voicebot",
-    title: "Voicebot – sprechen statt tippen", 
-    description: "Kein lästiges Tippen mehr – einfach sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
+    title: "Einfach Sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
+    description: "Voicebot – Sprechen statt tippen",
     features: ["Sprechen wie mit einem Menschen", "Einbindung in Website und über Telefon möglich", "Kein: Drücken Sie die eins... mehr", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     icon: <Mic className="text-secondary" />,
     image: voicebotImage,
@@ -42,8 +42,8 @@ const products = [
   },
   {
     id: "avatar",
-    title: "Avatar – Service mit Gesicht",
-    description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
+    title: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
+    description: "Avatar – Service mit Gesicht",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     icon: <UserCircle className="text-accent" />,
     image: avatarImage,
@@ -52,8 +52,8 @@ const products = [
   },
   {
     id: "wissensbot",
-    title: "Wissensbot – Wissen, das bleibt",
-    description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
+    title: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
+    description: "Wissensbot – Wissen, das bleibt",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität", "Onboarding leicht gemacht"],
     icon: <Brain className="text-primary" />,
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",

@@ -17,7 +17,7 @@ import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_K
 
 const productData: { [key: string]: any } = {
   chatbot: {
-    name: "Chatbot – Antworten ohne Suchen",
+    title: "Chatbot – Antworten ohne Suchen",
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
     price: "ab 299€/Monat",
     implementationTime: "2 Wochen",
@@ -65,7 +65,7 @@ const productData: { [key: string]: any } = {
     ]
   },
   voicebot: {
-    name: "Sprechen statt Tippen - Voicebot",
+    title: "Sprechen statt Tippen - Voicebot",
     description: "Einfach Sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
     price: "ab 599€/Monat",
     implementationTime: "3 Wochen",
@@ -113,7 +113,7 @@ const productData: { [key: string]: any } = {
     ]
   },
   avatar: {
-    name: "Avatar – Service mit Gesicht",
+    title: "Avatar – Service mit Gesicht",
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     price: "ab 899€/Monat",
     implementationTime: "4 Wochen",
@@ -161,7 +161,7 @@ const productData: { [key: string]: any } = {
     ]
   },
   wissensbot: {
-    name: "Wissensbot – Wissen, das bleibt",
+    title: "Wissensbot – Wissen, das bleibt",
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     price: "ab 399€/Monat",
     implementationTime: "2 Wochen",
@@ -230,9 +230,9 @@ export default function ProductDetail() {
   return (
     <div className="min-h-screen" data-testid={`product-detail-${id}`}>
       <SEOHelmet 
-        title={`${product.name} - KI-Assistenten | Professionelle KI-Lösung`}
+        title={`${product.title} - KI-Assistenten | Professionelle KI-Lösung`}
         description={`${product.description}. ${product.price}, Implementierung in ${product.implementationTime}. DSGVO-konform und einfach zu integrieren.`}
-        keywords={`${product.name}, KI Assistent, ${product.targetAudience}, DSGVO konform`}
+        keywords={`${product.title}, KI Assistent, ${product.targetAudience}, DSGVO konform`}
       />
       
       <AccessibilityBanner />
@@ -252,7 +252,7 @@ export default function ProductDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <h1 className="text-5xl font-bold mb-6 gradient-text" data-testid="product-title">
-                {product.name}
+                {product.title}
               </h1>
               <p className="text-xl text-muted-foreground mb-6" data-testid="product-description">
                 {product.description}
@@ -289,7 +289,7 @@ export default function ProductDetail() {
             <div>
               <img 
                 src={product.image}
-                alt={`${product.name} Interface und Anwendung`}
+                alt={`${product.title} Interface und Anwendung`}
                 className="rounded-lg shadow-2xl w-full"
                 data-testid="product-hero-image"
               />

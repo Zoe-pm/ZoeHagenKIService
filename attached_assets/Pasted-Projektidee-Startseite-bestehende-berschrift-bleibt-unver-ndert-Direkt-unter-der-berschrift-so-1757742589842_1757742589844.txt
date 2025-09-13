@@ -1,0 +1,33 @@
+Projektidee (Startseite, bestehende Überschrift bleibt unverändert):
+Direkt unter der Überschrift soll eine lebendige Visualisierung von „Juna“ entstehen – Juna im Zentrum als digitale Identität. Rundherum vier Formen von Juna (Chat, Voice – Web-Voice im Browser –, Avatar, Wissen). Alles pulsierend, organisch, verbunden; es darf einen dezenten „Gaming-Touch“ haben, aber elegant wirken.
+
+Gefühl & Look:
+Bitte edler, dezenter Dark-Look (tiefes Navy/Slate als Basis), sanfte Glas-Karten, zurückhaltender Glow. Farbakzente dezent: muted Cyan → Jade in Verbindungen, Beere nur sparsam. Bewegungen sanft, federnd, nicht hektisch. Bei „Bewegung reduzieren“ (Systemeinstellung) bitte ruhigere Variante.
+
+Was passieren soll:
+	•	In der Mitte: „Juna“ schwebt und „atmet“ leicht (Puls).
+	•	Drumherum die vier Lösungen; sie leuchten subtil, sind sichtbar miteinander verbunden (feine Linien/Flüsse). Kleine Partikel dürfen zwischen den Formen wandern.
+	•	Interaktion: Bei Hover/Klick auf eine Form verstärkt sich das Pulsieren/Leuchten und es öffnet sich eine Mini-Demo als kleines Overlay/Popup:
+	•	Chat-Juna: Mini-Chat mit 1 Frage → 1 Antwort (je 1 kurzer Satz).
+Beispiel: Q „Seid ihr DSGVO-konform?“ · A „Ja. EU-Hosting, Datenminimierung und klare Löschfristen.“
+	•	Voice-Juna (Web-Voice): Ein Play-Button mit kurzer gesprochener 1-Satz-Antwort und dezenter Wave-Animation.
+Beispiel-Text: „Du sprichst im Browser, Juna antwortet in Echtzeit – ohne Telefon.“
+	•	Avatar-Juna: Kurzes Video (Loop) oder stilvoller Platzhalter mit 1-Satz-Begrüßung.
+Beispiel: „Hi, ich bin Juna. Ich begrüße dich und führe dich zügig zum Ziel.“
+	•	Wissens-Juna: Kleine Wissenskarte mit zwei Einträgen aus dem internen Kontext von Zoë’s KI Service.
+Beispiele: „FAQ · Preise & Abrechnung – Einrichtung + Servicepauschale.“ / „Prozess · Rollout & Schulung – kurz erklärt.“
+	•	Hinweis unter/über der Szene: „Juna ist ein Support-Assistent ohne Zugriff auf Bestellungen, Rechnungen oder Kundendaten.“
+
+Inhaltliche Leitplanken (bitte so übernehmen, keine zusätzlichen Versprechen):
+Produkte: Chatbot, Voicebot „Juna“ (Web-Voice), Avatar-Juna, Wissens-Juna.
+Prozess: Erstgespräch → Pilot (~2 Wochen) → Rollout/Schulung → Support/Monitoring.
+Preise/SLA: Einrichtungspauschale (nach Umfang) + monatliche Servicepauschale; werktags Antwort innerhalb 24 h.
+Datenschutz: EU-Hosting, Datenminimierung, Einwilligung bei sensiblen Funktionen.
+
+Platzierung:
+Die Visualisierung soll ohne Scrollen sichtbar sein: direkt unter der bestehenden Überschrift der Startseite.
+
+Barrierefreiheit & Qualität:
+Semantisch zugänglich, fokussierbar, ESC schließt Overlays, Kontraste beachtet.
+
+Bitte setze das kreativ um (du wählst die passenden HTML/CSS/JS-Mittel). Mir ist wichtig, dass das Ecosystem organisch wirkt, klickbar erlebbar ist und Besucher:innen in < 15 Sekunden verstehen, wie vielseitig Juna hilft.

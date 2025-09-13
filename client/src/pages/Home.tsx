@@ -95,9 +95,9 @@ export default function Home() {
   return (
     <div className="min-h-screen" data-testid="home-page">
       <SEOHelmet 
-        title="Smarter Support – digital, menschlich, effizient | Chatbot, Voicebot, Avatar & Wissensbot"
-        description="Professionelle KI-Lösungen: Chatbot, Voicebot, Avatar und Wissensbot für besseren Kundenservice. DSGVO-konform, einfache Integration, 30 Tage Setup."
-        keywords="KI Assistenten, Chatbot, Voicebot, Avatar, Wissensbot, KI Kundenservice, DSGVO konform"
+        title="Zoë's KI Service – Intelligente Assistenten für Ihr Business | Juna, Chat, Voice, Avatar & Wissen"
+        description="Erleben Sie Juna - unsere vielseitige KI-Assistentin. Von Chatbot bis Avatar, dezent weiblich und innovativ designed. DSGVO-konform, EU-Hosting."
+        keywords="Zoë's KI Service, Juna, KI Assistentin, Chatbot, Voicebot, Avatar, Wissensbot, weibliche KI, DSGVO konform"
       />
       
       
@@ -120,12 +120,12 @@ export default function Home() {
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
                   <span className="text-white">
-                    KI mit Herz & Hirn
+                    Zoë's KI Service
                   </span>
                   <br />
                 </h1>
                 <p className="text-xl text-white/90 mb-8 fade-in" data-testid="hero-subtitle">
-                  Ihr Service wird schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
+                  Erleben Sie Juna - unsere vielseitige KI-Assistentin. Dezent weiblich, innovativ und intelligent designed für Ihr Business.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 </div>

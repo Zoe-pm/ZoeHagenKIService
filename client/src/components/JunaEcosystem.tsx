@@ -17,7 +17,37 @@ export default function JunaEcosystem() {
   const [activeDemo, setActiveDemo] = useState<string | null>(null);
   const [isPulsing, setIsPulsing] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isVoicePlaying, setIsVoicePlaying] = useState(false);
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const lastFocusedElementRef = useRef<HTMLElement | null>(null);
+  
+  // Voice synthesis function
+  const playVoiceDemo = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Speech Synthesis wird von Ihrem Browser nicht unterstützt.');
+      return;
+    }
+    
+    if (isVoicePlaying) {
+      speechSynthesis.cancel();
+      setIsVoicePlaying(false);
+      return;
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(
+      'Natürlich; du sprichst im Browser, Juna antwortet in Echtzeit.'
+    );
+    utterance.lang = 'de-DE';
+    utterance.rate = 0.9;
+    utterance.pitch = 1.1;
+    utterance.volume = 0.8;
+    
+    utterance.onstart = () => setIsVoicePlaying(true);
+    utterance.onend = () => setIsVoicePlaying(false);
+    utterance.onerror = () => setIsVoicePlaying(false);
+    
+    speechSynthesis.speak(utterance);
+  };
   
   // Responsive particle count and memoized for consistent performance
   const [isMobile, setIsMobile] = useState(false);
@@ -25,18 +55,28 @@ export default function JunaEcosystem() {
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    
+    let resizeTimer: NodeJS.Timeout;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(checkMobile, 150);
+    };
+    
+    window.addEventListener('resize', debouncedResize);
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(resizeTimer);
+    };
   }, []);
   
   const particles = useMemo(() => {
-    const particleCount = isMobile ? 3 : 6; // Reduziert auf Mobile
+    const particleCount = isMobile ? 2 : 4; // Weiter reduziert für Performance
     return [...Array(particleCount)].map(() => ({
       x: 45 + Math.random() * 10,
       y: 45 + Math.random() * 10,
-      deltaX: Math.random() * (isMobile ? 60 : 100) - (isMobile ? 30 : 50),
-      deltaY: Math.random() * (isMobile ? 60 : 100) - (isMobile ? 30 : 50),
-      duration: 4 + Math.random() * 2
+      deltaX: Math.random() * (isMobile ? 40 : 80) - (isMobile ? 20 : 40),
+      deltaY: Math.random() * (isMobile ? 40 : 80) - (isMobile ? 20 : 40),
+      duration: 3 + Math.random() * 1.5 // Schnellere Animationen für weniger CPU-Last
     }));
   }, [isMobile]);
 
@@ -89,23 +129,43 @@ export default function JunaEcosystem() {
           <div className="flex justify-center">
             <Button 
               size="lg" 
-              className="rounded-full w-16 h-16 bg-jade-accent hover:bg-jade-accent/80"
-              aria-label="Voice-Demo abspielen"
+              className={`rounded-full w-16 h-16 transition-all duration-300 ${
+                isVoicePlaying 
+                  ? 'bg-berry-highlight hover:bg-berry-highlight/80 shadow-lg shadow-pink-500/30' 
+                  : 'bg-jade-accent hover:bg-jade-accent/80'
+              }`}
+              onClick={playVoiceDemo}
+              aria-label={isVoicePlaying ? "Voice-Demo stoppen" : "Voice-Demo abspielen"}
+              data-testid="button-voice-demo"
             >
-              <Play className="w-6 h-6" />
+              {isVoicePlaying ? (
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                >
+                  <Mic className="w-6 h-6" />
+                </motion.div>
+              ) : (
+                <Play className="w-6 h-6" />
+              )}
             </Button>
           </div>
           <p className="text-sm text-slate-300">
-            "Du sprichst im Browser, Juna antwortet in Echtzeit – ohne Telefon."
+            {isVoicePlaying 
+              ? '🎵 Juna spricht gerade...' 
+              : '"Du sprichst im Browser, Juna antwortet in Echtzeit – ohne Telefon."'
+            }
           </p>
           <div className="flex justify-center space-x-1">
             {[...Array(5)].map((_, i) => (
               <motion.div
                 key={i}
                 className="w-1 bg-jade-accent rounded-full"
-                animate={prefersReducedMotion ? { height: 12 } : { height: [4, 20, 4] }}
+                animate={prefersReducedMotion ? { height: 12 } : {
+                  height: isVoicePlaying ? [4, 24, 8, 20, 4] : [4, 20, 4]
+                }}
                 transition={{ 
-                  duration: prefersReducedMotion ? 0 : 1, 
+                  duration: prefersReducedMotion ? 0 : (isVoicePlaying ? 0.6 : 1), 
                   repeat: prefersReducedMotion ? 0 : Infinity, 
                   delay: prefersReducedMotion ? 0 : i * 0.1 
                 }}
@@ -155,6 +215,23 @@ export default function JunaEcosystem() {
     }
   ];
 
+  // Cleanup voice when modal closes
+  useEffect(() => {
+    if (activeDemo !== 'voice' && isVoicePlaying) {
+      speechSynthesis.cancel();
+      setIsVoicePlaying(false);
+    }
+  }, [activeDemo, isVoicePlaying]);
+  
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (isVoicePlaying) {
+        speechSynthesis.cancel();
+      }
+    };
+  }, [isVoicePlaying]);
+  
   // Focus management and escape key handler
   useEffect(() => {
     if (activeDemo) {
@@ -425,14 +502,20 @@ export default function JunaEcosystem() {
                 animate={{
                   left: [`${startX}%`, `${endX}%`, `${startX}%`],
                   top: [`${startY}%`, `${endY}%`, `${startY}%`],
-                  opacity: [0, 1, 1, 0.8, 0],
-                  scale: [0.5, 1, 1, 0.5]
+                  opacity: hoveredNodeId === node.id 
+                    ? [0, 1, 1, 1, 0.9, 0] // Intensiver bei Hover
+                    : [0, 1, 1, 0.8, 0],
+                  scale: hoveredNodeId === node.id 
+                    ? [0.5, 1.2, 1.2, 0.8] // Größer bei Hover
+                    : [0.5, 1, 1, 0.5]
                 }}
                 transition={{
-                  duration: 4 + particleIndex * 0.5,
+                  duration: hoveredNodeId === node.id 
+                    ? (isMobile ? 1.5 : 2) + particleIndex * 0.2 // Schneller bei Hover
+                    : (isMobile ? 3 + particleIndex * 0.3 : 4 + particleIndex * 0.5),
                   repeat: Infinity,
-                  delay: particleIndex * 1.5 + nodeIndex * 0.3,
-                  ease: "easeInOut"
+                  delay: particleIndex * 1.0 + nodeIndex * 0.2,
+                  ease: "linear"
                 }}
               />
             );
@@ -455,6 +538,8 @@ export default function JunaEcosystem() {
             ...(isMobile && { touchAction: 'manipulation' })
           }}
           onClick={() => setActiveDemo(node.id)}
+          onMouseEnter={() => !prefersReducedMotion && setHoveredNodeId(node.id)}
+          onMouseLeave={() => setHoveredNodeId(null)}
           whileHover={prefersReducedMotion ? {} : { 
             scale: 1.08,
             boxShadow: `0 0 40px ${node.color}80, 0 0 20px ${node.color}60`,

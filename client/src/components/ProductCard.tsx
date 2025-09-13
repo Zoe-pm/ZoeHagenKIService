@@ -1,7 +1,6 @@
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface ProductCardProps {
   id: string;
@@ -29,15 +28,17 @@ export default function ProductCard({
   return (
     <Card className="glass hover-lift focus-within:ring-2 focus-within:ring-ring fade-in h-full flex flex-col" data-testid={`product-card-${id}`}>
       <CardContent className="p-4 flex flex-col h-full">
-        <AspectRatio ratio={16/9} className="mb-3">
-          <img 
-            src={image} 
-            alt={`${title} Interface-Darstellung`}
-            className="w-full h-full object-contain p-2 bg-card rounded-lg" 
-            loading="lazy"
-            data-testid={`product-image-${id}`}
-          />
-        </AspectRatio>
+        <img 
+          src={image} 
+          alt={`${title} Interface-Darstellung`}
+          className={`w-full h-36 object-cover rounded-lg mb-3 ${
+            id === 'avatar' ? 'object-[50%_20%]' : 
+            id === 'voicebot' ? 'object-[50%_30%]' : 
+            'object-center'
+          }`} 
+          loading="lazy"
+          data-testid={`product-image-${id}`}
+        />
         
         <div className="text-center mb-3">
           <div className="text-3xl mb-2" data-testid={`product-icon-${id}`}>

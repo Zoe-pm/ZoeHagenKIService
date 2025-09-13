@@ -17,8 +17,8 @@ import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_K
 
 const productData: { [key: string]: any } = {
   chatbot: {
-    name: "Chatbot",
-    description: "24/7 automatisierter Kundensupport für Ihre Website",
+    name: "Chatbot – Antworten ohne Suchen",
+    description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
     price: "ab 299€/Monat",
     implementationTime: "2 Wochen",
     image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
@@ -65,8 +65,8 @@ const productData: { [key: string]: any } = {
     ]
   },
   voicebot: {
-    name: "Voicebot",
-    description: "Intelligente Telefon-Assistenz für professionellen Kundenservice",
+    name: "Sprechen statt Tippen - Voicebot",
+    description: "Einfach Sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
     price: "ab 599€/Monat",
     implementationTime: "3 Wochen",
     image: voicebotImage,
@@ -113,8 +113,8 @@ const productData: { [key: string]: any } = {
     ]
   },
   avatar: {
-    name: "Avatar",
-    description: "Visueller KI-Assistent für persönliche Kundeninteraktionen",
+    name: "Avatar – Service mit Gesicht",
+    description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     price: "ab 899€/Monat",
     implementationTime: "4 Wochen",
     image: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
@@ -161,8 +161,8 @@ const productData: { [key: string]: any } = {
     ]
   },
   wissensbot: {
-    name: "Wissensbot",
-    description: "Interner KI-Assistent für Mitarbeiter und Wissensdatenbanken",
+    name: "Wissensbot – Wissen, das bleibt",
+    description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     price: "ab 399€/Monat",
     implementationTime: "2 Wochen",
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",

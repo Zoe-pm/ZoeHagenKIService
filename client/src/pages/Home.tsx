@@ -13,6 +13,7 @@ import SEOHelmet from "@/components/SEOHelmet";
 import ChatbotWidget from "@/components/ChatbotWidget";
 import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
 import VoicebotWidget from "@/components/VoicebotWidget";
+import JunaEcosystem from "@/components/JunaEcosystem";
 import { useState, useEffect } from "react";
 import { endianness } from "os";
 import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
@@ -131,6 +132,11 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Juna Ecosystem Visualization */}
+            <section className="mb-16" data-testid="juna-ecosystem-section">
+              <JunaEcosystem />
+            </section>
 
             {/* Four Products Above-the-Fold */}
             <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8" data-testid="products-section">

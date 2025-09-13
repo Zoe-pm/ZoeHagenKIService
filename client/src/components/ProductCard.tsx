@@ -31,7 +31,7 @@ export default function ProductCard({
         <img 
           src={image} 
           alt={`${title} Interface-Darstellung`}
-          className={`w-full h-36 object-cover rounded-lg mb-3 ${id === 'avatar' ? 'object-center' : ''}`} 
+          className={`w-full h-36 ${id === 'avatar' || id === 'voicebot' ? 'object-contain' : 'object-cover'} rounded-lg mb-3`} 
           loading="lazy"
           data-testid={`product-image-${id}`}
         />

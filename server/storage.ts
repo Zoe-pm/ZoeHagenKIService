@@ -1,8 +1,8 @@
-import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product, type TestAccessRequest, type TestAccessGrant, type TestCodeInfo, type TestCodeUsage } from "@shared/schema";
+import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product, type TestAccessRequest, type TestAccessGrant, type TestCodeInfo, type TestCodeUsage, type InsertVoicePreferences, type VoicePreferences } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { users, contacts, consultations, products } from "@shared/schema";
-import { eq } from "drizzle-orm";
+import { users, contacts, consultations, products, voicePreferences } from "@shared/schema";
+import { eq, and } from "drizzle-orm";
 
 // Contact type for storage
 type Contact = InsertContact & { id: string; createdAt: Date };
@@ -28,6 +28,10 @@ export interface IStorage {
   createTestSession(email: string, accessCode: string): Promise<TestAccessGrant>;
   getTestSession(token: string): Promise<TestAccessGrant | undefined>;
   cleanupExpiredSessions(): Promise<void>;
+  
+  // Voice preferences methods (ElevenLabs integration)
+  getVoicePreferences(sessionToken: string, email: string): Promise<VoicePreferences | undefined>;
+  upsertVoicePreferences(preferences: InsertVoicePreferences): Promise<VoicePreferences>;
   
   // Admin methods
   validateAdminLogin(password: string): Promise<boolean>;
@@ -115,6 +119,50 @@ export class DatabaseStorage implements IStorage {
   async getProduct(id: string): Promise<Product | undefined> {
     const [product] = await db.select().from(products).where(eq(products.id, id));
     return product || undefined;
+  }
+
+  // Voice preferences methods (ElevenLabs integration)
+  async getVoicePreferences(sessionToken: string, email: string): Promise<VoicePreferences | undefined> {
+    const [preferences] = await db
+      .select()
+      .from(voicePreferences)
+      .where(and(eq(voicePreferences.sessionToken, sessionToken), eq(voicePreferences.email, email.toLowerCase().trim())));
+    return preferences || undefined;
+  }
+
+  async upsertVoicePreferences(preferences: InsertVoicePreferences): Promise<VoicePreferences> {
+    const normalizedEmail = preferences.email.toLowerCase().trim();
+    
+    // Convert string decimals to fixed decimal strings, with fallback defaults
+    const stability = preferences.stability ? Number(preferences.stability).toFixed(2) : "0.50";
+    const similarity = preferences.similarity ? Number(preferences.similarity).toFixed(2) : "0.75";
+    const speed = preferences.speed ? Number(preferences.speed).toFixed(2) : "1.00";
+    
+    // Atomic upsert using ON CONFLICT to prevent race conditions
+    const [upserted] = await db
+      .insert(voicePreferences)
+      .values({
+        ...preferences,
+        email: normalizedEmail,
+        // Convert string decimals to fixed decimal strings for database storage
+        stability,
+        similarity, 
+        speed,
+      })
+      .onConflictDoUpdate({
+        target: [voicePreferences.sessionToken, voicePreferences.email],
+        set: {
+          elevenLabsVoiceId: preferences.elevenLabsVoiceId,
+          stability,
+          similarity,
+          speakerBoost: preferences.speakerBoost,
+          speed,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+      
+    return upserted;
   }
 
   // Test access methods - keeping in memory for now as they are complex

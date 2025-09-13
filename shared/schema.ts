@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, jsonb, decimal, boolean, uniqueIndex } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -104,6 +104,23 @@ export const testSessions = pgTable("test_sessions", {
   expiresAt: timestamp("expires_at").notNull(),
 });
 
+// Voice preferences for ElevenLabs integration - test environment only
+export const voicePreferences = pgTable("voice_preferences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionToken: text("session_token").notNull(),
+  email: text("email").notNull(),
+  elevenLabsVoiceId: text("elevenlabs_voice_id").notNull(),
+  stability: decimal("stability", { precision: 3, scale: 2 }).notNull().default("0.50"), // 0.00 - 1.00
+  similarity: decimal("similarity", { precision: 3, scale: 2 }).notNull().default("0.75"), // 0.00 - 1.00  
+  speakerBoost: boolean("speaker_boost").notNull().default(false),
+  speed: decimal("speed", { precision: 3, scale: 2 }).notNull().default("1.00"), // 0.70 - 1.20
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => ({
+  // Unique constraint on sessionToken + email to prevent duplicates
+  sessionEmailUniqueIdx: uniqueIndex("voice_pref_session_email_uq").on(table.sessionToken, table.email),
+}));
+
 export const insertTestAccountSchema = createInsertSchema(testAccounts).omit({
   id: true,
   createdAt: true,
@@ -114,10 +131,18 @@ export const insertTestSessionSchema = createInsertSchema(testSessions).omit({
   createdAt: true,
 });
 
+export const insertVoicePreferencesSchema = createInsertSchema(voicePreferences).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertTestAccount = z.infer<typeof insertTestAccountSchema>;
 export type TestAccount = typeof testAccounts.$inferSelect;
 export type InsertTestSession = z.infer<typeof insertTestSessionSchema>;
 export type TestSessionDb = typeof testSessions.$inferSelect;
+export type InsertVoicePreferences = z.infer<typeof insertVoicePreferencesSchema>;
+export type VoicePreferences = typeof voicePreferences.$inferSelect;
 
 export interface TestAccessGrant {
   id: string;
@@ -195,3 +220,30 @@ export const testConfigSaveSchema = z.object({
 });
 
 export type TestConfigSave = z.infer<typeof testConfigSaveSchema>;
+
+// Voice Preferences API Schemas
+export const voicePreferencesApiSchema = z.object({
+  sessionToken: z.string().min(1, "Session token erforderlich"),
+  email: z.string().email("Ungültige Email-Adresse"), 
+  elevenLabsVoiceId: z.string().min(1, "Voice ID erforderlich"),
+  stability: z.number().min(0).max(1).default(0.5),
+  similarity: z.number().min(0).max(1).default(0.75),
+  speakerBoost: z.boolean().default(false),
+  speed: z.number().min(0.7).max(1.2).default(1.0),
+});
+
+export const voicePreferencesResponseSchema = z.object({
+  id: z.string(),
+  sessionToken: z.string(),
+  email: z.string(),
+  elevenLabsVoiceId: z.string(),
+  stability: z.string(), // decimal as string from database
+  similarity: z.string(),
+  speakerBoost: z.boolean(),
+  speed: z.string(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+});
+
+export type VoicePreferencesApi = z.infer<typeof voicePreferencesApiSchema>;
+export type VoicePreferencesResponse = z.infer<typeof voicePreferencesResponseSchema>;

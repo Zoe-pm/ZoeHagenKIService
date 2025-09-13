@@ -18,11 +18,11 @@ export default function Navigation() {
   const normalLinkClass = "text-white/80 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-white";
   
   // Styling für aktuelle Seite
-  const activeLinkClass = "px-3 py-2 rounded-md text-sm font-medium font-semibold text-blue-600 bg-white shadow-md";
+  const activeLinkClass = "px-3 py-2 rounded-md text-sm font-medium font-semibold text-[#5DADE2] bg-white shadow-md";
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-blue-600" role="navigation" aria-label="Hauptnavigation">
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-[#5DADE2]" role="navigation" aria-label="Hauptnavigation">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
@@ -92,11 +92,11 @@ export default function Navigation() {
 
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-blue-600">
+          <div className="md:hidden bg-[#5DADE2]">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link 
                 href="/" 
-                className={`${location === "/" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/" ? "bg-white text-[#5DADE2] font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-home"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -104,7 +104,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/ueber-uns" 
-                className={`${location === "/ueber-uns" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/ueber-uns" ? "bg-white text-[#5DADE2] font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-ueber-uns"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -112,7 +112,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/kontakt" 
-                className={`${location === "/kontakt" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/kontakt" ? "bg-white text-[#5DADE2] font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-kontakt"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -120,7 +120,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/test" 
-                className={`${location === "/test" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/test" ? "bg-white text-[#5DADE2] font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-test"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -128,7 +128,7 @@ export default function Navigation() {
               </Link>
               <Link 
                 href="/admin" 
-                className={`${location === "/admin" ? "bg-white text-blue-600 font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
+                className={`${location === "/admin" ? "bg-white text-[#5DADE2] font-semibold shadow-md" : "text-white/80 hover:text-white"} block px-3 py-2 rounded-md text-base font-medium transition-colors`}
                 data-testid="mobile-nav-admin"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

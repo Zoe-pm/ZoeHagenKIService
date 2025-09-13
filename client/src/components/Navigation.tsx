@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import logoImage from "@assets/logo_zoe_ki_1757417595587.jpg";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -28,15 +27,9 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <Link href="/" className="flex items-center space-x-3">
-                <img 
-                  src={logoImage} 
-                  alt="Zoë Hagen KI Consulting Logo" 
-                  className="h-12 w-auto cursor-pointer" 
-                  data-testid="logo"
-                />
+              <Link href="/" className="flex items-center">
                 <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-pink-500 bg-clip-text text-transparent" data-testid="company-name">
-                  Zoë's KI Service
+                  Zoë Hagen Ki Condulting
                 </span>
               </Link>
             </div>

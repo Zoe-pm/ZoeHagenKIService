@@ -13,7 +13,6 @@ import SEOHelmet from "@/components/SEOHelmet";
 import ChatbotWidget from "@/components/ChatbotWidget";
 import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
 import VoicebotWidget from "@/components/VoicebotWidget";
-import JunaEcosystem from "@/components/JunaEcosystem";
 import { useState, useEffect } from "react";
 import { endianness } from "os";
 import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
@@ -96,9 +95,9 @@ export default function Home() {
   return (
     <div className="min-h-screen" data-testid="home-page">
       <SEOHelmet 
-        title="Zoë's KI Service – Intelligente Assistenten für Ihr Business | Juna, Chat, Voice, Avatar & Wissen"
-        description="Erleben Sie Juna - unsere vielseitige KI-Assistentin. Von Chatbot bis Avatar, dezent weiblich und innovativ designed. DSGVO-konform, EU-Hosting."
-        keywords="Zoë's KI Service, Juna, KI Assistentin, Chatbot, Voicebot, Avatar, Wissensbot, weibliche KI, DSGVO konform"
+        title="Smarter Support – digital, menschlich, effizient | Chatbot, Voicebot, Avatar & Wissensbot"
+        description="Professionelle KI-Lösungen: Chatbot, Voicebot, Avatar und Wissensbot für besseren Kundenservice. DSGVO-konform, einfache Integration, 30 Tage Setup."
+        keywords="KI Assistenten, Chatbot, Voicebot, Avatar, Wissensbot, KI Kundenservice, DSGVO konform"
       />
       
       
@@ -121,22 +120,17 @@ export default function Home() {
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
                   <span className="text-white">
-                    Zoë's KI Service
+                    KI mit Herz & Hirn
                   </span>
                   <br />
                 </h1>
                 <p className="text-xl text-white/90 mb-8 fade-in" data-testid="hero-subtitle">
-                  Erleben Sie Juna - unsere vielseitige KI-Assistentin. Dezent weiblich, innovativ und intelligent designed für Ihr Business.
+                  Ihr Service wird schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 </div>
               </div>
             </div>
-
-            {/* Juna Ecosystem Visualization */}
-            <section className="mb-16" data-testid="juna-ecosystem-section">
-              <JunaEcosystem />
-            </section>
 
             {/* Four Products Above-the-Fold */}
             <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8" data-testid="products-section">

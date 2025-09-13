@@ -1,0 +1,42 @@
+ch hatte bereits eine Überschrift auf der Startseite – die bleibt unverändert. Direkt darunter soll eine lebendige, organische Visualisierung entstehen:
+
+Zielbild (ohne starre Vorgaben):
+In der Mitte steht Juna als stilisiertes Frauen-Portrait, nicht als Foto, sondern künstlerisch verfremdet (duotone/glasig, leicht körnig, „KI-anmutend“). Juna sitzt in einer runden, halbtransparenten „Glaskugel“. Diese atmet sanft (Puls), hat einen subtilen Glow und ganz leichte Lichtstrahlen.
+
+Um Juna herum schweben vier verbundene Formen (Chat, Voice [Web-Voice], Avatar, Wissen). Sie pulsieren dezent, leuchten beim Hover/Klick etwas stärker und sind über feine Verlaufslinien miteinander verbunden. Entlang der Linien fließen kleine Partikel/Datenkörner – bei Aktivität etwas schneller – damit es wie ein lebendes Nervensystem wirkt.
+
+Interaktion:
+Klick auf eine Form öffnet eine Mini-Demo als kleines Overlay/Popup (gern <dialog>):
+	•	Chat: 1 kurze Frage → 1 kurze Antwort.
+	•	Voice (Web-Voice): Play-Button, Antwort wird gesprochen (SpeechSynthesis) + kleine Wave-Animation.
+	•	Avatar: kurzer Video-Loop oder eleganter Platzhalter mit 1-Satz-Begrüßung.
+	•	Wissen: eine kompakte Karte mit 2 Wissenseinträgen (FAQ/Prozess).
+Hinweis unter der Szene: „Juna ist ein Support-Assistent ohne Zugriff auf Bestellungen, Rechnungen oder Kundendaten.“
+
+Stil & Atmosphäre (elegant, nicht hektisch):
+Edler Dark-Look (tiefes Navy/Slate), sanfte Glasflächen, dezente Glows. Farbgefühl: muted Cyan → Jade für Verbindungen/Audio-Bars, Beere sehr sparsam als Akzent. Bewegungen weich, federnd, keine harten Sprünge. Unterstütze prefers-reduced-motion.
+
+Zentrale Figur (Juna) – so bitte umsetzen (frei wählen, was am saubersten wirkt):
+	•	Nimm das bereitgestellte Portrait vom Chatbot oder nutze einen abstrahierten Platzhalter.
+	•	Verfremde zu einem duotone/glasigen Portrait: weiche Kanten, leichter Bloom, feines Film-Grain; in runder Maske, mit leichten Lichtstrahlen und einem „breathing“ Scale/Shadow-Puls.
+	•	Alternativ auch Silhouette/Low-Poly/Vector-Tracing möglich – wichtig ist der menschliche Eindruck, nicht das Realfoto.
+Überlege die beeindruckendste futuristische innovative Lösung 
+
+Inhalte (kurz, passend zu „Zoë’s KI Service“):
+	•	Produkte: Chat, Voice (Web-Voice), Avatar-, Wissens-.
+	
+	
+
+UX/Qualität (ohne Over-Engineering):
+	•	Canvas oder SVG für Linien/Partikel; GPU-freundlich, 60fps-nah, mobil-tauglich.
+	•	Hover/Klick vergrößert die gewählte Form um ca. 6–8%, Glow + Partikelfluss kurz intensiver.
+	•	Overlays mit ESC schließbar; Fokus steuerbar; Farben als CSS-Variablen definieren.
+	•	Dateien gern simpel halten (index.html, styles.css, app.js + optional juna_portrait.jpg/avatar.mp4).
+
+Demo-Texte :
+	•	Chat Q: gern selbst wählen
+	•	Voice Q: „Wie klingt die Web-Voice?“ · A (gesprochen): „Natürlich; du sprichst im Browser, Juna antwortet in Echtzeit.“
+	•	Avatar Caption: „Hi, ich bin Juna. Ich begrüße dich und führe dich zügig zum Ziel.“
+	•	Wissen: „gern selbst Beispiel überlegen .“
+
+Bitte kreativ umsetzen, solange die Kernidee spürbar bleibt: Juna (menschlich-anmutend) im Zentrum, vier Lösungen pulsierend drumherum, sichtbar verbunden durch sanfte Datenströme, klickbar erlebbar. Die ganze Szene soll ohne Scrollen direkt unter der Überschrift zu sehen sein

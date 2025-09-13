@@ -224,7 +224,7 @@ export default function JunaEcosystem() {
   }, []);
 
   return (
-    <div className="relative w-full h-96 flex items-center justify-center" data-testid="juna-ecosystem">
+    <div className="relative w-full h-[480px] flex items-center justify-center" data-testid="juna-ecosystem">
       {/* Connection lines SVG */}
       <svg 
         className="absolute inset-0 w-full h-full" 
@@ -260,22 +260,121 @@ export default function JunaEcosystem() {
         </defs>
       </svg>
 
-      {/* Central Juna */}
-      <motion.div
-        className={`relative z-10 ${isMobile ? 'w-20 h-20' : 'w-24 h-24'} rounded-full bg-gradient-to-br from-cyan-500 to-jade-500 flex items-center justify-center shadow-2xl`}
-        animate={{
-          scale: (isPulsing && !activeDemo) ? [1, 1.1, 1] : 1,
-          boxShadow: (isPulsing && !activeDemo) ? [
-            "0 0 20px rgba(6, 182, 212, 0.3)",
-            "0 0 40px rgba(6, 182, 212, 0.6)", 
-            "0 0 20px rgba(6, 182, 212, 0.3)"
-          ] : "0 0 20px rgba(6, 182, 212, 0.3)"
-        }}
-        transition={{ duration: 2, repeat: Infinity }}
-        data-testid="juna-center"
-      >
-        <span className={`text-slate-900 font-bold ${isMobile ? 'text-lg' : 'text-xl'}`}>Juna</span>
-      </motion.div>
+      {/* Central Juna Portrait in Glass Sphere */}
+      <div className="relative z-10" data-testid="juna-center">
+        {/* Outer glass sphere with breathing animation */}
+        <motion.div
+          className={`${isMobile ? 'w-32 h-32' : 'w-40 h-40'} rounded-full relative`}
+          animate={{
+            scale: (isPulsing && !activeDemo) ? [1, 1.03, 1] : 1,
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {/* Glass sphere backdrop */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(circle at 30% 25%, rgba(6, 182, 212, 0.15), rgba(16, 185, 129, 0.1), rgba(15, 23, 42, 0.3))',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(6, 182, 212, 0.2)',
+              boxShadow: (isPulsing && !activeDemo) ? '0 0 40px rgba(6, 182, 212, 0.3), inset 0 0 30px rgba(6, 182, 212, 0.1)' : '0 0 20px rgba(6, 182, 212, 0.2)'
+            }}
+          />
+          
+          {/* Light rays */}
+          {!prefersReducedMotion && (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent"
+                  style={{
+                    height: '60px',
+                    left: '50%',
+                    top: '50%',
+                    transformOrigin: '0 30px',
+                    transform: `rotate(${i * 60}deg) translateX(-50%)`
+                  }}
+                  animate={{
+                    opacity: [0.2, 0.6, 0.2],
+                    scaleY: [0.8, 1.2, 0.8]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
+            </>
+          )}
+          
+          {/* Stylized female portrait */}
+          <div 
+            className="absolute inset-2 rounded-full overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 60%, #475569 100%)',
+            }}
+          >
+            {/* Portrait silhouette with duotone effect */}
+            <div 
+              className="w-full h-full relative"
+              style={{
+                background: `
+                  radial-gradient(ellipse 45% 60% at 50% 45%, 
+                    rgba(6, 182, 212, 0.8) 0%, 
+                    rgba(16, 185, 129, 0.6) 35%, 
+                    rgba(15, 23, 42, 0.9) 70%, 
+                    transparent 100%),
+                  radial-gradient(ellipse 25% 35% at 45% 35%, 
+                    rgba(6, 182, 212, 0.4) 0%, 
+                    transparent 60%),
+                  radial-gradient(ellipse 25% 35% at 55% 35%, 
+                    rgba(6, 182, 212, 0.4) 0%, 
+                    transparent 60%),
+                  radial-gradient(ellipse 30% 20% at 50% 55%, 
+                    rgba(16, 185, 129, 0.3) 0%, 
+                    transparent 70%)
+                `,
+                filter: 'contrast(1.1) blur(0.5px)',
+              }}
+            >
+              {/* Film grain texture overlay */}
+              <div 
+                className="absolute inset-0"
+                style={{
+                  background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E")`,
+                  mixBlendMode: 'overlay'
+                }}
+              />
+              
+              {/* Subtle inner glow */}
+              <motion.div 
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle at center, rgba(6, 182, 212, 0.2) 0%, transparent 70%)',
+                }}
+                animate={{
+                  opacity: (isPulsing && !activeDemo) ? [0.3, 0.7, 0.3] : 0.4
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </div>
+          </div>
+          
+          {/* Name label */}
+          <motion.div 
+            className="absolute -bottom-8 left-1/2 transform -translate-x-1/2"
+            animate={{
+              opacity: (isPulsing && !activeDemo) ? [0.7, 1, 0.7] : 0.8
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span className="text-cyan-300 font-medium text-sm tracking-wide">Juna</span>
+          </motion.div>
+        </motion.div>
+      </div>
 
       {/* Floating particles */}
       {!prefersReducedMotion && particles.map((particle, i) => (

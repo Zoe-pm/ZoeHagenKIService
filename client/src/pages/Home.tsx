@@ -123,10 +123,9 @@ export default function Home() {
                     KI mit Herz & Hirn
                   </span>
                   <br />
-                  <span className="text-2xl md:text-3xl text-white">– sichere, digitale Teammitglieder für Ihren Service.</span>
                 </h1>
                 <p className="text-xl text-white/90 mb-8 fade-in" data-testid="hero-subtitle">
-                  Ihre digitalen Teammitglieder machen Service schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
+                  Ihr Service wird schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 </div>

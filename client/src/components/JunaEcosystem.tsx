@@ -444,8 +444,8 @@ export default function JunaEcosystem() {
       {nodes.map((node) => (
         <motion.button
           key={node.id}
-          className={`absolute z-20 ${isMobile ? 'w-14 h-14' : 'w-16 h-16'} rounded-full glass flex items-center justify-center border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all ${
-            prefersReducedMotion ? '' : 'hover:scale-110 focus:scale-110'
+          className={`absolute z-20 ${isMobile ? 'w-14 h-14' : 'w-16 h-16'} rounded-full glass flex items-center justify-center border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-300 ${
+            prefersReducedMotion ? '' : 'hover:scale-[1.08] focus:scale-[1.08]'
           }`}
           style={{
             left: `calc(50% + ${node.position.x}px)`,
@@ -456,8 +456,12 @@ export default function JunaEcosystem() {
           }}
           onClick={() => setActiveDemo(node.id)}
           whileHover={prefersReducedMotion ? {} : { 
-            boxShadow: `0 0 30px ${node.color}40` 
+            scale: 1.08,
+            boxShadow: `0 0 40px ${node.color}80, 0 0 20px ${node.color}60`,
+            borderColor: node.color,
+            transition: { duration: 0.3 }
           }}
+          whileTap={{ scale: 0.95 }}
           data-testid={`juna-node-${node.id}`}
           aria-label={`${node.title} Demo öffnen`}
         >

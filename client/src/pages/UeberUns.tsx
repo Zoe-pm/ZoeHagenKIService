@@ -3,7 +3,7 @@ import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ChatbotWidget from "@/components/ChatbotWidget";
-import zoeImage from "@assets/Zoe_Website_1757416756555.jpg";
+const zoeImage = "/images/zoe-image.jpg";
 
 export default function UeberUns() {
   // Automatisch zum Seitenbeginn scrollen

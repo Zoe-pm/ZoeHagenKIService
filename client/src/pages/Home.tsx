@@ -1,23 +1,25 @@
+import { useState, useEffect, lazy, Suspense } from "react";
 import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones, CheckCircle, Users, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import Navigation from "@/components/Navigation";
 import ProductCard from "@/components/ProductCard";
-import VoiceDemo from "@/components/VoiceDemo";
 import ComparisonTable from "@/components/ComparisonTable";
 import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
-import ChatbotWidget from "@/components/ChatbotWidget";
-import { SimpleChatbot, ChatbotButton } from "@/components/SimpleChatbot";
-import VoicebotWidget from "@/components/VoicebotWidget";
-import { useState, useEffect } from "react";
-import { endianness } from "os";
-import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
-import avatarImage from "@assets/0_2_640_N_1757682590599.webp";
-import chatbotImage from "@assets/0_2_640_N_1757682466574.webp";
+
+// Lazy load heavy components to optimize bundle size
+const VoiceDemo = lazy(() => import("@/components/VoiceDemo"));
+const ChatbotWidget = lazy(() => import("@/components/ChatbotWidget"));
+const SimpleChatbot = lazy(() => import("@/components/SimpleChatbot").then(module => ({ default: module.SimpleChatbot })));
+const VoicebotWidget = lazy(() => import("@/components/VoicebotWidget"));
+// Using public images for better build performance
+const voicebotImage = "/images/voicebot.png";
+const avatarImage = "/images/avatar.webp";
+const chatbotImage = "/images/chatbot.webp";
 
 const products = [
   {
@@ -215,7 +217,9 @@ export default function Home() {
           </div>
         </section>
 
-        <VoiceDemo />
+        <Suspense fallback={<div className="h-32 bg-muted animate-pulse rounded-lg"></div>}>
+          <VoiceDemo />
+        </Suspense>
 
         {/* Central Call-to-Action */}
         <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="central-cta-section">
@@ -248,11 +252,12 @@ export default function Home() {
       </main>
 
       {/* Individual Widgets for Product Buttons */}
-      <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
-      
-      {/* Main ChatbotWidget (bottom-right) */}
-      <ChatbotWidget />
+      {/* Lazy-loaded interactive components */}
+      <Suspense fallback={null}>
+        <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+        <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
+        <ChatbotWidget />
+      </Suspense>
       
       <Footer />
     </div>

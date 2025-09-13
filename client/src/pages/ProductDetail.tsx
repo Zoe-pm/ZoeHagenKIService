@@ -13,7 +13,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
-import voicebotImage from "@assets/u8673192784_blonde_lchelnde_Frau_di_ein_die_Kamera_spricht_un_7db33a1d-9271-459b-b39e-442590c15639_1_1757680774037.png";
+const voicebotImage = "/images/voicebot.png";
 
 const productData: { [key: string]: any } = {
   chatbot: {

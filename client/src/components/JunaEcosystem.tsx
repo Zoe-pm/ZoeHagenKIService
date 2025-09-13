@@ -19,23 +19,52 @@ export default function JunaEcosystem() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   
-  // Memoized particles for consistent performance
+  // Responsive particle count and memoized for consistent performance
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   const particles = useMemo(() => {
-    return [...Array(6)].map(() => ({
+    const particleCount = isMobile ? 3 : 6; // Reduziert auf Mobile
+    return [...Array(particleCount)].map(() => ({
       x: 45 + Math.random() * 10,
       y: 45 + Math.random() * 10,
-      deltaX: Math.random() * 100 - 50,
-      deltaY: Math.random() * 100 - 50,
+      deltaX: Math.random() * (isMobile ? 60 : 100) - (isMobile ? 30 : 50),
+      deltaY: Math.random() * (isMobile ? 60 : 100) - (isMobile ? 30 : 50),
       duration: 4 + Math.random() * 2
     }));
-  }, []);
+  }, [isMobile]);
 
-  // Juna nodes positioned around the center
+  // Juna nodes positioned around the center - responsive positioning
+  const getNodePositions = () => {
+    if (isMobile) {
+      return {
+        chat: { x: -70, y: -50 },
+        voice: { x: 70, y: -50 },
+        avatar: { x: -70, y: 50 },
+        knowledge: { x: 70, y: 50 }
+      };
+    }
+    return {
+      chat: { x: -120, y: -80 },
+      voice: { x: 120, y: -80 },
+      avatar: { x: -120, y: 80 },
+      knowledge: { x: 120, y: 80 }
+    };
+  };
+  
+  const nodePositions = getNodePositions();
+  
   const nodes: JunaNode[] = [
     {
       id: "chat",
       title: "Chat-Juna",
-      position: { x: -120, y: -80 }, // Top left
+      position: nodePositions.chat,
       icon: <MessageCircle className="w-8 h-8" />,
       color: "var(--cyan-glow)",
       demoContent: (
@@ -52,7 +81,7 @@ export default function JunaEcosystem() {
     {
       id: "voice", 
       title: "Voice-Juna",
-      position: { x: 120, y: -80 }, // Top right
+      position: nodePositions.voice,
       icon: <Mic className="w-8 h-8" />,
       color: "var(--jade-accent)",
       demoContent: (
@@ -89,7 +118,7 @@ export default function JunaEcosystem() {
     {
       id: "avatar",
       title: "Avatar-Juna", 
-      position: { x: -120, y: 80 }, // Bottom left
+      position: nodePositions.avatar,
       icon: <UserCircle className="w-8 h-8" />,
       color: "var(--berry-highlight)",
       demoContent: (
@@ -106,7 +135,7 @@ export default function JunaEcosystem() {
     {
       id: "knowledge",
       title: "Wissens-Juna",
-      position: { x: 120, y: 80 }, // Bottom right  
+      position: nodePositions.knowledge,  
       icon: <Brain className="w-8 h-8" />,
       color: "var(--cyan-glow)",
       demoContent: (
@@ -189,9 +218,9 @@ export default function JunaEcosystem() {
     };
     
     handleChange(); // Initial check
-    mediaQuery.addListener(handleChange);
+    mediaQuery.addEventListener('change', handleChange);
     
-    return () => mediaQuery.removeListener(handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return (
@@ -233,7 +262,7 @@ export default function JunaEcosystem() {
 
       {/* Central Juna */}
       <motion.div
-        className="relative z-10 w-24 h-24 rounded-full bg-gradient-to-br from-cyan-500 to-jade-500 flex items-center justify-center shadow-2xl"
+        className={`relative z-10 ${isMobile ? 'w-20 h-20' : 'w-24 h-24'} rounded-full bg-gradient-to-br from-cyan-500 to-jade-500 flex items-center justify-center shadow-2xl`}
         animate={{
           scale: (isPulsing && !activeDemo) ? [1, 1.1, 1] : 1,
           boxShadow: (isPulsing && !activeDemo) ? [
@@ -245,7 +274,7 @@ export default function JunaEcosystem() {
         transition={{ duration: 2, repeat: Infinity }}
         data-testid="juna-center"
       >
-        <span className="text-slate-900 font-bold text-xl">Juna</span>
+        <span className={`text-slate-900 font-bold ${isMobile ? 'text-lg' : 'text-xl'}`}>Juna</span>
       </motion.div>
 
       {/* Floating particles */}
@@ -274,14 +303,15 @@ export default function JunaEcosystem() {
       {nodes.map((node) => (
         <motion.button
           key={node.id}
-          className={`absolute z-20 w-16 h-16 rounded-full glass flex items-center justify-center border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all ${
+          className={`absolute z-20 ${isMobile ? 'w-14 h-14' : 'w-16 h-16'} rounded-full glass flex items-center justify-center border-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all ${
             prefersReducedMotion ? '' : 'hover:scale-110 focus:scale-110'
           }`}
           style={{
             left: `calc(50% + ${node.position.x}px)`,
             top: `calc(50% + ${node.position.y}px)`,
             borderColor: node.color,
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
+            ...(isMobile && { touchAction: 'manipulation' })
           }}
           onClick={() => setActiveDemo(node.id)}
           whileHover={prefersReducedMotion ? {} : { 

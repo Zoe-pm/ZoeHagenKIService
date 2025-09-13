@@ -820,6 +820,9 @@ export default function KundenTest() {
                       <Select 
                         value={testConfig.voicebot.elevenLabsVoiceId} 
                         onValueChange={(value) => {
+                          // Ignore special placeholder values
+                          if (value === "_loading" || value === "_no_voices") return;
+                          
                           const selectedVoice = availableVoices.find(v => v.id === value);
                           handleVoicebotConfigChange("elevenLabsVoiceId", value);
                           handleVoicebotConfigChange("elevenLabsVoiceName", selectedVoice?.name || "Voice auswählen...");
@@ -831,7 +834,7 @@ export default function KundenTest() {
                         </SelectTrigger>
                         <SelectContent>
                           {isLoadingVoices ? (
-                            <SelectItem value="" disabled>Lade Stimmen...</SelectItem>
+                            <SelectItem value="_loading" disabled>Lade Stimmen...</SelectItem>
                           ) : availableVoices.length > 0 ? (
                             availableVoices.map((voice) => (
                               <SelectItem key={voice.id} value={voice.id}>
@@ -850,7 +853,7 @@ export default function KundenTest() {
                             ))
                           ) : (
                             <>
-                              <SelectItem value="" disabled>Keine Stimmen verfügbar</SelectItem>
+                              <SelectItem value="_no_voices" disabled>Keine Stimmen verfügbar</SelectItem>
                               <div className="px-3 py-2 text-xs text-muted-foreground">
                                 <p>Bitte überprüfen Sie Ihre ElevenLabs API-Konfiguration</p>
                                 <Button 

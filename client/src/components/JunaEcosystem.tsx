@@ -239,9 +239,12 @@ export default function JunaEcosystem() {
             y1="50%" 
             x2={`${50 + (node.position.x / 4)}%`}
             y2={`${50 + (node.position.y / 4)}%`}
-            stroke="url(#connectionGradient)"
-            strokeWidth="2"
-            opacity={0.6}
+            stroke={activeDemo === node.id ? "url(#activeConnectionGradient)" : "url(#connectionGradient)"}
+            strokeWidth={activeDemo === node.id ? "3" : "2"}
+            opacity={activeDemo === node.id ? 0.9 : 0.7}
+            filter={activeDemo === node.id ? "url(#nervePulse)" : "none"}
+            strokeDasharray={activeDemo === node.id ? "5,5" : "none"}
+            strokeDashoffset={activeDemo === node.id ? 0 : 0}
             initial={{ pathLength: 0 }}
             animate={{ pathLength: prefersReducedMotion ? 1 : 1 }}
             transition={{ 
@@ -251,12 +254,30 @@ export default function JunaEcosystem() {
           />
         ))}
         
-        {/* Gradient definition */}
+        {/* Enhanced gradient definitions */}
         <defs>
           <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="var(--cyan-glow)" />
-            <stop offset="100%" stopColor="var(--jade-accent)" />
+            <stop offset="0%" stopColor="var(--cyan-glow)" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="var(--jade-accent)" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="var(--cyan-glow)" stopOpacity="0.6" />
           </linearGradient>
+          
+          {/* Animated gradient for active connections */}
+          <linearGradient id="activeConnectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="var(--cyan-glow)" stopOpacity="1">
+              <animate attributeName="stop-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="50%" stopColor="var(--jade-accent)" stopOpacity="1" />
+            <stop offset="100%" stopColor="var(--berry-highlight)" stopOpacity="0.8">
+              <animate attributeName="stop-opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
+            </stop>
+          </linearGradient>
+          
+          {/* Pulsing filter for nerve-like effect */}
+          <filter id="nervePulse">
+            <feGaussianBlur stdDeviation="1" />
+            <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
+          </filter>
         </defs>
       </svg>
 
@@ -376,26 +397,47 @@ export default function JunaEcosystem() {
         </motion.div>
       </div>
 
-      {/* Floating particles */}
-      {!prefersReducedMotion && particles.map((particle, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 bg-cyan-400 rounded-full"
-          style={{
-            left: `${particle.x}%`,
-            top: `${particle.y}%`
-          }}
-          animate={{
-            x: [0, particle.deltaX],
-            y: [0, particle.deltaY],
-            opacity: [0.3, 0.8, 0.3]
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            delay: i * 0.5
-          }}
-        />
+      {/* Flowing data particles along connection lines */}
+      {!prefersReducedMotion && nodes.map((node, nodeIndex) => (
+        <div key={`particles-${node.id}`} className="absolute inset-0">
+          {/* Multiple particles per line for continuous flow */}
+          {[...Array(3)].map((_, particleIndex) => {
+            // Calculate particle path from center to node
+            const startX = 50; // Center percentage
+            const startY = 50; // Center percentage
+            const endX = 50 + (node.position.x / (isMobile ? 8 : 10));
+            const endY = 50 + (node.position.y / (isMobile ? 8 : 10));
+            
+            return (
+              <motion.div
+                key={`particle-${nodeIndex}-${particleIndex}`}
+                className="absolute w-1.5 h-1.5 rounded-full"
+                style={{
+                  background: `linear-gradient(45deg, ${node.color}80, ${node.color}ff)`,
+                  boxShadow: `0 0 8px ${node.color}60`,
+                  filter: 'blur(0.5px)'
+                }}
+                initial={{
+                  left: `${startX}%`,
+                  top: `${startY}%`,
+                  opacity: 0
+                }}
+                animate={{
+                  left: [`${startX}%`, `${endX}%`, `${startX}%`],
+                  top: [`${startY}%`, `${endY}%`, `${startY}%`],
+                  opacity: [0, 1, 1, 0.8, 0],
+                  scale: [0.5, 1, 1, 0.5]
+                }}
+                transition={{
+                  duration: 4 + particleIndex * 0.5,
+                  repeat: Infinity,
+                  delay: particleIndex * 1.5 + nodeIndex * 0.3,
+                  ease: "easeInOut"
+                }}
+              />
+            );
+          })}
+        </div>
       ))}
 
       {/* Product nodes */}

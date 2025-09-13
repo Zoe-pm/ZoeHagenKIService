@@ -66,6 +66,13 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Reset chat when component opens
+  useEffect(() => {
+    if (isOpen) {
+      resetChat();
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);

@@ -1,5 +1,8 @@
 import { type User, type InsertUser, type InsertContact, type InsertConsultation, type Product, type TestAccessRequest, type TestAccessGrant, type TestCodeInfo, type TestCodeUsage } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { db } from "./db";
+import { users, contacts, consultations, products } from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 // Contact type for storage
 type Contact = InsertContact & { id: string; createdAt: Date };
@@ -37,11 +40,8 @@ export interface IStorage {
   getAllActiveSessions(): Promise<TestAccessGrant[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-  private contacts: Map<string, Contact>;
-  private consultations: Map<string, Consultation>;
-  private products: Map<string, Product>;
+export class DatabaseStorage implements IStorage {
+  // In-memory storage for features not yet migrated to database
   private testSessions: Map<string, TestAccessGrant>;
   private validTestCodes: Map<string, string[]>; // code -> allowed emails
   private testCodeDetails: Map<string, TestCodeInfo>;
@@ -50,70 +50,74 @@ export class MemStorage implements IStorage {
   private readonly adminPassword = process.env.ADMIN_PASSWORD || 'ZKS-Admin2024!'; // Temporäres Admin-Passwort
 
   constructor() {
-    this.users = new Map();
-    this.contacts = new Map();
-    this.consultations = new Map();
-    this.products = new Map();
     this.testSessions = new Map();
     this.validTestCodes = new Map();
     this.testCodeDetails = new Map();
     this.adminSessions = new Map();
     this.testCodeUsageStats = new Map();
     
-    // Initialize with some sample products
-    this.initializeProducts();
-    
     // Initialize secure test codes
     this.initializeTestCodes();
+    
+    // Initialize products if needed
+    this.initializeProducts();
   }
 
+  // Database-backed methods
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {
-    const id = randomUUID();
-    const contact: Contact = { 
-      ...insertContact, 
-      id, 
-      createdAt: new Date() 
-    };
-    this.contacts.set(id, contact);
-    return contact;
+    const [contact] = await db
+      .insert(contacts)
+      .values(insertContact)
+      .returning();
+    
+    // Convert database timestamp to Date for compatibility
+    return {
+      ...contact,
+      createdAt: new Date(contact.createdAt!)
+    } as Contact;
   }
 
   async createConsultation(insertConsultation: InsertConsultation): Promise<Consultation> {
-    const id = randomUUID();
-    const consultation: Consultation = { 
-      ...insertConsultation, 
-      id, 
-      createdAt: new Date() 
-    };
-    this.consultations.set(id, consultation);
-    return consultation;
+    const [consultation] = await db
+      .insert(consultations)
+      .values(insertConsultation)
+      .returning();
+      
+    // Convert database timestamp to Date for compatibility
+    return {
+      ...consultation,
+      createdAt: new Date(consultation.createdAt!)
+    } as Consultation;
   }
 
   async getAllProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
+    return await db.select().from(products);
   }
 
   async getProduct(id: string): Promise<Product | undefined> {
-    return this.products.get(id);
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
   }
 
+  // Test access methods - keeping in memory for now as they are complex
   async validateTestAccess(email: string, accessCode: string): Promise<boolean> {
     const normalizedEmail = email.toLowerCase().trim();
     const upperCode = accessCode.toUpperCase().trim();
@@ -340,10 +344,15 @@ export class MemStorage implements IStorage {
     this.validTestCodes.set('ZKS-PREVIEW-2024', ['manager@startup.de', 'info@business.de']);
   }
 
-  private initializeProducts() {
-    const sampleProducts: Product[] = [
+  private async initializeProducts() {
+    // Check if products already exist in database
+    const existingProducts = await this.getAllProducts();
+    if (existingProducts.length > 0) {
+      return; // Products already initialized
+    }
+
+    const sampleProducts: Omit<Product, 'id'>[] = [
       {
-        id: "chatbot",
         name: "Chatbot",
         description: "Intelligenter KI-Assistent für Ihre Website",
         price: "ab 299€ / Monat",
@@ -354,7 +363,6 @@ export class MemStorage implements IStorage {
         integrations: ["Website", "WhatsApp", "Facebook Messenger"]
       },
       {
-        id: "voicebot",
         name: "Voicebot",
         description: "Sprachbasierter KI-Assistent für natürliche Kommunikation",
         price: "ab 499€ / Monat",
@@ -366,10 +374,16 @@ export class MemStorage implements IStorage {
       }
     ];
 
-    sampleProducts.forEach(product => {
-      this.products.set(product.id, product);
-    });
+    // Insert products into database with explicit IDs
+    for (let i = 0; i < sampleProducts.length; i++) {
+      const product = sampleProducts[i];
+      const id = i === 0 ? "chatbot" : "voicebot";
+      await db.insert(products).values({
+        id,
+        ...product
+      });
+    }
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

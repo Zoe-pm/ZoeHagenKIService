@@ -1,8 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertConsultationSchema, testAccessSchema, testSessionSchema, testConfigSaveSchema } from "@shared/schema";
+import { insertContactSchema, insertConsultationSchema, testAccessSchema, testSessionSchema, testConfigSaveSchema, voicePreferencesApiSchema } from "@shared/schema";
 import { z } from "zod";
+import fetch from "node-fetch";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission
@@ -234,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         throw new Error(`n8n webhook responded with status ${n8nResponse.status}`);
       }
 
-      const n8nData = await n8nResponse.json();
+      const n8nData = await n8nResponse.json() as any;
       
       // Extract response from n8n workflow
       // Adjust this based on your n8n workflow output structure
@@ -441,7 +442,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(502).json({ success: false, message: "Chatbot ist momentan nicht erreichbar" });
       }
 
-      const data = await response.json();
+      const data = await response.json() as any;
       
       // Parse n8n response - try multiple field names for compatibility
       const botResponse = data.output || data.response || data.message || data.text || data.answer || 'Entschuldigung, keine Antwort erhalten.';
@@ -472,6 +473,171 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(502).json({ 
         success: false, 
         message: "Chatbot ist momentan nicht verfügbar. Bitte kontaktieren Sie uns direkt: +49 01719862773" 
+      });
+    }
+  });
+
+  // === VOICE PREFERENCES ROUTES (ElevenLabs Integration) ===
+
+  // Get voice preferences for current session
+  app.get("/api/test-config/voice-prefs", async (req, res) => {
+    try {
+      const sessionToken = req.headers.authorization?.replace('Bearer ', '');
+      const email = req.query.email as string;
+      
+      if (!sessionToken || !email) {
+        return res.status(400).json({ success: false, message: "Session token und Email sind erforderlich" });
+      }
+
+      // Validate session
+      const session = await storage.getTestSession(sessionToken);
+      if (!session) {
+        return res.status(401).json({ success: false, message: "Ungültiges oder abgelaufenes Token" });
+      }
+
+      const preferences = await storage.getVoicePreferences(sessionToken, email);
+      res.json({ success: true, preferences });
+    } catch (error) {
+      console.error("Voice prefs get error:", error);
+      res.status(500).json({ success: false, message: "Server-Fehler beim Laden der Voice-Einstellungen" });
+    }
+  });
+
+  // Save voice preferences
+  app.post("/api/test-config/voice-prefs", async (req, res) => {
+    try {
+      const voiceData = voicePreferencesApiSchema.parse(req.body);
+      
+      // Validate session
+      const session = await storage.getTestSession(voiceData.sessionToken);
+      if (!session) {
+        return res.status(401).json({ success: false, message: "Ungültiges oder abgelaufenes Token" });
+      }
+
+      // Convert API data to database format (numbers to strings for decimals)
+      const dbPreferences = {
+        sessionToken: voiceData.sessionToken,
+        email: voiceData.email,
+        elevenLabsVoiceId: voiceData.elevenLabsVoiceId,
+        stability: voiceData.stability.toFixed(2),
+        similarity: voiceData.similarity.toFixed(2),
+        speakerBoost: voiceData.speakerBoost,
+        speed: voiceData.speed.toFixed(2),
+      };
+
+      const preferences = await storage.upsertVoicePreferences(dbPreferences);
+      res.json({ success: true, preferences });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ success: false, errors: error.errors });
+      } else {
+        console.error("Voice prefs save error:", error);
+        res.status(500).json({ success: false, message: "Server-Fehler beim Speichern der Voice-Einstellungen" });
+      }
+    }
+  });
+
+  // === ELEVENLABS TTS ROUTES ===
+
+  // Get available voices from ElevenLabs
+  app.get("/api/tts/elevenlabs/voices", async (req, res) => {
+    try {
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      if (!apiKey) {
+        return res.status(503).json({ 
+          success: false, 
+          message: "oh... kaputtgespielt! Wir bringen das in Ordnung!",
+          adminError: "ELEVENLABS_API_KEY not configured"
+        });
+      }
+
+      const response = await fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: {
+          'xi-api-key': apiKey,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`ElevenLabs API error: ${response.status}`);
+      }
+
+      const data = await response.json() as { voices?: any[] };
+      const voices = data.voices?.map((voice: any) => ({
+        id: voice.voice_id,
+        name: voice.name,
+        category: voice.category,
+        labels: voice.labels || {}
+      })) || [];
+
+      res.json({ success: true, voices });
+    } catch (error) {
+      console.error("ElevenLabs voices error:", error);
+      res.status(503).json({ 
+        success: false, 
+        message: "oh... kaputtgespielt! Wir bringen das in Ordnung!",
+        adminError: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Text-to-speech with ElevenLabs
+  app.post("/api/tts/elevenlabs/speak", async (req, res) => {
+    try {
+      const { text, voiceId = 'JBFqnCBsd6RMkjVDRZzb', stability = 0.5, similarity = 0.75, speakerBoost = false } = req.body;
+      
+      if (!text || text.length > 5000) {
+        return res.status(400).json({ success: false, message: "Text ist erforderlich und darf maximal 5000 Zeichen haben" });
+      }
+
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      if (!apiKey) {
+        return res.status(503).json({ 
+          success: false, 
+          message: "oh... kaputtgespielt! Wir bringen das in Ordnung!",
+          adminError: "ELEVENLABS_API_KEY not configured"
+        });
+      }
+
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_flash_v2_5', // Fast, low-latency model
+          voice_settings: {
+            stability: Math.max(0, Math.min(1, stability)),
+            similarity_boost: Math.max(0, Math.min(1, similarity)),
+            style: 0.0, // Keep at 0 as recommended
+            use_speaker_boost: speakerBoost
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`ElevenLabs TTS error: ${response.status}`);
+      }
+
+      // Stream audio binary response
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Disposition', 'inline; filename="speech.mp3"');
+      
+      if (response.body) {
+        // @ts-ignore - node-fetch response body is readable stream
+        response.body.pipe(res);
+      } else {
+        throw new Error('No audio data received from ElevenLabs');
+      }
+      
+    } catch (error) {
+      console.error("ElevenLabs TTS error:", error);
+      res.status(503).json({ 
+        success: false, 
+        message: "oh... kaputtgespielt! Wir bringen das in Ordnung!",
+        adminError: error instanceof Error ? error.message : "Unknown error"
       });
     }
   });

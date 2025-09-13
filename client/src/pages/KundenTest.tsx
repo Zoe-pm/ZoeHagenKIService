@@ -10,8 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { HelpCircle, Settings, Bot, MessageSquare, Mic, Palette, Layout, Volume2 } from "lucide-react";
 
 interface ChatbotConfig {
   name: string;
@@ -35,6 +37,10 @@ interface VoicebotConfig {
   voiceSpeed: number[];
   voicePitch: number[];
   elevenLabsVoiceId: string;
+  elevenLabsVoiceName: string;
+  stability: number;
+  similarity: number;
+  speakerBoost: boolean;
   greeting: string;
   title: string;
   subtitle: string;
@@ -112,6 +118,10 @@ export default function KundenTest() {
       voiceSpeed: [1],
       voicePitch: [1],
       elevenLabsVoiceId: "",
+      elevenLabsVoiceName: "Voice auswählen...",
+      stability: 0.5,
+      similarity: 0.75,
+      speakerBoost: false,
       greeting: "Hallo! Ich bin Kira, Ihr KI-Ratgeber.",
       title: "Immer für Sie da.",
       subtitle: "Womit kann ich helfen?",
@@ -122,6 +132,9 @@ export default function KundenTest() {
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
+  const [availableVoices, setAvailableVoices] = useState<{id: string, name: string, category: string, labels: any}[]>([]);
+  const [isLoadingVoices, setIsLoadingVoices] = useState(false);
+  const [isSavingPreferences, setIsSavingPreferences] = useState(false);
   const { toast } = useToast();
 
   // Check for existing session on mount
@@ -160,6 +173,155 @@ export default function KundenTest() {
       setShowOverlay(false);
     }
   }, [isAuthorized]);
+
+  // Load available voices when authorized and voicebot is selected
+  useEffect(() => {
+    if (isAuthorized && testConfig.activeBot === "voicebot" && availableVoices.length === 0) {
+      loadAvailableVoices();
+    }
+  }, [isAuthorized, testConfig.activeBot]);
+
+  // Load voice preferences when session is available
+  useEffect(() => {
+    if (isAuthorized && session?.token && session?.email) {
+      loadVoicePreferences();
+    }
+  }, [isAuthorized, session?.token, session?.email]);
+
+  // Update voice name when voices are loaded or voice ID changes
+  useEffect(() => {
+    if (availableVoices.length > 0 && testConfig.voicebot.elevenLabsVoiceId) {
+      const voice = availableVoices.find(v => v.id === testConfig.voicebot.elevenLabsVoiceId);
+      if (voice && voice.name !== testConfig.voicebot.elevenLabsVoiceName) {
+        setTestConfig(prev => ({
+          ...prev,
+          voicebot: {
+            ...prev.voicebot,
+            elevenLabsVoiceName: voice.name
+          }
+        }));
+      }
+    }
+  }, [availableVoices, testConfig.voicebot.elevenLabsVoiceId]);
+
+  const loadAvailableVoices = async () => {
+    try {
+      setIsLoadingVoices(true);
+      const response = await fetch('/api/tts/elevenlabs/voices');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.voices) {
+          setAvailableVoices(data.voices);
+        } else {
+          console.warn('ElevenLabs API responded but no voices available');
+          toast({
+            title: "Stimmen nicht verfügbar",
+            description: "ElevenLabs API antwortet, aber keine Stimmen verfügbar.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        console.warn('Could not load ElevenLabs voices');
+        toast({
+          title: "Fehler beim Laden",
+          description: "ElevenLabs Stimmen konnten nicht geladen werden.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to load voices:', error);
+      toast({
+        title: "Verbindungsfehler",
+        description: "Konnte nicht mit ElevenLabs verbinden.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingVoices(false);
+    }
+  };
+
+  const saveVoicePreferences = async () => {
+    if (!session?.token || !session?.email) return;
+
+    setIsSavingPreferences(true);
+    try {
+      const response = await fetch('/api/test-config/voice-prefs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({
+          sessionToken: session.token,
+          email: session.email,
+          elevenLabsVoiceId: testConfig.voicebot.elevenLabsVoiceId,
+          stability: testConfig.voicebot.stability,
+          similarity: testConfig.voicebot.similarity,
+          speakerBoost: testConfig.voicebot.speakerBoost,
+          speed: testConfig.voicebot.voiceSpeed[0],
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Einstellungen gespeichert",
+          description: "Ihre Voice-Einstellungen wurden erfolgreich gespeichert.",
+        });
+      } else {
+        toast({
+          title: "Fehler",
+          description: "Voice-Einstellungen konnten nicht gespeichert werden.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to save voice preferences:', error);
+      toast({
+        title: "Fehler",
+        description: "Verbindungsfehler beim Speichern der Einstellungen.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSavingPreferences(false);
+    }
+  };
+
+  const loadVoicePreferences = async () => {
+    if (!session?.token || !session?.email) return;
+
+    try {
+      const response = await fetch(`/api/test-config/voice-prefs?email=${encodeURIComponent(session.email)}`, {
+        headers: {
+          'Authorization': `Bearer ${session.token}`,
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.preferences) {
+          const prefs = data.preferences;
+          setTestConfig(prev => ({
+            ...prev,
+            voicebot: {
+              ...prev.voicebot,
+              elevenLabsVoiceId: prefs.elevenLabsVoiceId || prev.voicebot.elevenLabsVoiceId,
+              stability: prefs.stability !== undefined ? parseFloat(prefs.stability) : prev.voicebot.stability,
+              similarity: prefs.similarity !== undefined ? parseFloat(prefs.similarity) : prev.voicebot.similarity,
+              speakerBoost: prefs.speakerBoost !== undefined ? prefs.speakerBoost : prev.voicebot.speakerBoost,
+              voiceSpeed: prefs.speed !== undefined ? [parseFloat(prefs.speed)] : prev.voicebot.voiceSpeed,
+              elevenLabsVoiceName: (() => {
+                // Try to resolve voice name from availableVoices
+                const voice = availableVoices.find(v => v.id === prefs.elevenLabsVoiceId);
+                return voice?.name || prev.voicebot.elevenLabsVoiceName;
+              })(),
+            }
+          }));
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to load voice preferences:', error);
+    }
+  };
 
   const validateSession = async (token: string) => {
     try {
@@ -252,6 +414,10 @@ export default function KundenTest() {
         voiceSpeed: [1],
         voicePitch: [1],
         elevenLabsVoiceId: "",
+        elevenLabsVoiceName: "Voice auswählen...",
+        stability: 0.5,
+        similarity: 0.75,
+        speakerBoost: false,
         greeting: "Hallo! Ich bin Juna Voice, Ihr Sprach-Assistent.",
         title: "Sprachassistent",
         subtitle: "Sprechen Sie mit mir!",
@@ -647,17 +813,141 @@ export default function KundenTest() {
                     </div>
                   )}
 
-                  {/* ElevenLabs Voice ID - Only for Voicebot */}
+                  {/* Voice Selection - Only for Voicebot */}
                   {testConfig.activeBot === "voicebot" && (
                     <div>
-                      <label className="block text-sm font-medium mb-2">ElevenLabs Voice ID</label>
-                      <Input
-                        value={testConfig.voicebot.elevenLabsVoiceId}
-                        onChange={(e) => handleVoicebotConfigChange("elevenLabsVoiceId", e.target.value)}
-                        placeholder="Voice ID hier eingeben (wird noch geliefert)"
+                      <label className="block text-sm font-medium mb-2">Stimme auswählen</label>
+                      <Select 
+                        value={testConfig.voicebot.elevenLabsVoiceId} 
+                        onValueChange={(value) => {
+                          const selectedVoice = availableVoices.find(v => v.id === value);
+                          handleVoicebotConfigChange("elevenLabsVoiceId", value);
+                          handleVoicebotConfigChange("elevenLabsVoiceName", selectedVoice?.name || "Voice auswählen...");
+                        }}
+                        data-testid="select-voice"
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={isLoadingVoices ? "Lade Stimmen..." : testConfig.voicebot.elevenLabsVoiceName} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {isLoadingVoices ? (
+                            <SelectItem value="" disabled>Lade Stimmen...</SelectItem>
+                          ) : availableVoices.length > 0 ? (
+                            availableVoices.map((voice) => (
+                              <SelectItem key={voice.id} value={voice.id}>
+                                <div className="flex items-center gap-2">
+                                  <span>{voice.name}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {voice.labels?.gender || 'unbekannt'}
+                                  </Badge>
+                                  {voice.labels?.language && (
+                                    <Badge variant="secondary" className="text-xs">
+                                      {voice.labels.language}
+                                    </Badge>
+                                  )}
+                                </div>
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <>
+                              <SelectItem value="" disabled>Keine Stimmen verfügbar</SelectItem>
+                              <div className="px-3 py-2 text-xs text-muted-foreground">
+                                <p>Bitte überprüfen Sie Ihre ElevenLabs API-Konfiguration</p>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  onClick={loadAvailableVoices}
+                                  className="mt-1 h-6 px-2 text-xs"
+                                >
+                                  Erneut versuchen
+                                </Button>
+                              </div>
+                            </>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+
+                  {/* Voice Stability - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Stimmstabilität: {(testConfig.voicebot.stability * 100).toFixed(0)}%
+                      </label>
+                      <Slider
+                        value={[testConfig.voicebot.stability]}
+                        onValueChange={(value) => handleVoicebotConfigChange("stability", value[0])}
+                        max={1}
+                        min={0}
+                        step={0.01}
+                        className="w-full"
+                        data-testid="slider-stability"
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Die Voice ID erhalten Sie nach der Einrichtung von ElevenLabs
+                        Niedrig = ausdrucksvoller, Hoch = gleichmäßiger
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Voice Similarity - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Stimmähnlichkeit: {(testConfig.voicebot.similarity * 100).toFixed(0)}%
+                      </label>
+                      <Slider
+                        value={[testConfig.voicebot.similarity]}
+                        onValueChange={(value) => handleVoicebotConfigChange("similarity", value[0])}
+                        max={1}
+                        min={0}
+                        step={0.01}
+                        className="w-full"
+                        data-testid="slider-similarity"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Wie nah die Stimme am Original bleiben soll
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Speaker Boost - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={testConfig.voicebot.speakerBoost}
+                          onChange={(e) => handleVoicebotConfigChange("speakerBoost", e.target.checked)}
+                          className="rounded border-gray-300 text-primary focus:ring-primary"
+                          data-testid="checkbox-speaker-boost"
+                        />
+                        <span className="text-sm font-medium">Speaker Boost aktivieren</span>
+                      </label>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Verbessert die Stimmqualität, braucht mehr Rechenzeit
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Save Voice Settings - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div className="pt-4 border-t">
+                      <Button 
+                        onClick={saveVoicePreferences}
+                        disabled={isSavingPreferences || !testConfig.voicebot.elevenLabsVoiceId}
+                        className="w-full"
+                        variant="outline"
+                        data-testid="button-save-voice-settings"
+                      >
+                        <Volume2 className="w-4 h-4 mr-2" />
+                        {isSavingPreferences ? "Speichere..." : "Voice-Einstellungen speichern"}
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-2 text-center">
+                        {!testConfig.voicebot.elevenLabsVoiceId ? 
+                          "Wählen Sie zuerst eine Stimme aus" : 
+                          "Ihre Stimm-Präferenzen werden für diese Session gespeichert"
+                        }
                       </p>
                     </div>
                   )}

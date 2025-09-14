@@ -51,8 +51,8 @@ export default function ProductCard({
             ref={videoRef}
             src={image} 
             className={`w-full h-36 object-cover rounded-lg mb-3 cursor-pointer ${
-              id === 'avatar' ? 'object-[50%_20%]' : 
-              id === 'voicebot' ? 'object-[50%_30%]' : 
+              id === 'avatar' ? 'face-focus-avatar responsive-face-media' : 
+              id === 'voicebot' ? 'face-focus-voicebot responsive-face-media' : 
               'object-center'
             }`}
             onMouseEnter={handleVideoPlay}
@@ -67,8 +67,8 @@ export default function ProductCard({
             src={image} 
             alt={`${title} Interface-Darstellung`}
             className={`w-full h-36 object-cover rounded-lg mb-3 ${
-              id === 'avatar' ? 'object-[50%_20%]' : 
-              id === 'voicebot' ? 'object-[50%_30%]' : 
+              id === 'avatar' ? 'face-focus-avatar responsive-face-media' : 
+              id === 'voicebot' ? 'face-focus-voicebot responsive-face-media' : 
               'object-center'
             }`} 
             loading="lazy"

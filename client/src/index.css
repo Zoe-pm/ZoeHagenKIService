@@ -147,4 +147,29 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* Responsive Media Classes für bessere Gesichtsfokussierung */
+  .face-focus-voicebot {
+    object-position: 50% 25%; /* Verbesserte Fokussierung auf Gesichtsbereich */
+  }
+
+  .face-focus-avatar {
+    object-position: 50% 15%; /* Verbesserte Fokussierung auf Gesichtsbereich */
+  }
+
+  /* Bei kleinen Bildschirmen: object-fit contain um volles Gesicht zu zeigen */
+  @media (max-width: 640px) {
+    .responsive-face-media {
+      object-fit: contain !important;
+      background-color: var(--card);
+    }
+  }
+
+  /* Bei sehr kleinen Bildschirmen noch strikter */
+  @media (max-width: 480px) {
+    .responsive-face-media {
+      object-fit: contain !important;
+      object-position: center !important;
+    }
+  }
 }

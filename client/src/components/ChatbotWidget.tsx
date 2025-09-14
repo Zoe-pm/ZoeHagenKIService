@@ -12,15 +12,20 @@ export default function ChatbotWidget() {
   // Use ref to maintain stable portal container across renders
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Check if mobile viewport
+  // Check if mobile viewport using matchMedia
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 640);
+    const mediaQuery = window.matchMedia('(max-width: 640px)');
+    
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
     };
     
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    // Set initial value
+    setIsMobile(mediaQuery.matches);
+    
+    // Listen for changes
+    mediaQuery.addEventListener('change', handleMediaChange);
+    return () => mediaQuery.removeEventListener('change', handleMediaChange);
   }, []);
 
   // Position floating dock responsively
@@ -40,19 +45,11 @@ export default function ChatbotWidget() {
     set("pointer-events","none"); // Prevent dock from blocking input
     
     if (isMobile) {
-      // Mobile: horizontal layout and dynamic positioning
+      // Mobile: horizontal layout, always right (no jumping)
       set("flex-direction","row");
-      if (isChatOpen) {
-        // Move dock to left when chat is open on mobile
-        set("left","16px");
-        unset("right");
-        set("align-items","flex-start");
-      } else {
-        // Default right position
-        set("right","16px");
-        unset("left");
-        set("align-items","flex-end");
-      }
+      set("right","16px");
+      unset("left");
+      set("align-items","flex-end");
     } else {
       // Desktop: vertical layout, always right
       set("flex-direction","column");
@@ -127,8 +124,8 @@ export default function ChatbotWidget() {
       {/* Juna Voice - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
 
-      {/* Only render portal when container is mounted */}
-      {isMounted && containerRef.current && createPortal(
+      {/* Only render dock buttons when neither chat nor voice is open */}
+      {isMounted && containerRef.current && !isChatOpen && !isVoiceOpen && createPortal(
         <>
           <VoiceButton onClick={() => {
             setIsVoiceOpen(true);

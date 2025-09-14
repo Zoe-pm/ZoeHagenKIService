@@ -9,11 +9,11 @@ function VoiceButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       onClick={onClick}
-      className="fixed bottom-4 right-24 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#B8436A] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20"
+      className="fixed bottom-4 right-4 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[#B8436A] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20"
       size="sm"
       data-testid="button-open-voice"
     >
-      <Volume2 className="h-7 w-7 text-white" />
+      <Volume2 className="h-8 w-8 text-white drop-shadow-lg" />
     </Button>
   );
 }

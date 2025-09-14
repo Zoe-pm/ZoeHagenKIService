@@ -25,12 +25,14 @@ interface ChatbotConfig {
   greeting: string;
   title: string;
   subtitle: string;
+  messageToAlex: string;
 }
 
 interface VoicebotConfig {
   name: string;
   primaryColor: string;
   backgroundColor: string;
+  textColor: string;
   widgetSize: "small" | "medium" | "large";
   position: "bottom-right" | "bottom-left" | "center";
   voiceSpeed: number[];
@@ -43,6 +45,7 @@ interface VoicebotConfig {
   greeting: string;
   title: string;
   subtitle: string;
+  messageToAlex: string;
 }
 
 interface TestConfig {
@@ -104,6 +107,7 @@ export default function KundenTest() {
       greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
       title: "Willkommen!",
       subtitle: "24/7 erreichbar",
+      messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Chatbot...",
       logoUrl: "",
       logoPosition: "top-left",
       logoSize: "large"
@@ -112,6 +116,7 @@ export default function KundenTest() {
       name: "Kira",
       primaryColor: "#10B981",
       backgroundColor: "#F3F4F6",
+      textColor: "#1F2937",
       widgetSize: "medium",
       position: "bottom-right",
       voiceSpeed: [1],
@@ -124,6 +129,7 @@ export default function KundenTest() {
       greeting: "Hallo! Ich bin Kira, Ihr KI-Ratgeber.",
       title: "Immer für Sie da.",
       subtitle: "Womit kann ich helfen?",
+      messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Voicebot...",
       logoUrl: "",
       logoPosition: "top-left",
       logoSize: "medium"
@@ -400,6 +406,7 @@ export default function KundenTest() {
         greeting: "Hallo! Womit kann ich helfen?",
         title: "Willkommen!",
         subtitle: "Ich helfe Ihnen gerne weiter",
+        messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Chatbot...",
         logoUrl: "",
         logoPosition: "top-left",
         logoSize: "medium"
@@ -408,6 +415,7 @@ export default function KundenTest() {
         name: "Juna Voice",
         primaryColor: "#10B981",
         backgroundColor: "#F3F4F6",
+        textColor: "#1F2937",
         widgetSize: "medium",
         position: "bottom-right",
         voiceSpeed: [1],
@@ -420,6 +428,7 @@ export default function KundenTest() {
         greeting: "Hallo! Ich bin Juna Voice, Ihr Sprach-Assistent.",
         title: "Sprachassistent",
         subtitle: "Sprechen Sie mit mir!",
+        messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Voicebot...",
         logoUrl: "",
         logoPosition: "top-left",
         logoSize: "medium"

@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -40,6 +40,12 @@ function Router() {
 }
 
 function App() {
+  const [location] = useLocation();
+  
+  // Routes where Juna bubbles should NOT appear
+  const noJunaRoutes = ['/kunden-test', '/test', '/admin'];
+  const showJunaBubbles = !noJunaRoutes.includes(location);
+
   useEffect(() => {
     // Set dark mode by default
     document.documentElement.classList.add('dark');
@@ -68,8 +74,8 @@ function App() {
           <Footer />
           <AccessibilityBanner />
           
-          {/* Global Chat/Voice Widgets - Fixed position, always available */}
-          <ChatbotWidget />
+          {/* Global Chat/Voice Widgets - Only show on pages that should have Juna bubbles */}
+          {showJunaBubbles && <ChatbotWidget />}
         </div>
         <Toaster />
       </TooltipProvider>

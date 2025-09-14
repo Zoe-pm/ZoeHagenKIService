@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { SimpleChatbot, ChatbotButton } from "./SimpleChatbot";
 import VoicebotWidget, { VoiceButton } from "./VoicebotWidget";
@@ -6,10 +6,19 @@ import VoicebotWidget, { VoiceButton } from "./VoicebotWidget";
 export default function ChatbotWidget() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Use ref to maintain stable portal container across renders
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const el = document.createElement("div");
-  el.id = "floating-dock";
   useEffect(() => {
+    // Create stable container only once
+    if (!containerRef.current) {
+      containerRef.current = document.createElement("div");
+      containerRef.current.id = "floating-dock";
+    }
+
+    const el = containerRef.current;
     document.body.appendChild(el);
     const set = (p: string, v: string) => el.style.setProperty(p, v, "important");
     set("position","fixed");
@@ -18,7 +27,13 @@ export default function ChatbotWidget() {
     set("z-index","2147483647");
     set("display","flex"); set("flex-direction","column");
     set("gap","12px"); set("align-items","flex-end");
-    return () => el.remove();
+    
+    setIsMounted(true);
+    
+    return () => {
+      el.remove();
+      setIsMounted(false);
+    };
   }, []);
 
   // Listen for custom events from homepage product buttons
@@ -50,11 +65,12 @@ export default function ChatbotWidget() {
       {/* Juna Voice - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
 
-      {createPortal(
+      {/* Only render portal when container is mounted */}
+      {isMounted && containerRef.current && createPortal(
         <>
           <VoiceButton onClick={() => setIsVoiceOpen(true)} />
           <ChatbotButton onClick={() => setIsChatOpen(true)} />
-        </>, el
+        </>, containerRef.current
       )}
     </>
   );

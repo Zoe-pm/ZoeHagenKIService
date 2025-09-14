@@ -6,8 +6,11 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
+import { useSecureEmail } from '@/lib/emailUtils';
 
 export default function Impressum() {
+  const { handleEmailClick, displayEmail } = useSecureEmail('zoehagenkiconsulting@pm.me');
+  
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -45,7 +48,7 @@ export default function Impressum() {
                       <strong>Zoë Hagen – Einzelunternehmerin (Kleinunternehmerin nach § 19 UStG)</strong><br />
                       Zoë's KI Studio / Zoë Hagen KI Consulting<br />
                       Jägerweg 28, 13503 Berlin<br />
-                      E-Mail: <a href="mailto:zoehagenkiconsulting@pm.me" className="text-accent hover:underline">zoehagenkiconsulting@pm.me</a>
+                      E-Mail: <button onClick={() => handleEmailClick('Impressum Kontakt')} className="text-accent hover:underline">{displayEmail}</button>
                     </p>
                     
                     <p className="text-foreground">

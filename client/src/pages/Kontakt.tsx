@@ -7,10 +7,12 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 import ChatbotWidget from "@/components/ChatbotWidget";
+import VoicebotWidget from "@/components/VoicebotWidget";
 const zoePhoto = "/images/zoe-photo.jpg";
 
 export default function Kontakt() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [, setLocation] = useLocation();
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Kontaktseite
@@ -89,7 +91,7 @@ export default function Kontakt() {
                     Los geht´s!
                   </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setLocation('/kunden-test')}>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setIsVoiceOpen(true)}>
                   <h3 className="font-semibold text-foreground mb-2">Mit Juna sprechen</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
                     Sprechen Sie direkt mit Juna. Sie ist 24/7 für Sie am Start.
@@ -114,6 +116,7 @@ export default function Kontakt() {
       </main>
       
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
       <ChatbotWidget />
       
       <Footer />

@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useState } from 'react';
+import { useSecureEmail, SECURE_EMAILS } from '@/lib/emailUtils';
 
 
 // Contact form schema
@@ -22,6 +23,7 @@ const contactSchema = z.object({
 
 export default function ContactForm() {
   const { toast } = useToast();
+  const { handleEmailClick, displayEmail } = useSecureEmail('zoe-kiconsulting@pm.me');
   
   const contactForm = useForm({
     resolver: zodResolver(contactSchema),
@@ -180,13 +182,13 @@ export default function ContactForm() {
                     <Mail className="text-accent text-lg mr-3" />
                     <div>
                       <p className="font-medium">E-Mail</p>
-                      <a 
-                        href="mailto:zoe-kiconsulting@pm.me" 
-                        className="text-primary font-medium hover:underline"
+                      <button 
+                        onClick={() => handleEmailClick('Kontaktanfrage über Website')}
+                        className="text-primary font-medium hover:underline text-left"
                         data-testid="email-link"
                       >
-                        zoe-kiconsulting@pm.me
-                      </a>
+                        {displayEmail}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -201,7 +203,7 @@ export default function ContactForm() {
                 <div className="space-y-3">
                   <Button
                     className="w-full button-gradient py-3 px-4 font-medium"
-                    onClick={() => window.open('mailto:zoe-kiconsulting@pm.me', '_blank')}
+                    onClick={() => handleEmailClick('Direkte Kontaktanfrage')}
                     data-testid="quick-action-demo"
                   >
                     <Mail className="mr-2 h-4 w-4" />

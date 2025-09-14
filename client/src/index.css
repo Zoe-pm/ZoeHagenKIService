@@ -8,57 +8,62 @@
   font-family: 'Inter', system-ui, sans-serif;
 }
 
-/* Anpassung der n8n Chat-Farben an das neue dunkle Design */
+/* Anpassung der n8n Chat-Farben an das neue Farbschema */
 .n8n-chat {
-  --chat-color-primary: #D4AF37;
-  --chat-color-primary-shade-50: #B8941F;
-  --chat-color-secondary: #E8DCC8;
-  --chat-color-white: #1C2A35;
-  --chat-color-light-gray: #243340;
-  --chat-color-medium-gray: #34495E;
-  --chat-color-dark-gray: #E8DCC8;
+  --chat-color-primary: #B8436A;
+  --chat-color-primary-shade-50: #C54C75;
+  --chat-color-secondary: #D9D9D9;
+  --chat-color-white: #3C4A57;
+  --chat-color-light-gray: #2F3B47;
+  --chat-color-medium-gray: #25303A;
+  --chat-color-dark-gray: #FFFFFF;
   --chat-border-radius: 12px;
 }
 
 :root {
-  /* Neues dunkles, warmes, techy & feminines Farbschema */
-  --base-blue: #1C2A35;
-  --gold: #D4AF37;
-  --warm-beige: #E8DCC8;
+  /* Neues präzises Farbschema */
+  --page-background: #3C4A57;
+  --card-background: #2F3B47;
+  --accent-pink: #B8436A;
+  --accent-pink-hover: #C54C75;
+  --primary-text: #FFFFFF;
+  --secondary-text: #D9D9D9;
+  --border-color: #25303A;
+  --secondary-button-hover: #34414D;
 
-  /* Theme Variablen - dunkles Schema */
-  --background: #1C2A35;
-  --foreground: #E8DCC8;
-  --card: #243340;
-  --card-foreground: #E8DCC8;
-  --popover: #243340;
-  --popover-foreground: #E8DCC8;
-  --primary: #D4AF37;
-  --primary-foreground: #1C2A35;
-  --secondary: #2C3E4B;
-  --secondary-foreground: #E8DCC8;
-  --muted: #34495E;
-  --muted-foreground: #E8DCC8;
-  --accent: #D4AF37;
-  --accent-foreground: #1C2A35;
+  /* Theme Variablen - neues Schema */
+  --background: #3C4A57;
+  --foreground: #FFFFFF;
+  --card: #2F3B47;
+  --card-foreground: #FFFFFF;
+  --popover: #2F3B47;
+  --popover-foreground: #FFFFFF;
+  --primary: #B8436A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #2F3B47;
+  --secondary-foreground: #FFFFFF;
+  --muted: #25303A;
+  --muted-foreground: #D9D9D9;
+  --accent: #B8436A;
+  --accent-foreground: #FFFFFF;
   --destructive: #E74C3C;
-  --destructive-foreground: #E8DCC8;
-  --border: #34495E;
-  --input: #243340;
-  --ring: #D4AF37;
-  --chart-1: #D4AF37;
-  --chart-2: #E8DCC8;
-  --chart-3: #34495E;
-  --chart-4: #2C3E4B;
-  --chart-5: #243340;
-  --sidebar: #1C2A35;
-  --sidebar-foreground: #E8DCC8;
-  --sidebar-primary: #D4AF37;
-  --sidebar-primary-foreground: #1C2A35;
-  --sidebar-accent: #34495E;
-  --sidebar-accent-foreground: #E8DCC8;
-  --sidebar-border: #34495E;
-  --sidebar-ring: #D4AF37;
+  --destructive-foreground: #FFFFFF;
+  --border: #25303A;
+  --input: #2F3B47;
+  --ring: #B8436A;
+  --chart-1: #B8436A;
+  --chart-2: #FFFFFF;
+  --chart-3: #D9D9D9;
+  --chart-4: #2F3B47;
+  --chart-5: #25303A;
+  --sidebar: #3C4A57;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #B8436A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #25303A;
+  --sidebar-accent-foreground: #D9D9D9;
+  --sidebar-border: #25303A;
+  --sidebar-ring: #B8436A;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
@@ -74,48 +79,46 @@
 
   body {
     @apply font-sans antialiased text-foreground;
-    background: linear-gradient(135deg, var(--base-blue) 0%, #243340 50%, #2C3E4B 100%);
-    color: var(--warm-beige);
+    background: var(--page-background);
+    color: var(--primary-text);
     min-height: 100vh;
   }
 }
 
 @layer components {
   .glass {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(47, 59, 71, 0.9);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(217, 212, 204, 0.4);
-    box-shadow: 0 4px 6px rgba(58, 58, 58, 0.15);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
 
   .gradient-border {
-    background:
-      linear-gradient(135deg, var(--pastel-blue), var(--light-blue), var(--soft-green)) padding-box,
-      linear-gradient(135deg, var(--pastel-blue), var(--light-blue), var(--soft-green)) border-box;
-    border: 2px solid transparent;
+    border: 1px solid var(--border-color);
   }
 
-  /* Hero/Header Verlauf */
+  /* Hero/Header */
   .hero-gradient {
-    background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--light-blue) 50%, var(--soft-green) 100%);
+    background: var(--page-background);
   }
 
-  /* Button Verlauf */
+  /* Button Styles */
   .button-gradient {
-    background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--light-blue) 50%, var(--soft-green) 100%);
-    color: var(--anthracite);
+    background: var(--accent-pink);
+    color: var(--primary-text);
     border-radius: 0.5rem;
     transition: all 0.3s ease;
   }
 
   .button-gradient:hover {
+    background: var(--accent-pink-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(93, 173, 226, 0.3);
+    box-shadow: 0 4px 12px rgba(184, 67, 106, 0.3);
   }
 
-  /* Footer Verlauf */
+  /* Footer */
   .footer-gradient {
-    background: linear-gradient(180deg, #E8E2D5 0%, #C4B5A3 50%, #B4A393 100%);
+    background: var(--page-background);
   }
 
   .voice-pulse {
@@ -128,8 +131,7 @@
   }
 
   .gradient-text {
-    /* vorher: color: hsl(var(--primary));  -> falsch für Hex */
-    color: var(--primary);
+    color: var(--accent-pink);
   }
 
   @keyframes pulse {

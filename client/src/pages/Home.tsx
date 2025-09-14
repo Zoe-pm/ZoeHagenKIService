@@ -160,52 +160,52 @@ export default function Home() {
                 <h2 className="text-3xl font-bold text-left mb-12 text-white">So arbeiten wir</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="relative group">
-                    <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         1
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Gespräch</h3>
-                      <p className="text-gray-600 mb-2 text-center text-sm">(30 Min.)</p>
-                      <p className="text-gray-700 text-center text-sm flex-grow">Ziele & Use-Cases klären</p>
+                      <h3 className="font-bold text-white mb-3 text-left text-lg">Gespräch</h3>
+                      <p className="text-white/70 mb-2 text-center text-sm">(30 Min.)</p>
+                      <p className="text-white/90 text-center text-sm flex-grow">Ziele & Use-Cases klären</p>
                     </div>
                     {/* Connection line */}
                     <div className="hidden lg:block absolute top-8 -right-3 w-6 h-0.5 bg-gradient-to-r from-gray-400/50 to-transparent"></div>
                   </div>
                   
                   <div className="relative group">
-                    <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         2
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Pilot</h3>
-                      <p className="text-gray-600 mb-2 text-center text-sm">(2 Wochen)</p>
-                      <p className="text-gray-700 text-center text-sm flex-grow">Prototyp mit echtem Inhalt</p>
+                      <h3 className="font-bold text-white mb-3 text-left text-lg">Pilot</h3>
+                      <p className="text-white/70 mb-2 text-center text-sm">(2 Wochen)</p>
+                      <p className="text-white/90 text-center text-sm flex-grow">Prototyp mit echtem Inhalt</p>
                     </div>
                     {/* Connection line */}
                     <div className="hidden lg:block absolute top-8 -right-3 w-6 h-0.5 bg-gradient-to-r from-gray-400/50 to-transparent"></div>
                   </div>
                   
                   <div className="relative group">
-                    <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         3
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Rollout</h3>
-                      <p className="text-gray-600 mb-2 text-center text-sm">&nbsp;</p>
-                      <p className="text-gray-700 text-center text-sm flex-grow">Schulung, Feinschliff, Go-Live</p>
+                      <h3 className="font-bold text-white mb-3 text-left text-lg">Rollout</h3>
+                      <p className="text-white/70 mb-2 text-center text-sm">(1 Woche)</p>
+                      <p className="text-white/90 text-center text-sm flex-grow">Schulung, Feinschliff, Go-Live</p>
                     </div>
                     {/* Connection line */}
                     <div className="hidden lg:block absolute top-8 -right-3 w-6 h-0.5 bg-gradient-to-r from-gray-400/50 to-transparent"></div>
                   </div>
                   
                   <div className="relative group">
-                    <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         4
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Support</h3>
-                      <p className="text-gray-600 mb-2 text-center text-sm">&nbsp;</p>
-                      <p className="text-gray-700 text-center text-sm flex-grow">Monitoring & laufende Optimierung</p>
+                      <h3 className="font-bold text-white mb-3 text-left text-lg">Support</h3>
+                      <p className="text-white/70 mb-2 text-center text-sm">(Laufend)</p>
+                      <p className="text-white/90 text-center text-sm flex-grow">Monitoring & laufende Optimierung</p>
                     </div>
                   </div>
                 </div>

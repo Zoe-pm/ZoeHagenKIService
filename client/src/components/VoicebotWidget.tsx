@@ -242,7 +242,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-24 right-4 z-40 w-80 max-w-[calc(100vw-2rem)]">
+    <div className="w-80 max-w-[calc(100vw-2rem)]">
       <Card className="glass shadow-xl border border-secondary/20">
         <CardContent className="p-4">
           {/* Header */}

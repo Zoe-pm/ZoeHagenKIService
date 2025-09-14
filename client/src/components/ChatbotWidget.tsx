@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Portal } from "@radix-ui/react-portal";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { SimpleChatbot, ChatbotButton } from "./SimpleChatbot";
 import VoicebotWidget, { VoiceButton } from "./VoicebotWidget";
 
@@ -7,18 +7,18 @@ export default function ChatbotWidget() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
 
-  // Listen for custom events from product buttons
+  const el = document.createElement("div");
+  el.id = "floating-dock";
   useEffect(() => {
-    const handleOpenChat = () => setIsChatOpen(true);
-    const handleOpenVoice = () => setIsVoiceOpen(true);
-
-    window.addEventListener('open-chat', handleOpenChat);
-    window.addEventListener('open-voice', handleOpenVoice);
-
-    return () => {
-      window.removeEventListener('open-chat', handleOpenChat);
-      window.removeEventListener('open-voice', handleOpenVoice);
-    };
+    document.body.appendChild(el);
+    const set = (p: string, v: string) => el.style.setProperty(p, v, "important");
+    set("position","fixed");
+    set("right","16px");
+    set("bottom","calc(16px + env(safe-area-inset-bottom))");
+    set("z-index","2147483647");
+    set("display","flex"); set("flex-direction","column");
+    set("gap","12px"); set("align-items","flex-end");
+    return () => el.remove();
   }, []);
 
   return (
@@ -29,21 +29,12 @@ export default function ChatbotWidget() {
       {/* Juna Voice - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
 
-      <Portal>
-        <div
-          id="floating-dock"
-          className="
-            fixed
-            right-4 bottom-[calc(env(safe-area-inset-bottom)+16px)]
-            md:right-6 md:bottom-6
-            z-[2147483647]
-            flex flex-col items-end gap-3
-          "
-        >
+      {createPortal(
+        <>
           <VoiceButton onClick={() => setIsVoiceOpen(true)} />
           <ChatbotButton onClick={() => setIsChatOpen(true)} />
-        </div>
-      </Portal>
+        </>, el
+      )}
     </>
   );
 }

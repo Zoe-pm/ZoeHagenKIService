@@ -182,7 +182,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         onClose={handleCalendlyClose}
         calendlyUrl="https://calendly.com/zoeskistudio"
       />
-    <div className="fixed bottom-24 right-4 z-40 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-[32rem] max-h-[calc(100vh-6rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col">
+    <div className="w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-[32rem] max-h-[calc(100vh-6rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col">
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>
@@ -281,7 +281,7 @@ export function ChatbotButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       onClick={onClick}
-      className="fixed bottom-4 right-24 z-[10000] rounded-full w-16 h-16 bg-gradient-to-br from-[#e63973] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20 pointer-events-auto"
+      className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e63973] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20 pointer-events-auto"
       data-testid="button-open-chat"
     >
       <MessageCircle className="h-8 w-8 text-white drop-shadow-lg" />

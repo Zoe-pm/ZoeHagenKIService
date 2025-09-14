@@ -1,16 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { SimpleChatbot } from "@/components/SimpleChatbot";
 import { useLocation } from "wouter";
 import SEOHelmet from "@/components/SEOHelmet";
-import Navigation from "@/components/Navigation";
 import ContactForm from "@/components/ContactForm";
-import VoicebotWidget from "@/components/VoicebotWidget";
 const zoePhoto = "/images/zoe-photo.jpg";
 
 export default function Kontakt() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [, setLocation] = useLocation();
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Kontaktseite
@@ -25,8 +20,6 @@ export default function Kontakt() {
         description="Kontaktieren Sie Zoë's KI Service für Ihr persönliches Gespräch. Professionelle KI-Lösungen: Chatbot, Voicebot, Avatar und Wissensbot."
         keywords="Kontakt, Gespräch, Beratung, KI-Lösungen, Chatbot, Voicebot"
       />
-      
-      <Navigation />
       
       <main className="min-h-screen pt-20">
         {/* Hero with Photo */}
@@ -80,7 +73,7 @@ export default function Kontakt() {
             <div className="glass p-8 rounded-lg text-center">
               <h2 className="text-2xl font-bold mb-6 text-primary">Weitere Information erhalten</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setIsChatOpen(true)}>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}>
                   <h3 className="font-semibold text-foreground mb-2">Sofortiger Support</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
                     Nutzen Sie unseren Chatbot für schnelle Antworten auf häufige Fragen.
@@ -89,7 +82,7 @@ export default function Kontakt() {
                     Los geht´s!
                   </Button>
                 </div>
-                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => setIsVoiceOpen(true)}>
+                <div className="glass p-4 rounded border border-primary/20 cursor-pointer hover:bg-primary/5 transition-colors flex flex-col h-full" onClick={() => window.dispatchEvent(new CustomEvent('open-voice'))}>
                   <h3 className="font-semibold text-foreground mb-2">Mit Juna sprechen</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">
                     Sprechen Sie direkt mit Juna. Sie ist 24/7 für Sie am Start.
@@ -112,9 +105,6 @@ export default function Kontakt() {
           </div>
         </section>
       </main>
-      
-      <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
     </>
   );
 }

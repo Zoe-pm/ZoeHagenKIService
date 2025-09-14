@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
-import Navigation from "@/components/Navigation";
 const zoeImage = "/images/zoe-image.jpg";
 
 export default function UeberUns() {
@@ -16,8 +15,6 @@ export default function UeberUns() {
         description="KI mit Herz & Hirn: Wir kombinieren klare Umsetzung mit verlässlichem Support – von schnellen Chatbots bis zu Wissenslösungen für Unternehmen."
         keywords="Zoë Hagen, KI Consulting, Über uns, Team, Gründerin"
       />
-      
-      <Navigation />
       
       <main className="min-h-screen pt-20">
         {/* Hero */}

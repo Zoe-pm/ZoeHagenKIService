@@ -71,7 +71,7 @@ export default function Navigation() {
           <div className="bg-[#2F3B47] rounded-lg shadow-lg p-2">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white/90 hover:text-white focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-[#B8436A] hover:text-[#C54C75] focus:outline-none"
               data-testid="mobile-menu-button"
             >
               {isMobileMenuOpen ? (

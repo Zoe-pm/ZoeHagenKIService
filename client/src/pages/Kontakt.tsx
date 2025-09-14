@@ -5,7 +5,6 @@ import { useLocation } from "wouter";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import ContactForm from "@/components/ContactForm";
-import ChatbotWidget from "@/components/ChatbotWidget";
 import VoicebotWidget from "@/components/VoicebotWidget";
 const zoePhoto = "/images/zoe-photo.jpg";
 
@@ -116,8 +115,6 @@ export default function Kontakt() {
       
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
-      <ChatbotWidget />
-      
     </>
   );
 }

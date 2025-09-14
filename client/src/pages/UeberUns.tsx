@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import ChatbotWidget from "@/components/ChatbotWidget";
-const zoeImage = "/images/zoe-portrait.jpg";
+const zoeImage = "/images/zoe-image.jpg";
 
 export default function UeberUns() {
   // Automatisch zum Seitenbeginn scrollen

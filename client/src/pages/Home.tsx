@@ -217,16 +217,16 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             <Card className="glass border-primary/20">
               <CardContent className="p-12">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold mb-6">
                   Lassen Sie uns gemeinsam herausfinden, welche Lösung zu Ihnen passt.
                 </h2>
-                <p className="text-xl text-muted-foreground mb-8">
+                <p className="text-lg text-muted-foreground mb-8">
                   Wir übernehmen die Einrichtung – Sie profitieren vom Ergebnis.
                 </p>
                 <Link href="/kontakt">
                   <Button 
                     size="lg" 
-                    className="button-gradient px-12 py-6 text-xl"
+                    className="button-gradient px-8 py-4 text-lg"
                     data-testid="central-cta-button"
                   >
                     Gespräch vereinbaren

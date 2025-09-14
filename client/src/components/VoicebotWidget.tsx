@@ -234,12 +234,15 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full button-gradient flex items-center justify-center">
-                <Volume2 className="h-5 w-5 text-white" />
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+                <img 
+                  src="/images/voicebot.png" 
+                  alt="Juna Voice Assistant" 
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">Juna</h3>
-                <p className="text-sm text-muted-foreground">Voice Assistant</p>
               </div>
             </div>
             <Button
@@ -287,9 +290,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
             )}
 
             {!callState.isConnected && !callState.isConnecting && (
-              <p className="text-sm text-muted-foreground">
-                Bereit für Ihren Sprachchat mit Juna
-              </p>
+              <div></div>
             )}
           </div>
 

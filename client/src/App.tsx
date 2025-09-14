@@ -9,6 +9,7 @@ import Home from "@/pages/Home";
 import Kontakt from "@/pages/Kontakt";
 import UeberUns from "@/pages/UeberUns";
 import KundenTest from "@/pages/KundenTest";
+import Admin from "@/pages/Admin";
 import Datenschutz from "@/pages/Datenschutz";
 import Impressum from "@/pages/Impressum";
 import Bildnachweise from "@/pages/Bildnachweise";
@@ -25,6 +26,8 @@ function Router() {
       <Route path="/kontakt" component={Kontakt} />
       <Route path="/ueber-uns" component={UeberUns} />
       <Route path="/kunden-test" component={KundenTest} />
+      <Route path="/test" component={KundenTest} />
+      <Route path="/admin" component={Admin} />
       <Route path="/datenschutz" component={Datenschutz} />
       <Route path="/impressum" component={Impressum} />
       <Route path="/bildnachweise" component={Bildnachweise} />

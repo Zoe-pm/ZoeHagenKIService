@@ -207,7 +207,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3" data-testid="chat-messages">
+      <div className="flex-1 min-h-0 p-4 overflow-y-auto space-y-3 relative z-0" data-testid="chat-messages">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -256,7 +256,7 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-primary/20 flex-shrink-0">
+      <div className="p-4 border-t border-primary/20 flex-shrink-0 relative z-10 bg-background">
         <div className="flex space-x-2">
           <Input
             value={inputText}

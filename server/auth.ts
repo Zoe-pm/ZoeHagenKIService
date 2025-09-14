@@ -5,15 +5,14 @@ const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-secret-key';
 export interface JWTPayload {
   type: 'admin' | 'test';
   email: string;
-  exp: number;
+  exp?: number;
 }
 
 export function generateAdminToken(email: string): string {
   const expiresIn = '24h';
-  const payload: JWTPayload = {
-    type: 'admin',
-    email,
-    exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours
+  const payload = {
+    type: 'admin' as const,
+    email
   };
   
   return jwt.sign(payload, SESSION_SECRET, { expiresIn });
@@ -21,10 +20,9 @@ export function generateAdminToken(email: string): string {
 
 export function generateTestToken(email: string): string {
   const expiresIn = '72h';
-  const payload: JWTPayload = {
-    type: 'test', 
-    email,
-    exp: Math.floor(Date.now() / 1000) + (72 * 60 * 60) // 72 hours
+  const payload = {
+    type: 'test' as const, 
+    email
   };
   
   return jwt.sign(payload, SESSION_SECRET, { expiresIn });
@@ -33,12 +31,6 @@ export function generateTestToken(email: string): string {
 export function verifyToken(token: string): JWTPayload | null {
   try {
     const decoded = jwt.verify(token, SESSION_SECRET) as JWTPayload;
-    
-    // Check if token is expired
-    if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) {
-      return null;
-    }
-    
     return decoded;
   } catch (error) {
     return null;

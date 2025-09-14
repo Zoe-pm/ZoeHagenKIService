@@ -161,7 +161,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="relative group">
                     <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#3C4A57] to-[#B8436A] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         1
                       </div>
                       <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Gespräch</h3>
@@ -174,7 +174,7 @@ export default function Home() {
                   
                   <div className="relative group">
                     <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         2
                       </div>
                       <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Pilot</h3>
@@ -187,7 +187,7 @@ export default function Home() {
                   
                   <div className="relative group">
                     <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#2F3B47] to-[#B8436A] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         3
                       </div>
                       <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Rollout</h3>
@@ -200,7 +200,7 @@ export default function Home() {
                   
                   <div className="relative group">
                     <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#3C4A57] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         4
                       </div>
                       <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Support</h3>

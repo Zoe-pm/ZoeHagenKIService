@@ -98,6 +98,9 @@ export default function Admin() {
       if (data.success && data.token) {
         setAdminToken(data.token);
         localStorage.setItem('admin_token', data.token);
+        // Force refetch of session data with new token
+        queryClient.invalidateQueries({ queryKey: ['admin-session'] });
+        queryClient.refetchQueries({ queryKey: ['admin-session', data.token] });
         toast({
           title: "Erfolgreich angemeldet",
           description: "Willkommen im Admin-Bereich!",
@@ -121,8 +124,8 @@ export default function Admin() {
   });
 
   // Session validation query
-  const { data: sessionData } = useQuery({
-    queryKey: ['admin-session'],
+  const { data: sessionData, isPending: sessionPending } = useQuery({
+    queryKey: ['admin-session', adminToken],
     queryFn: async () => {
       if (!adminToken) return null;
       const response = await fetch('/api/admin/session', {
@@ -137,7 +140,7 @@ export default function Admin() {
 
   // Test codes query
   const { data: testCodesData, isLoading: testCodesLoading } = useQuery({
-    queryKey: ['admin-testcodes'],
+    queryKey: ['admin-testcodes', adminToken],
     queryFn: async () => {
       const response = await fetch('/api/admin/testcodes', {
         headers: { Authorization: `Bearer ${adminToken}` }
@@ -239,7 +242,8 @@ export default function Admin() {
   };
 
   // Show login form if not authenticated
-  if (!adminToken || (sessionData !== undefined && !sessionData?.valid)) {
+  if (!adminToken) {
+    // No token at all - show login
     return (
       <div className="min-h-screen">
         <Navigation />
@@ -301,6 +305,70 @@ export default function Admin() {
     );
   }
 
+  // Have token but session check failed - show login
+  if (!sessionPending && sessionData && !sessionData?.valid) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="min-h-screen bg-[#3C4A57] flex items-center justify-center p-4 pt-20">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <div className="mx-auto mb-4 w-16 h-16 bg-[#e63973] rounded-full flex items-center justify-center">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl font-bold text-[#e63973]">
+                Admin-Login
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...loginForm}>
+                <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                  <FormField
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Admin-Passwort</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Passwort eingeben"
+                            data-testid="input-admin-password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button 
+                    type="submit" 
+                    className="w-full button-gradient text-gray-800 font-semibold"
+                    disabled={loginMutation.isPending}
+                    data-testid="button-admin-login"
+                  >
+                    {loginMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Anmelden...
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-4 h-4 mr-2" />
+                        Anmelden
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Show admin dashboard (token exists and session is either loading or valid)
   return (
     <div className="min-h-screen">
       <Navigation />

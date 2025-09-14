@@ -13,7 +13,6 @@ import SEOHelmet from "@/components/SEOHelmet";
 
 // Lazy load heavy components to optimize bundle size
 const VoiceDemo = lazy(() => import("@/components/VoiceDemo"));
-const ChatbotWidget = lazy(() => import("@/components/ChatbotWidget"));
 // Using public images for better build performance
 const voicebotImage = "/images/voicebot.png";
 const avatarVideo = "/images/avatar.mp4";

@@ -672,7 +672,7 @@ export default function KundenTest() {
                 <fieldset disabled={!isAuthorized} className={!isAuthorized ? 'opacity-50' : ''}>
                 <CardContent className="space-y-6">
                   
-                  {/* Bot Type Switcher */}
+                  {/* 1. Bot Type Switcher */}
                   <div>
                     <label className="block text-sm font-medium mb-2">Bot-Typ</label>
                     <Select value={testConfig.activeBot} onValueChange={(value: any) => handleActiveBotChange(value)}>
@@ -686,7 +686,7 @@ export default function KundenTest() {
                     </Select>
                   </div>
 
-                  {/* Bot Name with Suggestions */}
+                  {/* 2. Bot Name with Suggestions */}
                   <div>
                     <label className="block text-sm font-medium mb-2">Bot-Name</label>
                     <div className="space-y-2">
@@ -723,271 +723,103 @@ export default function KundenTest() {
                     </div>
                   </div>
 
-                  {/* Primary Color */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Primärfarbe</label>
-                    <Input
-                      type="color"
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor}
-                      onChange={(e) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange("primaryColor", e.target.value);
-                        } else {
-                          handleVoicebotConfigChange("primaryColor", e.target.value);
-                        }
-                      }}
-                    />
-                  </div>
-
-                  {/* Position */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Position</label>
-                    <Select 
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position} 
-                      onValueChange={(value: any) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange("position", value);
-                        } else {
-                          handleVoicebotConfigChange("position", value);
-                        }
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Position wählen" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="bottom-right">Unten rechts</SelectItem>
-                        <SelectItem value="bottom-left">Unten links</SelectItem>
-                        <SelectItem value="center">Zentral</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Widget Size */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Widget-Größe</label>
-                    <Select 
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.widgetSize : testConfig.voicebot.widgetSize} 
-                      onValueChange={(value: any) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange("widgetSize", value);
-                        } else {
-                          handleVoicebotConfigChange("widgetSize", value);
-                        }
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Größe wählen" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="small">Klein</SelectItem>
-                        <SelectItem value="medium">Mittel</SelectItem>
-                        <SelectItem value="large">Groß</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Voice Speed - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
+                  {/* 3. Logo Section */}
+                  <div className="space-y-4 p-4 border border-border/50 rounded-lg bg-background/50">
+                    <h3 className="text-sm font-semibold text-foreground">Logo-Einstellungen</h3>
+                    
+                    {/* Logo Upload */}
                     <div>
                       <label className="block text-sm font-medium mb-2">
-                        Sprachgeschwindigkeit: {testConfig.voicebot.voiceSpeed[0]}x
+                        Firmenlogo (optional)
                       </label>
-                      <Slider
-                        value={testConfig.voicebot.voiceSpeed}
-                        onValueChange={(value) => handleVoicebotConfigChange("voiceSpeed", value)}
-                        max={2}
-                        min={0.5}
-                        step={0.1}
-                        className="w-full"
-                      />
-                    </div>
-                  )}
-
-                  {/* Voice Pitch - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Stimmlage: {testConfig.voicebot.voicePitch[0]}x
-                      </label>
-                      <Slider
-                        value={testConfig.voicebot.voicePitch}
-                        onValueChange={(value) => handleVoicebotConfigChange("voicePitch", value)}
-                        max={2}
-                        min={0.5}
-                        step={0.1}
-                        className="w-full"
-                      />
-                    </div>
-                  )}
-
-                  {/* Voice Selection - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Stimme auswählen</label>
-                      <Select 
-                        value={testConfig.voicebot.elevenLabsVoiceId} 
-                        onValueChange={(value) => {
-                          // Ignore special placeholder values
-                          if (value === "_loading" || value === "_no_voices") return;
-                          
-                          const selectedVoice = availableVoices.find(v => v.id === value);
-                          handleVoicebotConfigChange("elevenLabsVoiceId", value);
-                          handleVoicebotConfigChange("elevenLabsVoiceName", selectedVoice?.name || "Voice auswählen...");
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                              const logoUrl = event.target?.result as string;
+                              if (testConfig.activeBot === "chatbot") {
+                                setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoUrl } }));
+                              } else {
+                                setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoUrl } }));
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }
                         }}
-                        data-testid="select-voice"
+                        data-testid="input-logo"
+                      />
+                      {(testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl) && (
+                        <div className="mt-2">
+                          <img 
+                            src={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl}
+                            alt="Logo Vorschau"
+                            className="h-12 w-auto border rounded"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Logo Position */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Logo Position
+                      </label>
+                      <Select 
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoPosition : testConfig.voicebot.logoPosition}
+                        onValueChange={(value) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoPosition: value } }));
+                          } else {
+                            setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoPosition: value } }));
+                          }
+                        }}
+                        data-testid="select-logo-position"
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={isLoadingVoices ? "Lade Stimmen..." : testConfig.voicebot.elevenLabsVoiceName} />
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {isLoadingVoices ? (
-                            <SelectItem value="_loading" disabled>Lade Stimmen...</SelectItem>
-                          ) : availableVoices.length > 0 ? (
-                            availableVoices.map((voice) => (
-                              <SelectItem key={voice.id} value={voice.id}>
-                                <div className="flex items-center gap-2">
-                                  <span>{voice.name}</span>
-                                  <Badge variant="outline" className="text-xs">
-                                    {voice.labels?.gender || 'unbekannt'}
-                                  </Badge>
-                                  {voice.labels?.language && (
-                                    <Badge variant="secondary" className="text-xs">
-                                      {voice.labels.language}
-                                    </Badge>
-                                  )}
-                                </div>
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <>
-                              <SelectItem value="_no_voices" disabled>Keine Stimmen verfügbar</SelectItem>
-                              <div className="px-3 py-2 text-xs text-muted-foreground">
-                                <p>Bitte überprüfen Sie Ihre ElevenLabs API-Konfiguration</p>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm" 
-                                  onClick={loadAvailableVoices}
-                                  className="mt-1 h-6 px-2 text-xs"
-                                >
-                                  Erneut versuchen
-                                </Button>
-                              </div>
-                            </>
-                          )}
+                          <SelectItem value="top-left">Oben Links</SelectItem>
+                          <SelectItem value="top-right">Oben Rechts</SelectItem>
+                          <SelectItem value="top-center">Oben Mitte</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-                  )}
 
-                  {/* Voice Stability - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
+                    {/* Logo Size */}
                     <div>
                       <label className="block text-sm font-medium mb-2">
-                        Stimmstabilität: {(testConfig.voicebot.stability * 100).toFixed(0)}%
+                        Logo Größe
                       </label>
-                      <Slider
-                        value={[testConfig.voicebot.stability]}
-                        onValueChange={(value) => handleVoicebotConfigChange("stability", value[0])}
-                        max={1}
-                        min={0}
-                        step={0.01}
-                        className="w-full"
-                        data-testid="slider-stability"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Niedrig = ausdrucksvoller, Hoch = gleichmäßiger
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Voice Similarity - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Stimmähnlichkeit: {(testConfig.voicebot.similarity * 100).toFixed(0)}%
-                      </label>
-                      <Slider
-                        value={[testConfig.voicebot.similarity]}
-                        onValueChange={(value) => handleVoicebotConfigChange("similarity", value[0])}
-                        max={1}
-                        min={0}
-                        step={0.01}
-                        className="w-full"
-                        data-testid="slider-similarity"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Wie nah die Stimme am Original bleiben soll
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Speaker Boost - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
-                    <div>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={testConfig.voicebot.speakerBoost}
-                          onChange={(e) => handleVoicebotConfigChange("speakerBoost", e.target.checked)}
-                          className="rounded border-gray-300 text-primary focus:ring-primary"
-                          data-testid="checkbox-speaker-boost"
-                        />
-                        <span className="text-sm font-medium">Speaker Boost aktivieren</span>
-                      </label>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Verbessert die Stimmqualität, braucht mehr Rechenzeit
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Save Voice Settings - Only for Voicebot */}
-                  {testConfig.activeBot === "voicebot" && (
-                    <div className="pt-4 border-t">
-                      <Button 
-                        onClick={saveVoicePreferences}
-                        disabled={isSavingPreferences || !testConfig.voicebot.elevenLabsVoiceId}
-                        className="w-full"
-                        variant="outline"
-                        data-testid="button-save-voice-settings"
+                      <Select 
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoSize : testConfig.voicebot.logoSize}
+                        onValueChange={(value) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoSize: value } }));
+                          } else {
+                            setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoSize: value } }));
+                          }
+                        }}
+                        data-testid="select-logo-size"
                       >
-                        {/* Icon entfernt */}
-                        {isSavingPreferences ? "Speichere..." : "Voice-Einstellungen speichern"}
-                      </Button>
-                      <p className="text-xs text-muted-foreground mt-2 text-center">
-                        {!testConfig.voicebot.elevenLabsVoiceId ? 
-                          "Wählen Sie zuerst eine Stimme aus" : 
-                          "Ihre Stimm-Präferenzen werden für diese Session gespeichert"
-                        }
-                      </p>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="small">Klein (24px)</SelectItem>
+                          <SelectItem value="medium">Mittel (32px)</SelectItem>
+                          <SelectItem value="large">Groß (48px)</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                  )}
+                  </div>
 
-                  {/* Background Color - Only for Chatbot */}
-                  {testConfig.activeBot === "chatbot" && (
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Hintergrundfarbe</label>
-                      <Input
-                        type="color"
-                        value={testConfig.chatbot.backgroundColor}
-                        onChange={(e) => handleChatbotConfigChange("backgroundColor", e.target.value)}
-                      />
-                    </div>
-                  )}
-
-                  {/* Text Color - Only for Chatbot */}
-                  {testConfig.activeBot === "chatbot" && (
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Textfarbe</label>
-                      <Input
-                        type="color"
-                        value={testConfig.chatbot.textColor}
-                        onChange={(e) => handleChatbotConfigChange("textColor", e.target.value)}
-                      />
-                    </div>
-                  )}
-
-                  {/* Font Family - Only for Chatbot */}
+                  {/* 4. Font Family - Only for Chatbot */}
                   {testConfig.activeBot === "chatbot" && (
                     <div>
                       <label className="block text-sm font-medium mb-2">Schriftart</label>
@@ -1024,147 +856,392 @@ export default function KundenTest() {
                     </div>
                   )}
 
-                  {/* Title */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Titel</label>
-                    <Input
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.title : testConfig.voicebot.title}
-                      onChange={(e) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange("title", e.target.value);
-                        } else {
-                          handleVoicebotConfigChange("title", e.target.value);
-                        }
-                      }}
-                      placeholder="z.B. Willkommen!"
-                      data-testid="input-bot-title"
-                    />
+                  {/* 5. Text Fields Section */}
+                  <div className="space-y-4 p-4 border border-border/50 rounded-lg bg-background/50">
+                    <h3 className="text-sm font-semibold text-foreground">Textinhalte</h3>
+                    
+                    {/* Title */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Titel</label>
+                      <Input
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.title : testConfig.voicebot.title}
+                        onChange={(e) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("title", e.target.value);
+                          } else {
+                            handleVoicebotConfigChange("title", e.target.value);
+                          }
+                        }}
+                        placeholder="z.B. Willkommen!"
+                        data-testid="input-bot-title"
+                      />
+                    </div>
+
+                    {/* Subtitle */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Untertitel</label>
+                      <Input
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.subtitle : testConfig.voicebot.subtitle}
+                        onChange={(e) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("subtitle", e.target.value);
+                          } else {
+                            handleVoicebotConfigChange("subtitle", e.target.value);
+                          }
+                        }}
+                        placeholder="z.B. Ich helfe Ihnen gerne weiter"
+                        data-testid="input-bot-subtitle"
+                      />
+                    </div>
+
+                    {/* Custom Greeting */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Begrüßungstext</label>
+                      <Textarea
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.greeting : testConfig.voicebot.greeting}
+                        onChange={(e) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("greeting", e.target.value);
+                          } else {
+                            handleVoicebotConfigChange("greeting", e.target.value);
+                          }
+                        }}
+                        rows={3}
+                        placeholder="Ihre persönliche Begrüßung..."
+                        data-testid="input-greeting"
+                      />
+                    </div>
+
+                    {/* Message to Alex */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Nachricht an Alex</label>
+                      <Textarea
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.messageToAlex : testConfig.voicebot.messageToAlex}
+                        onChange={(e) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("messageToAlex", e.target.value);
+                          } else {
+                            handleVoicebotConfigChange("messageToAlex", e.target.value);
+                          }
+                        }}
+                        rows={4}
+                        placeholder="Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche..."
+                        data-testid="input-message-to-alex"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Zusätzliche Wünsche und Anmerkungen für die Umsetzung
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Subtitle */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Untertitel</label>
-                    <Input
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.subtitle : testConfig.voicebot.subtitle}
-                      onChange={(e) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange("subtitle", e.target.value);
-                        } else {
-                          handleVoicebotConfigChange("subtitle", e.target.value);
-                        }
-                      }}
-                      placeholder="z.B. Ich helfe Ihnen gerne weiter"
-                      data-testid="input-bot-subtitle"
-                    />
-                  </div>
-
-                  {/* Logo Upload */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Firmenlogo (optional)
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
-                            const logoUrl = event.target?.result as string;
+                  {/* 6. Colors Section */}
+                  <div className="space-y-4 p-4 border border-border/50 rounded-lg bg-background/50">
+                    <h3 className="text-sm font-semibold text-foreground">Farbgestaltung</h3>
+                    
+                    {/* Primary Color */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Primärfarbe</label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="color"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor}
+                          onChange={(e) => {
                             if (testConfig.activeBot === "chatbot") {
-                              setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoUrl } }));
+                              handleChatbotConfigChange("primaryColor", e.target.value);
                             } else {
-                              setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoUrl } }));
+                              handleVoicebotConfigChange("primaryColor", e.target.value);
                             }
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                      data-testid="input-logo"
-                    />
-                    {(testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl) && (
-                      <div className="mt-2">
-                        <img 
-                          src={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoUrl : testConfig.voicebot.logoUrl}
-                          alt="Logo Vorschau"
-                          className="h-12 w-auto border rounded"
+                          }}
+                          className="w-16 h-10"
+                          data-testid="input-primary-color"
+                        />
+                        <Input
+                          type="text"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("primaryColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("primaryColor", e.target.value);
+                            }
+                          }}
+                          placeholder="#000000"
+                          className="flex-1"
                         />
                       </div>
-                    )}
+                    </div>
+
+                    {/* Background Color */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Hintergrundfarbe</label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="color"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.backgroundColor : testConfig.voicebot.backgroundColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("backgroundColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("backgroundColor", e.target.value);
+                            }
+                          }}
+                          className="w-16 h-10"
+                          data-testid="input-background-color"
+                        />
+                        <Input
+                          type="text"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.backgroundColor : testConfig.voicebot.backgroundColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("backgroundColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("backgroundColor", e.target.value);
+                            }
+                          }}
+                          placeholder="#FFFFFF"
+                          className="flex-1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text Color */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Textfarbe</label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="color"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.textColor : testConfig.voicebot.textColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("textColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("textColor", e.target.value);
+                            }
+                          }}
+                          className="w-16 h-10"
+                          data-testid="input-text-color"
+                        />
+                        <Input
+                          type="text"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.textColor : testConfig.voicebot.textColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("textColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("textColor", e.target.value);
+                            }
+                          }}
+                          placeholder="#000000"
+                          className="flex-1"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Logo Position */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Logo Position
-                    </label>
-                    <Select 
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoPosition : testConfig.voicebot.logoPosition}
-                      onValueChange={(value) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoPosition: value } }));
-                        } else {
-                          setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoPosition: value } }));
-                        }
-                      }}
-                      data-testid="select-logo-position"
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="top-left">Oben Links</SelectItem>
-                        <SelectItem value="top-right">Oben Rechts</SelectItem>
-                        <SelectItem value="top-center">Oben Mitte</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {/* Voice Settings - Only for Voicebot */}
+                  {testConfig.activeBot === "voicebot" && (
+                    <div className="space-y-4 p-4 border border-border/50 rounded-lg bg-background/50">
+                      <h3 className="text-sm font-semibold text-foreground">Voice-Einstellungen</h3>
+                      
+                      {/* Voice Selection */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Stimme auswählen</label>
+                        <Select 
+                          value={testConfig.voicebot.elevenLabsVoiceId} 
+                          onValueChange={(value) => {
+                            // Ignore special placeholder values
+                            if (value === "_loading" || value === "_no_voices") return;
+                            
+                            const selectedVoice = availableVoices.find(v => v.id === value);
+                            handleVoicebotConfigChange("elevenLabsVoiceId", value);
+                            handleVoicebotConfigChange("elevenLabsVoiceName", selectedVoice?.name || "Voice auswählen...");
+                          }}
+                          data-testid="select-voice"
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder={isLoadingVoices ? "Lade Stimmen..." : testConfig.voicebot.elevenLabsVoiceName} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {isLoadingVoices ? (
+                              <SelectItem value="_loading" disabled>Lade Stimmen...</SelectItem>
+                            ) : availableVoices.length > 0 ? (
+                              availableVoices.map((voice) => (
+                                <SelectItem key={voice.id} value={voice.id}>
+                                  <div className="flex items-center gap-2">
+                                    <span>{voice.name}</span>
+                                    <Badge variant="outline" className="text-xs">
+                                      {voice.labels?.gender || 'unbekannt'}
+                                    </Badge>
+                                    {voice.labels?.language && (
+                                      <Badge variant="secondary" className="text-xs">
+                                        {voice.labels.language}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <>
+                                <SelectItem value="_no_voices" disabled>Keine Stimmen verfügbar</SelectItem>
+                                <div className="px-3 py-2 text-xs text-muted-foreground">
+                                  <p>Bitte überprüfen Sie Ihre ElevenLabs API-Konfiguration</p>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    onClick={loadAvailableVoices}
+                                    className="mt-1 h-6 px-2 text-xs"
+                                  >
+                                    Erneut versuchen
+                                  </Button>
+                                </div>
+                              </>
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                  {/* Logo Size */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Logo Größe
-                    </label>
-                    <Select 
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.logoSize : testConfig.voicebot.logoSize}
-                      onValueChange={(value) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          setTestConfig(prev => ({ ...prev, chatbot: { ...prev.chatbot, logoSize: value } }));
-                        } else {
-                          setTestConfig(prev => ({ ...prev, voicebot: { ...prev.voicebot, logoSize: value } }));
-                        }
-                      }}
-                      data-testid="select-logo-size"
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="small">Klein (24px)</SelectItem>
-                        <SelectItem value="medium">Mittel (32px)</SelectItem>
-                        <SelectItem value="large">Groß (48px)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                      {/* Voice Speed */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          Sprachgeschwindigkeit: {testConfig.voicebot.voiceSpeed[0]}x
+                        </label>
+                        <Slider
+                          value={testConfig.voicebot.voiceSpeed}
+                          onValueChange={(value) => handleVoicebotConfigChange("voiceSpeed", value)}
+                          max={2}
+                          min={0.5}
+                          step={0.1}
+                          className="w-full"
+                        />
+                      </div>
 
-                  {/* Custom Greeting */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Begrüßungstext</label>
-                    <textarea
-                      value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.greeting : testConfig.voicebot.greeting}
-                      onChange={(e) => {
-                        if (testConfig.activeBot === "chatbot") {
-                          handleChatbotConfigChange("greeting", e.target.value);
-                        } else {
-                          handleVoicebotConfigChange("greeting", e.target.value);
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring resize-none"
-                      rows={3}
-                      placeholder="Ihre persönliche Begrüßung..."
-                    />
+                      {/* Voice Stability */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          Stimmstabilität: {(testConfig.voicebot.stability * 100).toFixed(0)}%
+                        </label>
+                        <Slider
+                          value={[testConfig.voicebot.stability]}
+                          onValueChange={(value) => handleVoicebotConfigChange("stability", value[0])}
+                          max={1}
+                          min={0}
+                          step={0.01}
+                          className="w-full"
+                          data-testid="slider-stability"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Niedrig = ausdrucksvoller, Hoch = gleichmäßiger
+                        </p>
+                      </div>
+
+                      {/* Voice Similarity */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">
+                          Stimmähnlichkeit: {(testConfig.voicebot.similarity * 100).toFixed(0)}%
+                        </label>
+                        <Slider
+                          value={[testConfig.voicebot.similarity]}
+                          onValueChange={(value) => handleVoicebotConfigChange("similarity", value[0])}
+                          max={1}
+                          min={0}
+                          step={0.01}
+                          className="w-full"
+                          data-testid="slider-similarity"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Wie nah die Stimme am Original bleiben soll
+                        </p>
+                      </div>
+
+                      {/* Speaker Boost */}
+                      <div>
+                        <label className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            checked={testConfig.voicebot.speakerBoost}
+                            onChange={(e) => handleVoicebotConfigChange("speakerBoost", e.target.checked)}
+                            className="rounded border-gray-300 text-primary focus:ring-primary"
+                            data-testid="checkbox-speaker-boost"
+                          />
+                          <span className="text-sm font-medium">Speaker Boost aktivieren</span>
+                        </label>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Verbessert die Stimmqualität, braucht mehr Rechenzeit
+                        </p>
+                      </div>
+
+                      {/* Save Voice Settings */}
+                      <div className="pt-4 border-t">
+                        <Button 
+                          onClick={saveVoicePreferences}
+                          disabled={isSavingPreferences || !testConfig.voicebot.elevenLabsVoiceId}
+                          className="w-full"
+                          variant="outline"
+                          data-testid="button-save-voice-settings"
+                        >
+                          {isSavingPreferences ? "Speichere..." : "Voice-Einstellungen speichern"}
+                        </Button>
+                        <p className="text-xs text-muted-foreground mt-2 text-center">
+                          {!testConfig.voicebot.elevenLabsVoiceId ? 
+                            "Wählen Sie zuerst eine Stimme aus" : 
+                            "Ihre Stimm-Präferenzen werden für diese Session gespeichert"
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 7. Position and Size Section */}
+                  <div className="space-y-4 p-4 border border-border/50 rounded-lg bg-background/50">
+                    <h3 className="text-sm font-semibold text-foreground">Position & Größe</h3>
+                    
+                    {/* Position */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Position</label>
+                      <Select 
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position} 
+                        onValueChange={(value: any) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("position", value);
+                          } else {
+                            handleVoicebotConfigChange("position", value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Position wählen" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="bottom-right">Unten rechts</SelectItem>
+                          <SelectItem value="bottom-left">Unten links</SelectItem>
+                          <SelectItem value="center">Zentral</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Widget Size */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Widget-Größe</label>
+                      <Select 
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.widgetSize : testConfig.voicebot.widgetSize} 
+                        onValueChange={(value: any) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("widgetSize", value);
+                          } else {
+                            handleVoicebotConfigChange("widgetSize", value);
+                          }
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Größe wählen" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="small">Klein</SelectItem>
+                          <SelectItem value="medium">Mittel</SelectItem>
+                          <SelectItem value="large">Groß</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
                   {/* Test & Save Buttons */}
@@ -1172,7 +1249,8 @@ export default function KundenTest() {
                     {isAuthorized ? (
                       <Button 
                         onClick={() => setIsChatOpen(true)}
-                        className="w-full bg-gradient-to-r from-cyan-500 to-pink-500 hover:from-cyan-600 hover:to-pink-600 text-white font-semibold py-3 text-lg shadow-lg"
+                        style={{ backgroundColor: '#e63973' }}
+                        className="w-full hover:opacity-90 text-white font-semibold py-3 text-lg shadow-lg"
                         size="lg"
                         data-testid="button-test-bot"
                       >
@@ -1230,11 +1308,12 @@ export default function KundenTest() {
                         }
                       }}
                       disabled={!isAuthorized || isValidating}
-                      className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 shadow-md disabled:opacity-50"
+                      style={{ backgroundColor: '#e63973' }}
+                      className="w-full hover:opacity-90 text-white font-semibold py-2 shadow-md disabled:opacity-50"
                       size="default"
                       data-testid="button-save-config"
                     >
-                      {isValidating ? "💾 Wird gespeichert..." : "💾 Konfiguration speichern & abschicken"}
+                      {isValidating ? "💾 Wird gespeichert..." : "💾 Konfiguration abspeichern"}
                     </Button>
                     <p className="text-xs text-muted-foreground text-center">
                       Sie erhalten eine detaillierte Zusammenfassung per E-Mail

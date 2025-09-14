@@ -160,7 +160,7 @@ export default function Home() {
                 <h2 className="text-3xl font-bold text-left mb-12 text-white">So arbeiten wir</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="relative group">
-                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         1
                       </div>
@@ -173,7 +173,7 @@ export default function Home() {
                   </div>
                   
                   <div className="relative group">
-                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         2
                       </div>
@@ -186,7 +186,7 @@ export default function Home() {
                   </div>
                   
                   <div className="relative group">
-                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         3
                       </div>
@@ -199,7 +199,7 @@ export default function Home() {
                   </div>
                   
                   <div className="relative group">
-                    <div className="glass p-6 rounded-lg border border-white/40 hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
+                    <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         4
                       </div>

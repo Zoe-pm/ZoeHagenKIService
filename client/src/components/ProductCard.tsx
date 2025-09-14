@@ -108,7 +108,7 @@ export default function ProductCard({
         <div className="space-y-1 mb-4 text-sm flex-grow">
           {features.map((feature, index) => (
             <div key={index} className="flex items-center" data-testid={`product-feature-${id}-${index}`}>
-              <span className="w-4 h-4 text-accent mr-2 flex-shrink-0">•</span>
+              <span className="w-4 h-4 text-[#B8436A] mr-2 flex-shrink-0">✓</span>
               <span>{feature}</span>
             </div>
           ))}

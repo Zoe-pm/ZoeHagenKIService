@@ -918,6 +918,23 @@ export default function KundenTest() {
                       />
                     </div>
 
+                    {/* Input Placeholder */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Textfeld 2: Eingabe-Platzhalter</label>
+                      <Input
+                        value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.inputPlaceholder : testConfig.voicebot.inputPlaceholder}
+                        onChange={(e) => {
+                          if (testConfig.activeBot === "chatbot") {
+                            handleChatbotConfigChange("inputPlaceholder", e.target.value);
+                          } else {
+                            handleVoicebotConfigChange("inputPlaceholder", e.target.value);
+                          }
+                        }}
+                        placeholder="z.B. Nachricht an Arnie..."
+                        data-testid="input-placeholder-text"
+                      />
+                    </div>
+
                     {/* Message to Alex */}
                     <div>
                       <label className="block text-sm font-medium mb-2">Nachricht an Alex</label>

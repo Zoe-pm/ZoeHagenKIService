@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -26,7 +26,24 @@ export default function ProductCard({
   mediaType = 'image'
 }: ProductCardProps) {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [imageHeight, setImageHeight] = useState('240px');
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const updateImageHeight = () => {
+      if (window.innerWidth <= 640) {
+        setImageHeight('180px');
+      } else if (window.innerWidth <= 1024) {
+        setImageHeight('200px');
+      } else {
+        setImageHeight('240px');
+      }
+    };
+
+    updateImageHeight();
+    window.addEventListener('resize', updateImageHeight);
+    return () => window.removeEventListener('resize', updateImageHeight);
+  }, []);
 
   const handleVideoPlay = () => {
     if (videoRef.current && !isVideoPlaying) {
@@ -50,11 +67,12 @@ export default function ProductCard({
           <video 
             ref={videoRef}
             src={image} 
-            className={`w-full h-36 object-cover rounded-lg mb-3 cursor-pointer ${
-              id === 'avatar' ? 'face-focus-avatar responsive-face-media' : 
-              id === 'voicebot' ? 'face-focus-voicebot responsive-face-media' : 
+            className={`w-full object-cover rounded-lg mb-3 cursor-pointer responsive-face-media ${
+              id === 'avatar' ? 'face-focus-avatar' : 
+              id === 'voicebot' ? 'face-focus-voicebot' : 
               'object-center'
             }`}
+            style={{ height: imageHeight }}
             onMouseEnter={handleVideoPlay}
             onClick={handleVideoPlay}
             onEnded={handleVideoEnd}
@@ -66,11 +84,12 @@ export default function ProductCard({
           <img 
             src={image} 
             alt={`${title} Interface-Darstellung`}
-            className={`w-full h-36 object-cover rounded-lg mb-3 ${
-              id === 'avatar' ? 'face-focus-avatar responsive-face-media' : 
-              id === 'voicebot' ? 'face-focus-voicebot responsive-face-media' : 
+            className={`w-full object-cover rounded-lg mb-3 responsive-face-media ${
+              id === 'avatar' ? 'face-focus-avatar' : 
+              id === 'voicebot' ? 'face-focus-voicebot' : 
               'object-center'
-            }`} 
+            }`}
+            style={{ height: imageHeight }} 
             loading="lazy"
             data-testid={`product-image-${id}`}
           />

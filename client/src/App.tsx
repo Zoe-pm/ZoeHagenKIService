@@ -3,60 +3,59 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { lazy, Suspense } from "react";
-
-// Eager load: Critical marketing pages
+import { useEffect } from "react";
+import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
-
-// Lazy load: Secondary and admin pages for better performance
-const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
-const UeberUns = lazy(() => import("@/pages/UeberUns"));
-const Kontakt = lazy(() => import("@/pages/Kontakt"));
-const KundenTest = lazy(() => import("@/pages/KundenTest"));
-const Impressum = lazy(() => import("@/pages/Impressum"));
-const Datenschutz = lazy(() => import("@/pages/Datenschutz"));
-const Bildnachweise = lazy(() => import("@/pages/Bildnachweise"));
-const NotFound = lazy(() => import("@/pages/not-found"));
-const Admin = lazy(() => import("@/pages/Admin"));
+import Kontakt from "@/pages/Kontakt";
+import UeberUns from "@/pages/UeberUns";
+import KundenTest from "@/pages/KundenTest";
+import Datenschutz from "@/pages/Datenschutz";
+import Impressum from "@/pages/Impressum";
+import Bildnachweise from "@/pages/Bildnachweise";
+import ProductDetail from "@/pages/ProductDetail";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import AccessibilityBanner from "@/components/AccessibilityBanner";
+import SEOHelmet from "@/components/SEOHelmet";
 
 function Router() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-lg text-muted-foreground">Lädt...</div>
-      </div>
-    }>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/produkte/:id" component={ProductDetail} />
-        <Route path="/ueber-uns" component={UeberUns} />
-        <Route path="/kontakt" component={Kontakt} />
-        <Route path="/test" component={KundenTest} />
-        <Route path="/kundentest">
-          {() => {
-            // SPA-friendly redirect to new route
-            if (typeof window !== 'undefined') {
-              window.history.replaceState(null, '', '/test');
-            }
-            return <Route path="/test" component={KundenTest} />;
-          }}
-        </Route>
-        <Route path="/impressum" component={Impressum} />
-        <Route path="/datenschutz" component={Datenschutz} />
-        <Route path="/bildnachweise" component={Bildnachweise} />
-        <Route path="/admin" component={Admin} />
-        <Route component={NotFound} />
-      </Switch>
-    </Suspense>
+    <Switch>
+      <Route path="/" component={Home} />
+      <Route path="/kontakt" component={Kontakt} />
+      <Route path="/ueber-uns" component={UeberUns} />
+      <Route path="/kunden-test" component={KundenTest} />
+      <Route path="/datenschutz" component={Datenschutz} />
+      <Route path="/impressum" component={Impressum} />
+      <Route path="/bildnachweise" component={Bildnachweise} />
+      <Route path="/product/:id" component={ProductDetail} />
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
 function App() {
+  useEffect(() => {
+    // Set dark mode by default
+    document.documentElement.classList.add('dark');
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <div className="min-h-screen bg-background text-foreground">
+          <SEOHelmet 
+            title="Zoë's KI Service - AI Assistenten für Ihr Unternehmen"
+            description="Professionelle KI-Assistenten: Chatbots, Voicebots und Avatare. Entlasten Sie Ihr Team mit intelligenten Lösungen."
+          />
+          <AccessibilityBanner />
+          <Navigation />
+          <main className="flex-1">
+            <Router />
+          </main>
+          <Footer />
+        </div>
         <Toaster />
-        <Router />
       </TooltipProvider>
     </QueryClientProvider>
   );

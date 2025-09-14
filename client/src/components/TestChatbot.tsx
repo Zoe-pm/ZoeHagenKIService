@@ -23,6 +23,7 @@ interface TestConfig {
     greeting: string;
     title: string;
     subtitle: string;
+    inputPlaceholder: string;
     logoUrl: string;
     logoPosition: string;
     logoSize: string;
@@ -31,6 +32,7 @@ interface TestConfig {
     name: string;
     primaryColor: string;
     backgroundColor: string;
+    textColor: string;
     widgetSize: string;
     position: string;
     voiceSpeed: number[];
@@ -39,6 +41,7 @@ interface TestConfig {
     greeting: string;
     title: string;
     subtitle: string;
+    inputPlaceholder: string;
     logoUrl: string;
     logoPosition: string;
     logoSize: string;
@@ -210,12 +213,12 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
       } else {
         // Fallback: Demo responses when no n8n webhook configured  
         const testResponses: { [key: string]: string } = {
-          "hallo": currentConfig.greeting || `Hallo! Ich bin ${currentConfig.name}, wie kann ich Ihnen helfen?`,
+          "hallo": currentConfig.greeting || "Hallo! Wie kann ich Ihnen heute helfen?",
           "test": "Das ist eine Vorschau der Funktionalität. Ihr echter Bot wird individuell konfiguriert.",
           "funktionen": "In der echten Version kann ich Ihre spezifischen Fragen beantworten und vieles mehr.",
           "kosten": "Für genaue Informationen sprechen Sie bitte mit Zoë's KI Service.",
           "voice": config.activeBot === "voicebot" ? "Ich kann sprechen! Probieren Sie die Sprachausgabe aus." : "Wechseln Sie zum Voicebot um die Sprachfunktion zu testen.",
-          "default": currentConfig.greeting || `Hallo! Ich bin ${currentConfig.name}, wie kann ich Ihnen helfen?`
+          "default": currentConfig.greeting || "Hallo! Wie kann ich Ihnen heute helfen?"
         };
 
         const messageLower = messageToSend.toLowerCase();
@@ -300,7 +303,14 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
         ...(currentConfig.position === 'center' && { left: '50%', transform: 'translateX(-50%)' })
       }}
       data-testid="test-chatbot-widget"
+      data-chatbot-scope={authToken || 'default'}
     >
+      <style>{`
+        [data-chatbot-scope="${authToken || 'default'}"] input::placeholder {
+          color: ${currentConfig.textColor || '#6B7280'} !important;
+          opacity: 0.7;
+        }
+      `}</style>
       {/* Header */}
       <div 
         className="flex items-center justify-between p-4 border-b text-white rounded-t-lg relative min-h-[60px]"
@@ -343,9 +353,9 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
             <Volume2 className="w-5 h-5" />
           )}
           <div className="flex-1">
-            <div className="font-semibold">{currentConfig.name} (TEST)</div>
-            {(config.activeBot === "chatbot" ? config.chatbot.subtitle : config.voicebot.subtitle) && (
-              <div className="text-xs text-white/80">{config.activeBot === "chatbot" ? config.chatbot.subtitle : config.voicebot.subtitle}</div>
+            <div className="font-semibold">{currentConfig.title} (TEST)</div>
+            {currentConfig.subtitle && (
+              <div className="text-xs text-white/80">{currentConfig.subtitle}</div>
             )}
           </div>
         </div>
@@ -397,10 +407,10 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
                 message.sender === 'user' 
                   ? { 
                       backgroundColor: currentConfig.primaryColor,
-                      color: config.activeBot === "chatbot" && config.chatbot.textColor ? config.chatbot.textColor : '#FFFFFF'
+                      color: '#FFFFFF'
                     } 
                   : {
-                      color: config.activeBot === "chatbot" && config.chatbot.textColor ? config.chatbot.textColor : undefined
+                      color: currentConfig.textColor || undefined
                     }
               }
             >
@@ -439,9 +449,12 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder={`Nachricht an ${currentConfig.name}...`}
+            placeholder={currentConfig.inputPlaceholder}
             disabled={isLoading}
             className="flex-1"
+            style={{
+              color: currentConfig.textColor || undefined
+            }}
             data-testid="input-test-message"
           />
           <Button

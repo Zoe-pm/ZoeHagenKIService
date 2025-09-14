@@ -18,6 +18,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
 function Router() {
   return (
@@ -57,6 +58,9 @@ function App() {
           </main>
           <Footer />
           <AccessibilityBanner />
+          
+          {/* Global Chat/Voice Widgets - Fixed position, always available */}
+          <ChatbotWidget />
         </div>
         <Toaster />
       </TooltipProvider>

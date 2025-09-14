@@ -1387,42 +1387,38 @@ export default function KundenTest() {
               </Card>
             </div>
 
-            {/* Live Preview */}
+            {/* Live TestChatbot - Interactive Preview */}
             <div className="lg:col-span-2">
               <Card className="glass">
                 <CardHeader>
-                  <CardTitle>📱 Live-Vorschau</CardTitle>
+                  <CardTitle>🤖 Interaktiver Test-Bot</CardTitle>
                   <p className="text-muted-foreground">
-                    So wird Ihr Chatbot auf der Website erscheinen:
+                    Testen Sie Ihren Bot direkt - alle Änderungen werden sofort angewendet:
                   </p>
                 </CardHeader>
-                <CardContent className={`min-h-[300px] relative ${!isAuthorized ? 'opacity-50' : ''}`}>
-                  <div 
-                    className={`
-                      p-4 rounded-lg border-2 border-dashed border-muted-foreground/30 min-h-[250px] relative overflow-hidden bg-white
-                    `}
-                  >
-                    <div className="text-center text-muted-foreground py-12">
-                      <p className="mb-4">TEST-Bot Vorschau</p>
-                      <p className="text-sm">Klicken Sie auf die Bubble um Ihren {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} zu testen.</p>
-                      
-                      {/* Simulierter Bot Button */}
-                      <div 
-                        className={`
-                          fixed rounded-full w-16 h-16 flex items-center justify-center text-white font-bold text-xl shadow-lg cursor-pointer z-10
-                          ${(testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position) === 'bottom-right' ? 'bottom-4 right-4' : 
-                            (testConfig.activeBot === "chatbot" ? testConfig.chatbot.position : testConfig.voicebot.position) === 'bottom-left' ? 'bottom-4 left-4' : 
-                            'bottom-4 left-1/2 transform -translate-x-1/2'}
-                        `}
-                        style={{
-                          backgroundColor: testConfig.activeBot === "chatbot" ? testConfig.chatbot.primaryColor : testConfig.voicebot.primaryColor
-                        }}
-                        onClick={() => isAuthorized && setIsChatOpen(true)}
-                      >
-                        {testConfig.activeBot === "chatbot" ? "💬" : "🎤"}
+                <CardContent className={`min-h-[500px] relative ${!isAuthorized ? 'opacity-50' : ''}`}>
+                  {isAuthorized ? (
+                    <div className="relative h-[500px] bg-gradient-to-br from-background via-muted/20 to-background rounded-lg overflow-hidden border border-border/50">
+                      <TestChatbot
+                        isOpen={true}
+                        onClose={() => {}} // No close in embedded mode
+                        authToken={session?.token}
+                        config={testConfig}
+                        n8nWebhookUrl={session?.n8nWebhookUrl}
+                        n8nBotName={session?.n8nBotName}
+                        n8nBotGreeting={session?.n8nBotGreeting}
+                        mode="inline"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-[500px] flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-background rounded-lg border border-border/50">
+                      <div className="text-center text-muted-foreground p-8">
+                        <div className="text-6xl mb-4">🔒</div>
+                        <h3 className="text-xl font-semibold mb-2">Testcode erforderlich</h3>
+                        <p className="text-sm">Melden Sie sich mit Ihrem Testcode an, um den interaktiven Bot zu testen.</p>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
 

@@ -59,9 +59,11 @@ interface TestChatbotProps {
   n8nWebhookUrl?: string;
   n8nBotName?: string;
   n8nBotGreeting?: string;
+  // Display mode
+  mode?: 'fixed' | 'inline';
 }
 
-export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl, n8nBotName, n8nBotGreeting }: TestChatbotProps) {
+export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl, n8nBotName, n8nBotGreeting, mode = 'fixed' }: TestChatbotProps) {
   // Stable session ID for Test Chatbots (per webhook/authToken)
   const getTestSessionId = () => {
     const sessionKey = `testSessionId-${authToken || 'default'}`;
@@ -292,17 +294,24 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
 
   return (
     <div 
-      className={`fixed ${sizeClass} shadow-2xl border rounded-lg z-[9999] flex flex-col max-h-[80vh]`}
+      className={`${mode === 'fixed' ? 'fixed' : 'relative'} ${sizeClass} shadow-2xl border rounded-lg ${mode === 'fixed' ? 'z-[9999]' : ''} flex flex-col max-h-[80vh]`}
       style={{
         backgroundColor: currentConfig.backgroundColor,
-        bottom: '20px',
-        maxHeight: 'calc(100vh - 40px)',
-        fontFamily: config.activeBot === "chatbot" ? config.chatbot.fontFamily : 'Inter',
-        ...getResponsiveWidth(),
-        // Position respektieren
-        ...(currentConfig.position === 'bottom-left' && { left: '20px' }),
-        ...(currentConfig.position === 'bottom-right' && { right: '20px' }),
-        ...(currentConfig.position === 'center' && { left: '50%', transform: 'translateX(-50%)' })
+        ...(mode === 'fixed' && {
+          bottom: '20px',
+          maxHeight: 'calc(100vh - 40px)',
+          ...getResponsiveWidth(),
+          // Position respektieren
+          ...(currentConfig.position === 'bottom-left' && { left: '20px' }),
+          ...(currentConfig.position === 'bottom-right' && { right: '20px' }),
+          ...(currentConfig.position === 'center' && { left: '50%', transform: 'translateX(-50%)' })
+        }),
+        ...(mode === 'inline' && {
+          width: '100%',
+          height: '100%',
+          maxHeight: '100%'
+        }),
+        fontFamily: config.activeBot === "chatbot" ? config.chatbot.fontFamily : 'Inter'
       }}
       data-testid="test-chatbot-widget"
       data-chatbot-scope={authToken || 'default'}
@@ -403,7 +412,7 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
               className={`max-w-[80%] p-3 rounded-lg ${
                 message.sender === 'user'
                   ? ''
-                  : 'bg-muted'
+                  : ''
               }`}
               style={
                 message.sender === 'user' 
@@ -412,7 +421,8 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
                       color: '#FFFFFF'
                     } 
                   : {
-                      color: currentConfig.textColor || undefined
+                      backgroundColor: currentConfig.textBackgroundColor || '#F3F4F6',
+                      color: currentConfig.textColor || '#000000'
                     }
               }
             >
@@ -426,11 +436,16 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-muted p-3 rounded-lg">
+            <div 
+              className="p-3 rounded-lg"
+              style={{
+                backgroundColor: currentConfig.textBackgroundColor || '#F3F4F6'
+              }}
+            >
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: currentConfig.textColor || '#6B7280' }} />
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: currentConfig.textColor || '#6B7280', animationDelay: '0.1s' }} />
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: currentConfig.textColor || '#6B7280', animationDelay: '0.2s' }} />
               </div>
             </div>
           </div>

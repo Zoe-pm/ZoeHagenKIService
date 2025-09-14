@@ -25,6 +25,7 @@ interface ChatbotConfig {
   greeting: string;
   title: string;
   subtitle: string;
+  inputPlaceholder: string;
   messageToAlex: string;
 }
 
@@ -45,6 +46,7 @@ interface VoicebotConfig {
   greeting: string;
   title: string;
   subtitle: string;
+  inputPlaceholder: string;
   messageToAlex: string;
 }
 
@@ -107,6 +109,7 @@ export default function KundenTest() {
       greeting: "Hallo! Wie kann ich Ihnen heute helfen?",
       title: "Willkommen!",
       subtitle: "24/7 erreichbar",
+      inputPlaceholder: "Nachricht an das Team...",
       messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Chatbot...",
       logoUrl: "",
       logoPosition: "top-left",
@@ -129,6 +132,7 @@ export default function KundenTest() {
       greeting: "Hallo! Ich bin Kira, Ihr KI-Ratgeber.",
       title: "Immer für Sie da.",
       subtitle: "Womit kann ich helfen?",
+      inputPlaceholder: "Nachricht an Kira...",
       messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Voicebot...",
       logoUrl: "",
       logoPosition: "top-left",
@@ -406,6 +410,7 @@ export default function KundenTest() {
         greeting: "Hallo! Womit kann ich helfen?",
         title: "Willkommen!",
         subtitle: "Ich helfe Ihnen gerne weiter",
+        inputPlaceholder: "Nachricht an Kira...",
         messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Chatbot...",
         logoUrl: "",
         logoPosition: "top-left",
@@ -428,6 +433,7 @@ export default function KundenTest() {
         greeting: "Hallo! Ich bin Juna Voice, Ihr Sprach-Assistent.",
         title: "Sprachassistent",
         subtitle: "Sprechen Sie mit mir!",
+        inputPlaceholder: "Nachricht an Juna Voice...",
         messageToAlex: "Hallo Alex, bitte berücksichtigen Sie die folgenden Anpassungswünsche für meinen Voicebot...",
         logoUrl: "",
         logoPosition: "top-left",

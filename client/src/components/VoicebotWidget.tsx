@@ -4,6 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Mic, MicOff, Phone, PhoneOff, Volume2 } from 'lucide-react';
 
+// Voice button component (for floating dock)
+export function VoiceButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      onClick={onClick}
+      className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e63973] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20 pointer-events-auto"
+      size="sm"
+      data-testid="button-open-voice"
+    >
+      <Volume2 className="h-8 w-8 text-white drop-shadow-lg" />
+    </Button>
+  );
+}
+
 interface VoicebotWidgetProps {
   isOpen: boolean;
   onClose: () => void;

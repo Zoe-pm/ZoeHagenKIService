@@ -1,22 +1,7 @@
 import { useState, useEffect } from 'react';
-import { SimpleChatbot, ChatbotButton } from './SimpleChatbot';
-import VoicebotWidget from './VoicebotWidget';
-import { Button } from '@/components/ui/button';
-import { Volume2 } from 'lucide-react';
-
-// Voice button component (similar to ChatbotButton)
-function VoiceButton({ onClick }: { onClick: () => void }) {
-  return (
-    <Button
-      onClick={onClick}
-      className="fixed bottom-4 right-4 z-[10000] w-16 h-16 rounded-full bg-gradient-to-br from-[#e63973] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20 pointer-events-auto"
-      size="sm"
-      data-testid="button-open-voice"
-    >
-      <Volume2 className="h-8 w-8 text-white drop-shadow-lg" />
-    </Button>
-  );
-}
+import { Portal } from "@radix-ui/react-portal";
+import { SimpleChatbot, ChatbotButton } from "./SimpleChatbot";
+import VoicebotWidget, { VoiceButton } from "./VoicebotWidget";
 
 export default function ChatbotWidget() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -40,11 +25,25 @@ export default function ChatbotWidget() {
     <>
       {/* Juna Chat - Text Chatbot */}
       <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      <ChatbotButton onClick={() => setIsChatOpen(true)} />
       
       {/* Juna Voice - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
-      <VoiceButton onClick={() => setIsVoiceOpen(true)} />
+
+      <Portal>
+        <div
+          id="floating-dock"
+          className="
+            fixed
+            right-4 bottom-[calc(env(safe-area-inset-bottom)+16px)]
+            md:right-6 md:bottom-6
+            z-[2147483647]
+            flex flex-col items-end gap-3
+          "
+        >
+          <VoiceButton onClick={() => setIsVoiceOpen(true)} />
+          <ChatbotButton onClick={() => setIsChatOpen(true)} />
+        </div>
+      </Portal>
     </>
   );
 }

@@ -569,7 +569,7 @@ export default function Admin() {
                       data-testid={`testcode-card-${testCode.code}`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <code className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                        <code className="text-lg font-bold text-[#B8436A] dark:text-[#E8719A]">
                           {testCode.code}
                         </code>
                         <div className="flex items-center gap-2">

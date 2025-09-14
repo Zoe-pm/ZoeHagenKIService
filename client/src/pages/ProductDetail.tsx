@@ -401,7 +401,7 @@ export default function ProductDetail() {
                   <h3 className="text-xl font-semibold mb-4">Jetzt starten</h3>
                   <div className="space-y-4">
                     <Button 
-                      className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground"
+                      className="w-full bg-gradient-to-r from-[#B8436A] to-[#E8719A] text-white"
                       data-testid="sidebar-demo-button"
                     >
                       Kostenlose Demo

@@ -243,11 +243,13 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
 
   return (
     <div 
+      id="juna-voice"
       className="fixed bottom-20 right-4 w-80 max-w-[calc(100vw-2rem)]"
       style={{
         maxWidth: 'min(320px, calc(100vw - 2rem))',
         zIndex: 2147483649  // Above the floating dock and below chat
       }}
+      data-testid="container-voice"
     >
       <Card className="glass shadow-xl border border-secondary/20">
         <CardContent className="p-4">

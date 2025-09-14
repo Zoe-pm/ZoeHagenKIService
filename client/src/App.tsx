@@ -19,6 +19,7 @@ import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
 import ChatbotWidget from "@/components/ChatbotWidget";
+import { testSessionManager } from "@/lib/testSession";
 
 function Router() {
   return (
@@ -42,6 +43,14 @@ function App() {
   useEffect(() => {
     // Set dark mode by default
     document.documentElement.classList.add('dark');
+    
+    // Initialize test session manager
+    testSessionManager.init();
+    
+    // Cleanup on app unmount
+    return () => {
+      testSessionManager.destroy();
+    };
   }, []);
 
   return (

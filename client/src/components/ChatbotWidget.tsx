@@ -83,10 +83,12 @@ export default function ChatbotWidget() {
   useEffect(() => {
     const handleOpenChat = () => {
       setIsChatOpen(true);
+      setIsVoiceOpen(false); // Close voice when opening chat
     };
 
     const handleOpenVoice = () => {
       setIsVoiceOpen(true);
+      setIsChatOpen(false); // Close chat when opening voice
     };
 
     // Add event listeners for custom events
@@ -100,6 +102,23 @@ export default function ChatbotWidget() {
     };
   }, []);
 
+  // Outside-click detection to close widgets
+  useEffect(() => {
+    if (!isChatOpen && !isVoiceOpen) return;
+
+    const handleOutsideClick = (event: PointerEvent) => {
+      const target = event.target as Element;
+      // Check if click is outside all widget areas
+      if (!target.closest('#juna-chat, #juna-voice, #floating-dock')) {
+        setIsChatOpen(false);
+        setIsVoiceOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handleOutsideClick);
+    return () => document.removeEventListener('pointerdown', handleOutsideClick);
+  }, [isChatOpen, isVoiceOpen]);
+
   return (
     <>
       {/* Juna Chat - Text Chatbot */}
@@ -111,8 +130,14 @@ export default function ChatbotWidget() {
       {/* Only render portal when container is mounted */}
       {isMounted && containerRef.current && createPortal(
         <>
-          <VoiceButton onClick={() => setIsVoiceOpen(true)} />
-          <ChatbotButton onClick={() => setIsChatOpen(true)} />
+          <VoiceButton onClick={() => {
+            setIsVoiceOpen(true);
+            setIsChatOpen(false); // Close chat when opening voice
+          }} />
+          <ChatbotButton onClick={() => {
+            setIsChatOpen(true);
+            setIsVoiceOpen(false); // Close voice when opening chat
+          }} />
         </>, containerRef.current
       )}
     </>

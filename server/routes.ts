@@ -222,6 +222,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Close test session endpoint (for proper session lifecycle)
+  app.post('/api/test-session/close', async (req, res) => {
+    try {
+      const { token } = req.body;
+      
+      if (!token) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Token required' 
+        });
+      }
+
+      // Delete the test session
+      await storage.deleteTestSession(token);
+      
+      console.log(`Test session closed: ${token.substring(0, 10)}...`);
+      
+      res.json({
+        success: true,
+        message: 'Session closed'
+      });
+    } catch (error) {
+      console.error('Test session close error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Internal server error' 
+      });
+    }
+  });
+
   // Admin Testcode Management Routes
   
   // Get all test codes

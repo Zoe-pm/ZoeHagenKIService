@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { HelpCircle, Settings, Bot, MessageSquare, Mic, Palette, Layout, Volume2 } from "lucide-react";
+// Icons entfernt auf Benutzeranfrage
 
 interface ChatbotConfig {
   name: string;
@@ -539,9 +539,9 @@ export default function KundenTest() {
           {/* Login Card - immer sichtbar */}
           <Card className="glass max-w-lg mx-auto mb-8 relative z-20 border-2 border-primary/20 shadow-2xl">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl mb-4 text-primary">🔐 Testbereich-Anmeldung</CardTitle>
+              <CardTitle className="text-2xl mb-4 text-primary">Testbereich-Anmeldung</CardTitle>
               <p className="text-foreground mb-4 font-medium">
-                Diese Testumgebung ist öffentlich sichtbar. Einstellungen und Tests sind erst nach Login mit Ihrem Testcode möglich.
+                Fordern Sie bitte einen Code an, um Ihr Design zu testen. Nach Auftragsvergabe und Training können Sie ihren fertigen Assistant hier testen.
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -943,7 +943,7 @@ export default function KundenTest() {
                         variant="outline"
                         data-testid="button-save-voice-settings"
                       >
-                        <Volume2 className="w-4 h-4 mr-2" />
+                        {/* Icon entfernt */}
                         {isSavingPreferences ? "Speichere..." : "Voice-Einstellungen speichern"}
                       </Button>
                       <p className="text-xs text-muted-foreground mt-2 text-center">

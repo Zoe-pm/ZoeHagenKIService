@@ -281,7 +281,7 @@ export function ChatbotButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       onClick={onClick}
-      className="fixed bottom-4 right-20 z-[10000] rounded-full w-16 h-16 bg-gradient-to-br from-[#e63973] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20 pointer-events-auto"
+      className="fixed bottom-4 right-24 z-[10000] rounded-full w-16 h-16 bg-gradient-to-br from-[#e63973] to-[#E8719A] shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border-2 border-white/20 pointer-events-auto"
       data-testid="button-open-chat"
     >
       <MessageCircle className="h-8 w-8 text-white drop-shadow-lg" />

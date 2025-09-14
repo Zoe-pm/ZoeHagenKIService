@@ -295,7 +295,7 @@
   }
 
   .hero-gradient {
-    background: hsl(var(--secondary));
+    background: #3C4A57;
   }
 
   /* Token-based button styles */

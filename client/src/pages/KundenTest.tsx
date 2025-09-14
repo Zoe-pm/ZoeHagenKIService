@@ -522,13 +522,13 @@ export default function KundenTest() {
             </p>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8 border border-white/20">
               <p className="text-white/95 text-sm">
-                <strong>💡 Hinweis:</strong> Alle gezeigten Anpassungen sind Beispiele. Nach unserem Gespräch können wir weitere individuelle Anpassungen problemlos umsetzen – von erweiterten Funktionen bis hin zu speziellen Design-Anforderungen.
+<strong>Hinweis:</strong> Alle gezeigten Anpassungen sind Beispiele. Nach unserem Gespräch können wir weitere individuelle Anpassungen problemlos umsetzen – von erweiterten Funktionen bis hin zu speziellen Design-Anforderungen.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white/80 text-sm max-w-2xl mx-auto">
-              <div>✨ Live-Vorschau</div>
-              <div>🎨 Design anpassen</div>
-              <div>🗣️ Stimme testen</div>
+              <div>Live-Vorschau</div>
+              <div>Design anpassen</div>
+              <div>Stimme testen</div>
             </div>
           </div>
         </section>
@@ -577,12 +577,12 @@ export default function KundenTest() {
                   className="w-full button-gradient"
                   data-testid="unlock-chatbot"
                 >
-                  {isValidating ? "Wird geprüft..." : "🤖 Zugang freischalten"}
+                  {isValidating ? "Wird geprüft..." : "Zugang freischalten"}
                 </Button>
               ) : (
                 <div className="space-y-3">
                   <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-green-700 font-medium">✅ Zugang freigeschaltet!</p>
+                    <p className="text-green-700 font-medium">Zugang freigeschaltet!</p>
                     <p className="text-sm text-green-600 mt-1">Sie können jetzt alle Funktionen testen.</p>
                   </div>
                   <Button 
@@ -591,7 +591,7 @@ export default function KundenTest() {
                     className="w-full"
                     data-testid="logout-button"
                   >
-                    🔒 Abmelden
+                    Abmelden
                   </Button>
                 </div>
               )}
@@ -627,7 +627,7 @@ export default function KundenTest() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 backdrop-blur-[1px] z-10 rounded-lg">
               <div className="flex items-center justify-center h-full">
                 <div className="text-center text-foreground p-6 max-w-sm bg-background/70 rounded-xl border border-primary/20 shadow-md">
-                  <div className="mb-4 text-5xl">✨</div>
+                  <div className="mb-4 text-5xl"></div>
                   <h3 className="text-xl font-bold mb-3 text-primary">Ihr KI-Assistent wartet</h3>
                   <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
                     Mit Ihrem persönlichen Testcode können Sie alle Einstellungen live ausprobieren und Ihren perfekten KI-Assistenten konfigurieren.
@@ -637,7 +637,7 @@ export default function KundenTest() {
                     className="button-gradient px-6 py-2"
                     size="default"
                   >
-                    🚀 Jetzt einloggen
+                    Jetzt einloggen
                   </Button>
                 </div>
               </div>
@@ -651,7 +651,7 @@ export default function KundenTest() {
               <Card className="glass sticky top-24">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    🎛️ Live-Anpassungen
+                    Live-Anpassungen
                     <Button variant="outline" size="sm" onClick={resetConfig}>
                       Reset
                     </Button>
@@ -671,8 +671,8 @@ export default function KundenTest() {
                         <SelectValue placeholder="Bot-Typ wählen" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="chatbot">💬 Chatbot</SelectItem>
-                        <SelectItem value="voicebot">🎤 Voicebot</SelectItem>
+                        <SelectItem value="chatbot">Chatbot</SelectItem>
+                        <SelectItem value="voicebot">Voicebot</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1167,7 +1167,7 @@ export default function KundenTest() {
                         size="lg"
                         data-testid="button-test-bot"
                       >
-                        🤖 {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} testen
+                        {testConfig.activeBot === "chatbot" ? "Chatbot" : "Voicebot"} testen
                       </Button>
                     ) : (
                       <Button 
@@ -1175,7 +1175,7 @@ export default function KundenTest() {
                         className="w-full opacity-50 cursor-not-allowed"
                         size="lg"
                       >
-                        🔒 Anmeldung erforderlich
+                        Anmeldung erforderlich
                       </Button>
                     )}
 
@@ -1203,7 +1203,7 @@ export default function KundenTest() {
 
                           if (response.ok && data.success) {
                             toast({
-                              title: "✅ Konfiguration gespeichert!",
+                              title: "Konfiguration gespeichert!",
                               description: `Ihre Einstellungen wurden erfolgreich übermittelt. Referenz: ${data.referenceId}. Sie erhalten eine Zusammenfassung per E-Mail.`,
                             });
                           } else {

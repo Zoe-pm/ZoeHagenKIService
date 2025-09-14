@@ -27,6 +27,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [imageHeight, setImageHeight] = useState('240px');
+  const [isIntersecting, setIsIntersecting] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -45,18 +46,44 @@ export default function ProductCard({
     return () => window.removeEventListener('resize', updateImageHeight);
   }, []);
 
+  // Intersection Observer für Autoplay
+  useEffect(() => {
+    if (!videoRef.current || mediaType !== 'video') return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+        if (entry.isIntersecting && !isVideoPlaying) {
+          handleVideoPlay();
+        } else if (!entry.isIntersecting && isVideoPlaying) {
+          // Video pausieren wenn es aus dem viewport geht
+          if (videoRef.current) {
+            videoRef.current.pause();
+            setIsVideoPlaying(false);
+          }
+        }
+      },
+      { threshold: 0.5 } // Video startet wenn 50% sichtbar sind
+    );
+
+    observer.observe(videoRef.current);
+    return () => observer.disconnect();
+  }, [mediaType, isVideoPlaying]);
+
   const handleVideoPlay = () => {
     if (videoRef.current && !isVideoPlaying) {
       setIsVideoPlaying(true);
       videoRef.current.currentTime = 0;
-      videoRef.current.play();
+      videoRef.current.play().catch(console.error);
     }
   };
 
   const handleVideoEnd = () => {
     setIsVideoPlaying(false);
-    if (videoRef.current) {
+    // Video läuft endlos durch wenn sichtbar
+    if (videoRef.current && isIntersecting) {
       videoRef.current.currentTime = 0;
+      setTimeout(() => handleVideoPlay(), 100);
     }
   };
 

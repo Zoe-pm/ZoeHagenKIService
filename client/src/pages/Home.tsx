@@ -14,8 +14,6 @@ import SEOHelmet from "@/components/SEOHelmet";
 // Lazy load heavy components to optimize bundle size
 const VoiceDemo = lazy(() => import("@/components/VoiceDemo"));
 const ChatbotWidget = lazy(() => import("@/components/ChatbotWidget"));
-const SimpleChatbot = lazy(() => import("@/components/SimpleChatbot").then(module => ({ default: module.SimpleChatbot })));
-const VoicebotWidget = lazy(() => import("@/components/VoicebotWidget"));
 // Using public images for better build performance
 const voicebotImage = "/images/voicebot.png";
 const avatarVideo = "/images/avatar.mp4";
@@ -62,8 +60,6 @@ const products = [
 ];
 
 export default function Home() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [, setLocation] = useLocation();
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
@@ -80,11 +76,11 @@ export default function Home() {
 
   const handleProductButtonClick = (productId: string) => {
     if (productId === 'chatbot') {
-      // Open Juna Chat chatbot directly
-      setIsChatOpen(true);
+      // Use custom event to trigger chatbot opening
+      window.dispatchEvent(new CustomEvent('open-chat'));
     } else if (productId === 'voicebot') {
-      // Open Juna Voice voicebot directly
-      setIsVoiceOpen(true);
+      // Use custom event to trigger voicebot opening  
+      window.dispatchEvent(new CustomEvent('open-voice'));
     } else {
       // For other products, navigate to contact page
       setLocation('/kontakt');
@@ -248,11 +244,8 @@ export default function Home() {
 
       </main>
 
-      {/* Individual Widgets for Product Buttons */}
-      {/* Lazy-loaded interactive components */}
+      {/* Bot Widgets - Floating Buttons */}
       <Suspense fallback={null}>
-        <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-        <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
         <ChatbotWidget />
       </Suspense>
       

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SimpleChatbot, ChatbotButton } from './SimpleChatbot';
 import VoicebotWidget from './VoicebotWidget';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,20 @@ function VoiceButton({ onClick }: { onClick: () => void }) {
 export default function ChatbotWidget() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+
+  // Listen for custom events from product buttons
+  useEffect(() => {
+    const handleOpenChat = () => setIsChatOpen(true);
+    const handleOpenVoice = () => setIsVoiceOpen(true);
+
+    window.addEventListener('open-chat', handleOpenChat);
+    window.addEventListener('open-voice', handleOpenVoice);
+
+    return () => {
+      window.removeEventListener('open-chat', handleOpenChat);
+      window.removeEventListener('open-voice', handleOpenVoice);
+    };
+  }, []);
 
   return (
     <>

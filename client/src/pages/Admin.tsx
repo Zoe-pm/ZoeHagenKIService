@@ -244,13 +244,13 @@ export default function Admin() {
     return (
       <div className="min-h-screen">
         <Navigation />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 pt-20">
+        <div className="min-h-screen bg-[#3C4A57] flex items-center justify-center p-4 pt-20">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
-              <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] rounded-full flex items-center justify-center">
-                <Shield className="w-8 h-8 text-gray-800" />
+              <div className="mx-auto mb-4 w-16 h-16 bg-[#B8436A] rounded-full flex items-center justify-center">
+                <Shield className="w-8 h-8 text-white" />
               </div>
-              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] bg-clip-text text-transparent">
+              <CardTitle className="text-2xl font-bold text-[#B8436A]">
                 Admin-Login
               </CardTitle>
             </CardHeader>
@@ -305,16 +305,16 @@ export default function Admin() {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4 pt-20 min-h-screen">
+      <div className="bg-[#3C4A57] p-4 pt-20 min-h-screen">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-[#A7C7E7] via-[#5DADE2] to-[#58B58E] bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold text-[#B8436A]">
                   Zoë's KI Service - Admin Dashboard
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
+                <p className="text-[#D9D9D9] mt-2">
                   Verwalten Sie Test-Codes und Kundenzugänge
                 </p>
               </div>

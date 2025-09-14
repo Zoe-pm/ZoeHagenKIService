@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { MessageCircle, Mic, UserCircle, Brain, Shield, Settings, Headphones, CheckCircle, Users, Zap } from "lucide-react";
+import { Shield, Settings, Headphones, CheckCircle, Users, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
@@ -24,10 +24,9 @@ const chatbotImage = "/images/chatbot.webp";
 const products = [
   {
     id: "chatbot",
-    title: "Chatbot – Antworten ohne Suchen",
+    title: "Antwort ohne Suchen - Chatbot",
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
     features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Schafft Ihnen Zeit für Ihre eigentlichen Aufgaben", "Terminbuchung"],
-    icon: <MessageCircle className="text-primary" />,
     image: chatbotImage,
     gradient: "bg-gradient-to-r from-primary to-secondary",
     buttonText: "hier ausprobieren"
@@ -37,17 +36,15 @@ const products = [
     title: "Sprechen statt Tippen - Voicebot",
     description: "Einfach Sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
     features: ["Sprechen wie mit einem Menschen", "Einbindung in Website und über Telefon möglich", "Kein: Drücken Sie die eins... mehr", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
-    icon: <Mic className="text-secondary" />,
     image: voicebotImage,
     gradient: "bg-gradient-to-r from-secondary to-accent",
     buttonText: "Sprechen Sie mit Juna"
   },
   {
     id: "avatar",
-    title: "Avatar – Service mit Gesicht",
+    title: "Service mit Gesicht - Avatar",
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
-    icon: <UserCircle className="text-accent" />,
     image: avatarVideo,
     gradient: "bg-gradient-to-r from-accent to-primary",
     buttonText: "Avatar erleben",
@@ -55,10 +52,9 @@ const products = [
   },
   {
     id: "wissensbot",
-    title: "Wissensbot – Wissen, das bleibt",
+    title: "Wissen, das bleibt - Wissensbot",
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität", "Onboarding leicht gemacht"],
-    icon: <Brain className="text-primary" />,
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
     gradient: "bg-gradient-to-r from-primary to-accent",
     buttonText: "Gespräch vereinbaren"
@@ -121,7 +117,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in" data-testid="hero-title">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in text-left" data-testid="hero-title">
                   <span className="text-white">
                     KI mit Herz & Hirn
                   </span>
@@ -161,14 +157,14 @@ export default function Home() {
             {/* So arbeiten wir */}
             <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="process-section">
               <div className="max-w-6xl mx-auto">
-                <h2 className="text-3xl font-bold text-center mb-12 text-white">So arbeiten wir</h2>
+                <h2 className="text-3xl font-bold text-left mb-12 text-white">So arbeiten wir</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="relative group">
                     <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg border border-white/40 hover:bg-white/100 transition-all duration-300 h-full flex flex-col shadow-lg">
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
                         1
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-center text-lg">Gespräch</h3>
+                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Gespräch</h3>
                       <p className="text-gray-600 mb-2 text-center text-sm">(30 Min.)</p>
                       <p className="text-gray-700 text-center text-sm flex-grow">Ziele & Use-Cases klären</p>
                     </div>
@@ -181,7 +177,7 @@ export default function Home() {
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
                         2
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-center text-lg">Pilot</h3>
+                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Pilot</h3>
                       <p className="text-gray-600 mb-2 text-center text-sm">(2 Wochen)</p>
                       <p className="text-gray-700 text-center text-sm flex-grow">Prototyp mit echtem Inhalt</p>
                     </div>
@@ -194,7 +190,7 @@ export default function Home() {
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
                         3
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-center text-lg">Rollout</h3>
+                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Rollout</h3>
                       <p className="text-gray-600 mb-2 text-center text-sm">&nbsp;</p>
                       <p className="text-gray-700 text-center text-sm flex-grow">Schulung, Feinschliff, Go-Live</p>
                     </div>
@@ -207,7 +203,7 @@ export default function Home() {
                       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-xl mx-auto mb-4 shadow-lg">
                         4
                       </div>
-                      <h3 className="font-bold text-gray-800 mb-3 text-center text-lg">Support</h3>
+                      <h3 className="font-bold text-gray-800 mb-3 text-left text-lg">Support</h3>
                       <p className="text-gray-600 mb-2 text-center text-sm">&nbsp;</p>
                       <p className="text-gray-700 text-center text-sm flex-grow">Monitoring & laufende Optimierung</p>
                     </div>

@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -8,7 +7,6 @@ interface ProductCardProps {
   title: string;
   description: string;
   features: string[];
-  icon: React.ReactNode;
   image: string;
   gradient: string;
   buttonText: string;
@@ -21,7 +19,6 @@ export default function ProductCard({
   title,
   description,
   features,
-  icon,
   image,
   gradient,
   buttonText,
@@ -79,10 +76,7 @@ export default function ProductCard({
           />
         )}
         
-        <div className="text-center mb-3">
-          <div className="text-3xl mb-2" data-testid={`product-icon-${id}`}>
-            {icon}
-          </div>
+        <div className="text-left mb-3">
           <h2 className="text-xl font-semibold mb-2" data-testid={`product-title-${id}`}>
             {title}
           </h2>
@@ -95,7 +89,7 @@ export default function ProductCard({
         <div className="space-y-1 mb-4 text-sm flex-grow">
           {features.map((feature, index) => (
             <div key={index} className="flex items-center" data-testid={`product-feature-${id}-${index}`}>
-              <CheckCircle className="w-4 h-4 text-accent mr-2 flex-shrink-0" />
+              <span className="w-4 h-4 text-accent mr-2 flex-shrink-0">•</span>
               <span>{feature}</span>
             </div>
           ))}

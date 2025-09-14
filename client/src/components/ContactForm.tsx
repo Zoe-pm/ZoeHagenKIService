@@ -73,7 +73,7 @@ export default function ContactForm() {
           <div className="lg:col-span-2">
             <Card className="glass">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold mb-6 text-center" data-testid="contact-form-title">
+                <h3 className="text-2xl font-semibold mb-6 text-left" data-testid="contact-form-title">
                   Schreiben Sie uns eine Nachricht
                 </h3>
                 <Form {...contactForm}>
@@ -159,7 +159,7 @@ export default function ContactForm() {
           <div className="space-y-6">
             <Card className="glass">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-center" data-testid="contact-info-title">
+                <h3 className="text-xl font-semibold mb-4 text-left" data-testid="contact-info-title">
                   Direkter Kontakt
                 </h3>
                 <div className="space-y-4">
@@ -195,7 +195,7 @@ export default function ContactForm() {
 
             <Card className="glass">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-center" data-testid="quick-actions-title">
+                <h3 className="text-xl font-semibold mb-4 text-left" data-testid="quick-actions-title">
                   Schnellstart
                 </h3>
                 <div className="space-y-3">

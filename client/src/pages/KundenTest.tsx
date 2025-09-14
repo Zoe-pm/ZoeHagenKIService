@@ -607,14 +607,14 @@ export default function KundenTest() {
               />
               
               <div className="space-y-3">
-                <div className="p-3 bg-amber-50 rounded-lg border-l-4 border-amber-400">
-                  <p className="text-sm text-amber-700">
+                <div className="p-3 bg-pink-50 rounded-lg border-l-4 border-[#B8436A]">
+                  <p className="text-sm text-[#B8436A]">
                     <strong>Zum Schutz vor Missbrauch setzen wir eine kurze Sicherheitsprüfung ein.</strong> Nach erfolgreichem Login werden alle Funktionen freigeschaltet.
                   </p>
                 </div>
                 
-                <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-                  <p className="text-sm text-blue-700">
+                <div className="p-3 bg-pink-50 rounded-lg border-l-4 border-[#B8436A]">
+                  <p className="text-sm text-[#B8436A]">
                     <strong>Das Training des Chatbots erfolgt durch uns nach Testcode-Vergabe.</strong>
                   </p>
                 </div>

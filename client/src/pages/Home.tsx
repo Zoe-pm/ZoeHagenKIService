@@ -18,7 +18,7 @@ const SimpleChatbot = lazy(() => import("@/components/SimpleChatbot").then(modul
 const VoicebotWidget = lazy(() => import("@/components/VoicebotWidget"));
 // Using public images for better build performance
 const voicebotImage = "/images/voicebot.png";
-const avatarImage = "/images/avatar.webp";
+const avatarVideo = "/images/avatar.mp4";
 const chatbotImage = "/images/chatbot.webp";
 
 const products = [
@@ -48,9 +48,10 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     icon: <UserCircle className="text-accent" />,
-    image: avatarImage,
+    image: avatarVideo,
     gradient: "bg-gradient-to-r from-accent to-primary",
-    buttonText: "Avatar erleben"
+    buttonText: "Avatar erleben",
+    mediaType: "video" as const
   },
   {
     id: "wissensbot",

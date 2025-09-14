@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +13,7 @@ interface ProductCardProps {
   gradient: string;
   buttonText: string;
   onButtonClick?: () => void;
+  mediaType?: 'image' | 'video';
 }
 
 export default function ProductCard({
@@ -23,22 +25,59 @@ export default function ProductCard({
   image,
   gradient,
   buttonText,
-  onButtonClick
+  onButtonClick,
+  mediaType = 'image'
 }: ProductCardProps) {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleVideoPlay = () => {
+    if (videoRef.current && !isVideoPlaying) {
+      setIsVideoPlaying(true);
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setIsVideoPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+    }
+  };
+
   return (
     <Card className="glass hover-lift focus-within:ring-2 focus-within:ring-ring fade-in h-full flex flex-col" data-testid={`product-card-${id}`}>
       <CardContent className="p-4 flex flex-col h-full">
-        <img 
-          src={image} 
-          alt={`${title} Interface-Darstellung`}
-          className={`w-full h-36 object-cover rounded-lg mb-3 ${
-            id === 'avatar' ? 'object-[50%_20%]' : 
-            id === 'voicebot' ? 'object-[50%_30%]' : 
-            'object-center'
-          }`} 
-          loading="lazy"
-          data-testid={`product-image-${id}`}
-        />
+        {mediaType === 'video' ? (
+          <video 
+            ref={videoRef}
+            src={image} 
+            className={`w-full h-36 object-cover rounded-lg mb-3 cursor-pointer ${
+              id === 'avatar' ? 'object-[50%_20%]' : 
+              id === 'voicebot' ? 'object-[50%_30%]' : 
+              'object-center'
+            }`}
+            onMouseEnter={handleVideoPlay}
+            onClick={handleVideoPlay}
+            onEnded={handleVideoEnd}
+            muted
+            playsInline
+            data-testid={`product-video-${id}`}
+          />
+        ) : (
+          <img 
+            src={image} 
+            alt={`${title} Interface-Darstellung`}
+            className={`w-full h-36 object-cover rounded-lg mb-3 ${
+              id === 'avatar' ? 'object-[50%_20%]' : 
+              id === 'voicebot' ? 'object-[50%_30%]' : 
+              'object-center'
+            }`} 
+            loading="lazy"
+            data-testid={`product-image-${id}`}
+          />
+        )}
         
         <div className="text-center mb-3">
           <div className="text-3xl mb-2" data-testid={`product-icon-${id}`}>

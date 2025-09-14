@@ -242,7 +242,13 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="w-80 max-w-[calc(100vw-2rem)]">
+    <div 
+      className="fixed bottom-20 right-4 w-80 max-w-[calc(100vw-2rem)]"
+      style={{
+        maxWidth: 'min(320px, calc(100vw - 2rem))',
+        zIndex: 2147483649  // Above the floating dock and below chat
+      }}
+    >
       <Card className="glass shadow-xl border border-secondary/20">
         <CardContent className="p-4">
           {/* Header */}

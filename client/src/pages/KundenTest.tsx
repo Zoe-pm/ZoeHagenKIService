@@ -19,6 +19,7 @@ interface ChatbotConfig {
   primaryColor: string;
   backgroundColor: string;
   textColor: string;
+  textBackgroundColor: string; // New field for text input background
   widgetSize: "small" | "medium" | "large";
   fontFamily: string;
   position: "bottom-right" | "bottom-left" | "center";
@@ -34,6 +35,7 @@ interface VoicebotConfig {
   primaryColor: string;
   backgroundColor: string;
   textColor: string;
+  textBackgroundColor: string; // New field for text input background
   widgetSize: "small" | "medium" | "large";
   position: "bottom-right" | "bottom-left" | "center";
   voiceSpeed: number[];
@@ -100,9 +102,10 @@ export default function KundenTest() {
     activeBot: "chatbot",
     chatbot: {
       name: "Wie soll ihr neues Teammitglied heißen?",
-      primaryColor: "#fdff06",
-      backgroundColor: "#cbffb3",
+      primaryColor: "#219cb5",
+      backgroundColor: "#b3f0ff",
       textColor: "#1F2937",
+      textBackgroundColor: "#c0c0b5",
       widgetSize: "medium",
       fontFamily: "Merriweather, serif",
       position: "center",
@@ -117,9 +120,10 @@ export default function KundenTest() {
     },
     voicebot: {
       name: "Kira",
-      primaryColor: "#10B981",
-      backgroundColor: "#F3F4F6",
+      primaryColor: "#219cb5",
+      backgroundColor: "#b3f0ff",
       textColor: "#1F2937",
+      textBackgroundColor: "#c0c0b5",
       widgetSize: "medium",
       position: "bottom-right",
       voiceSpeed: [1],
@@ -404,6 +408,7 @@ export default function KundenTest() {
         primaryColor: "#3B82F6",
         backgroundColor: "#FFFFFF",
         textColor: "#1F2937",
+        textBackgroundColor: "#F9FAFB",
         widgetSize: "medium",
         fontFamily: "Inter",
         position: "bottom-right",
@@ -421,6 +426,7 @@ export default function KundenTest() {
         primaryColor: "#10B981",
         backgroundColor: "#F3F4F6",
         textColor: "#1F2937",
+        textBackgroundColor: "#F9FAFB",
         widgetSize: "medium",
         position: "bottom-right",
         voiceSpeed: [1],
@@ -1055,6 +1061,39 @@ export default function KundenTest() {
                             }
                           }}
                           placeholder="#000000"
+                          className="flex-1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text Background Color */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Textfeld-Hintergrundfarbe</label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="color"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.textBackgroundColor : testConfig.voicebot.textBackgroundColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("textBackgroundColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("textBackgroundColor", e.target.value);
+                            }
+                          }}
+                          className="w-16 h-10"
+                          data-testid="input-text-background-color"
+                        />
+                        <Input
+                          type="text"
+                          value={testConfig.activeBot === "chatbot" ? testConfig.chatbot.textBackgroundColor : testConfig.voicebot.textBackgroundColor}
+                          onChange={(e) => {
+                            if (testConfig.activeBot === "chatbot") {
+                              handleChatbotConfigChange("textBackgroundColor", e.target.value);
+                            } else {
+                              handleVoicebotConfigChange("textBackgroundColor", e.target.value);
+                            }
+                          }}
+                          placeholder="#F0F0F0"
                           className="flex-1"
                         />
                       </div>

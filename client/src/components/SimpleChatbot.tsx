@@ -182,7 +182,13 @@ export function SimpleChatbot({ isOpen, onClose, authToken }: SimpleChatbotProps
         onClose={handleCalendlyClose}
         calendlyUrl="https://calendly.com/zoeskistudio"
       />
-    <div className="w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-80 h-[32rem] max-h-[calc(100vh-6rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col">
+    <div 
+      className="fixed bottom-20 right-4 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] h-[32rem] max-h-[calc(100vh-10rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col"
+      style={{
+        maxWidth: 'min(320px, calc(100vw - 2rem))',
+        zIndex: 2147483650  // Above everything including voice widget
+      }}
+    >
       {/* Header */}
       <div className="button-gradient p-4 text-white flex justify-between items-center flex-shrink-0">
         <div>

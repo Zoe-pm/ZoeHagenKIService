@@ -21,6 +21,27 @@ export default function ChatbotWidget() {
     return () => el.remove();
   }, []);
 
+  // Listen for custom events from homepage product buttons
+  useEffect(() => {
+    const handleOpenChat = () => {
+      setIsChatOpen(true);
+    };
+
+    const handleOpenVoice = () => {
+      setIsVoiceOpen(true);
+    };
+
+    // Add event listeners for custom events
+    window.addEventListener('open-chat', handleOpenChat);
+    window.addEventListener('open-voice', handleOpenVoice);
+
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener('open-chat', handleOpenChat);
+      window.removeEventListener('open-voice', handleOpenVoice);
+    };
+  }, []);
+
   return (
     <>
       {/* Juna Chat - Text Chatbot */}

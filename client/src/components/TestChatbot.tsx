@@ -17,6 +17,7 @@ interface TestConfig {
     primaryColor: string;
     backgroundColor: string;
     textColor: string;
+    textBackgroundColor: string;
     widgetSize: string;
     fontFamily: string;
     position: string;
@@ -33,6 +34,7 @@ interface TestConfig {
     primaryColor: string;
     backgroundColor: string;
     textColor: string;
+    textBackgroundColor: string;
     widgetSize: string;
     position: string;
     voiceSpeed: number[];
@@ -453,7 +455,8 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
             disabled={isLoading}
             className="flex-1"
             style={{
-              color: currentConfig.textColor || undefined
+              color: currentConfig.textColor || undefined,
+              backgroundColor: currentConfig.textBackgroundColor || undefined
             }}
             data-testid="input-test-message"
           />

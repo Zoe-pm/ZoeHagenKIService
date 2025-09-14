@@ -93,7 +93,19 @@ export class MemStorage implements IStorage {
   }
 
   async getTestSession(token: string): Promise<TestSession | undefined> {
-    return this.testSessions.get(token);
+    const session = this.testSessions.get(token);
+    if (!session) {
+      return undefined;
+    }
+    
+    // Check if session has expired
+    if (new Date(session.expiresAt) < new Date()) {
+      // Delete expired session
+      this.testSessions.delete(token);
+      return undefined;
+    }
+    
+    return session;
   }
 
   async deleteTestSession(token: string): Promise<void> {
@@ -125,31 +137,64 @@ export class MemStorage implements IStorage {
   async getTestCode(code: string): Promise<TestCode | undefined> {
     const testCode = this.testCodes.get(code);
     if (testCode && new Date(testCode.expiresAt) < new Date()) {
-      testCode.isActive = false;
+      // Delete expired code instead of just marking it inactive
+      this.testCodes.delete(code);
+      return undefined;
     }
     return testCode;
   }
 
   async getAllTestCodes(): Promise<TestCode[]> {
     const codes = Array.from(this.testCodes.values());
-    // Update active status
+    const validCodes: TestCode[] = [];
+    
+    // Clean up expired codes and return only valid ones
     codes.forEach(code => {
       if (new Date(code.expiresAt) < new Date()) {
-        code.isActive = false;
+        // Delete expired code
+        this.testCodes.delete(code.code);
+      } else {
+        validCodes.push(code);
       }
     });
-    return codes;
+    
+    return validCodes;
   }
 
   async deleteTestCode(code: string): Promise<void> {
+    // Get the test code before deleting to know which emails were associated
+    const testCode = this.testCodes.get(code);
+    
+    // Delete the test code
     this.testCodes.delete(code);
+    
+    // If the code existed and had associated emails, delete sessions for those emails
+    if (testCode && testCode.emails && testCode.emails.length > 0) {
+      const sessionsToDelete: string[] = [];
+      
+      this.testSessions.forEach((session, token) => {
+        // Delete sessions whose email was in the deleted test code
+        if (testCode.emails.includes(session.email)) {
+          sessionsToDelete.push(token);
+        }
+      });
+      
+      // Actually delete the sessions
+      sessionsToDelete.forEach(token => {
+        this.testSessions.delete(token);
+      });
+      
+      console.log(`Deleted ${sessionsToDelete.length} sessions for test code: ${code}`);
+    }
   }
 
   async getTestCodeByEmail(email: string, code: string): Promise<TestCode | undefined> {
     const testCode = this.testCodes.get(code);
     if (testCode && testCode.emails.includes(email)) {
       if (new Date(testCode.expiresAt) < new Date()) {
-        testCode.isActive = false;
+        // Delete expired code instead of just marking it inactive
+        this.testCodes.delete(code);
+        return undefined;
       }
       return testCode;
     }

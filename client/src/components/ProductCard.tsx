@@ -28,6 +28,7 @@ export default function ProductCard({
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [imageHeight, setImageHeight] = useState('240px');
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const [hasAutoPlayed, setHasAutoPlayed] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -46,15 +47,17 @@ export default function ProductCard({
     return () => window.removeEventListener('resize', updateImageHeight);
   }, []);
 
-  // Intersection Observer für Autoplay
+  // Intersection Observer für Autoplay (nur einmal)
   useEffect(() => {
     if (!videoRef.current || mediaType !== 'video') return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsIntersecting(entry.isIntersecting);
-        if (entry.isIntersecting && !isVideoPlaying) {
+        // Only auto-play once when first entering viewport
+        if (entry.isIntersecting && !isVideoPlaying && !hasAutoPlayed) {
           handleVideoPlay();
+          setHasAutoPlayed(true);
         } else if (!entry.isIntersecting && isVideoPlaying) {
           // Video pausieren wenn es aus dem viewport geht
           if (videoRef.current) {
@@ -68,7 +71,7 @@ export default function ProductCard({
 
     observer.observe(videoRef.current);
     return () => observer.disconnect();
-  }, [mediaType, isVideoPlaying]);
+  }, [mediaType, isVideoPlaying, hasAutoPlayed]);
 
   const handleVideoPlay = () => {
     if (videoRef.current && !isVideoPlaying) {
@@ -80,10 +83,9 @@ export default function ProductCard({
 
   const handleVideoEnd = () => {
     setIsVideoPlaying(false);
-    // Video läuft endlos durch wenn sichtbar
-    if (videoRef.current && isIntersecting) {
+    // Video stops after playing once and only restarts on click
+    if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      setTimeout(() => handleVideoPlay(), 100);
     }
   };
 
@@ -100,7 +102,6 @@ export default function ProductCard({
               'object-center'
             }`}
             style={{ height: imageHeight }}
-            onMouseEnter={handleVideoPlay}
             onClick={handleVideoPlay}
             onEnded={handleVideoEnd}
             muted

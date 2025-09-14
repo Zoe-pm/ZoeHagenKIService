@@ -48,12 +48,12 @@ function App() {
             title="Zoë's KI Service - AI Assistenten für Ihr Unternehmen"
             description="Professionelle KI-Assistenten: Chatbots, Voicebots und Avatare. Entlasten Sie Ihr Team mit intelligenten Lösungen."
           />
-          <AccessibilityBanner />
           <Navigation />
           <main className="flex-1">
             <Router />
           </main>
           <Footer />
+          <AccessibilityBanner />
         </div>
         <Toaster />
       </TooltipProvider>

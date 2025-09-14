@@ -239,7 +239,7 @@ export default function Admin() {
   };
 
   // Show login form if not authenticated
-  if (!adminToken || !sessionData?.valid) {
+  if (!adminToken || (sessionData !== undefined && !sessionData?.valid)) {
     return (
       <div className="min-h-screen">
         <Navigation />

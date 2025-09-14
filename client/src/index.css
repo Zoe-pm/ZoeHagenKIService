@@ -73,12 +73,12 @@
   --destructive-foreground: 0 0% 98%;
 
   --input: 214 32% 88%;
-  --ring: 320 85% 65%;
-  --chart-1: 320 85% 65%;
-  --chart-2: 280 75% 55%;
-  --chart-3: 210 40% 60%;
-  --chart-4: 260 65% 50%;
-  --chart-5: 340 75% 58%;
+  --ring: 329 47% 52%;
+  --chart-1: 329 47% 52%;
+  --chart-2: 329 55% 60%;
+  --chart-3: 329 65% 70%;
+  --chart-4: 329 35% 45%;
+  --chart-5: 329 75% 65%;
 
   --font-sans: Open Sans, sans-serif;
   --font-serif: Georgia, serif;
@@ -196,7 +196,7 @@
 
   /* Used as the border around inputs. Dark mode: Should be a border that is light enough to have high contrast when rendered on a --card background. More contrast than standard --border */
   --input: 210 12% 20%;
-  --ring: 320 85% 65%;
+  --ring: 329 47% 52%;
   --chart-1: 320 85% 65%;
   --chart-2: 280 75% 55%;
   --chart-3: 210 40% 70%;

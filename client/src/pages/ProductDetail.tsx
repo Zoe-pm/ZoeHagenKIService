@@ -271,7 +271,7 @@ export default function ProductDetail() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-to-r from-primary to-secondary text-primary-foreground"
+                  className="bg-gradient-to-r from-[#B8436A] to-[#E8719A] text-white"
                   data-testid="product-demo-button"
                 >
                   Kostenlose Demo

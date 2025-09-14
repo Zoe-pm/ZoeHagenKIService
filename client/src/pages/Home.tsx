@@ -28,7 +28,7 @@ const products = [
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
     features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Schafft Ihnen Zeit für Ihre eigentlichen Aufgaben", "Terminbuchung"],
     image: chatbotImage,
-    gradient: "bg-gradient-to-r from-primary to-secondary",
+    gradient: "bg-gradient-to-r from-[#B8436A] to-[#E8719A]",
     buttonText: "hier ausprobieren"
   },
   {
@@ -37,7 +37,7 @@ const products = [
     description: "Einfach Sprechen und sofort empathische Antworten erhalten. Nimmt mehrere Anrufe und Anfragen gleichzeitig entgegen und vereinbart auf Wunsch Termine, sammelt Kundenfeedback u.v.m.",
     features: ["Sprechen wie mit einem Menschen", "Einbindung in Website und über Telefon möglich", "Kein: Drücken Sie die eins... mehr", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     image: voicebotImage,
-    gradient: "bg-gradient-to-r from-secondary to-accent",
+    gradient: "bg-gradient-to-r from-[#E8719A] to-[#F5A1C1]",
     buttonText: "Sprechen Sie mit Juna"
   },
   {
@@ -46,7 +46,7 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     image: avatarVideo,
-    gradient: "bg-gradient-to-r from-accent to-primary",
+    gradient: "bg-gradient-to-r from-[#F5A1C1] to-[#B8436A]",
     buttonText: "Avatar erleben",
     mediaType: "video" as const
   },
@@ -56,7 +56,7 @@ const products = [
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität", "Onboarding leicht gemacht"],
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-    gradient: "bg-gradient-to-r from-primary to-accent",
+    gradient: "bg-gradient-to-r from-[#B8436A] to-[#F5A1C1]",
     buttonText: "Gespräch vereinbaren"
   }
 ];

@@ -30,7 +30,7 @@ export default function VoiceDemo() {
               
               <div className="flex flex-col items-center space-y-6">
                 <Button
-                  className="voice-pulse bg-gradient-to-r from-secondary to-accent p-6 rounded-full text-4xl hover:scale-110 transition-transform"
+                  className="voice-pulse bg-gradient-to-r from-[#B8436A] to-[#E8719A] p-6 rounded-full text-4xl hover:scale-110 transition-transform"
                   onClick={handleVoiceDemo}
                   aria-label="Juna Voicebot starten"
                   data-testid="voice-demo-mic-button"

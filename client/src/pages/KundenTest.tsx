@@ -669,7 +669,7 @@ export default function KundenTest() {
             
             {/* Konfiguration */}
             <div className="lg:col-span-1">
-              <Card className="glass sticky top-24">
+              <Card className="glass lg:sticky lg:top-24 lg:z-40">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     Live-Anpassungen
@@ -1387,9 +1387,9 @@ export default function KundenTest() {
               </Card>
             </div>
 
-            {/* Live TestChatbot - Interactive Preview */}
+            {/* Live TestChatbot - Interactive Preview - Always visible while scrolling */}
             <div className="lg:col-span-2">
-              <Card className="glass">
+              <Card className="glass lg:sticky lg:top-24 lg:z-40 lg:max-h-[calc(100vh-6rem)] lg:overflow-auto">
                 <CardHeader>
                   <CardTitle>🤖 Interaktiver Test-Bot</CardTitle>
                   <p className="text-muted-foreground">

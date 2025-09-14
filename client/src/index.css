@@ -4,81 +4,85 @@
 
 /* LIGHT MODE */
 :root {
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
+  --button-outline: rgba(255,255,255, .10);
+  --badge-outline: rgba(255,255,255, .05);
 
   /* Automatic computation of border around primary / danger buttons */
   --opaque-button-border-intensity: -8; /* In terms of percentages */
 
   /* Backgrounds applied on top of other backgrounds when hovered/active */
-  --elevate-1: rgba(0,0,0, .03);
-  --elevate-2: rgba(0,0,0, .08);
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .09);
 
-  --background: 0 0% 100%;
+  --background: 209 18% 29%;
 
-  --foreground: 222 84% 5%;
+  --foreground: 0 0% 100%;
 
-  --border: 214 32% 91%;
+  --border: 209 22% 19%;
   
-  --accent-pink: 329 47% 52%;
-  --accent-lighter: 329 65% 72%;
-  --border-color: rgba(255, 255, 255, 0.1);
+  --border-color: hsl(209 22% 19%);
+  --accent-pink: 340 46% 49%;
+  
 
-  --card: 0 0% 100%;
+  --card: 210 20% 23%;
 
-  --card-foreground: 222 84% 5%;
+  --card-foreground: 0 0% 85%;
 
-  --card-border: 214 32% 91%;
+  --card-border: 209 22% 19%;
 
-  --sidebar: 60 9% 98%;
+  --sidebar: 210 20% 23%;
 
-  --sidebar-foreground: 222 84% 5%;
+  --sidebar-foreground: 0 0% 100%;
 
-  --sidebar-border: 214 32% 91%;
+  --sidebar-border: 209 22% 19%;
 
-  --sidebar-primary: 329 47% 52%;
+  --sidebar-primary: 340 46% 49%;
 
-  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-primary-foreground: 0 0% 100%;
 
-  --sidebar-accent: 210 20% 92%;
+  --sidebar-accent: 211 20% 25%;
 
-  --sidebar-accent-foreground: 222 84% 5%;
+  --sidebar-accent-foreground: 0 0% 100%;
 
-  --sidebar-ring: 329 47% 52%;
+  --sidebar-ring: 340 46% 49%;
 
-  --popover: 0 0% 100%;
+  --popover: 210 20% 23%;
 
-  --popover-foreground: 222 84% 5%;
+  --popover-foreground: 0 0% 100%;
 
-  --popover-border: 214 32% 91%;
+  --popover-border: 209 22% 19%;
 
-  --primary: 329 47% 52%;
+  --primary: 340 46% 49%;
 
-  --primary-foreground: 0 0% 98%;
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 210 40% 96%;
+  --primary-hover: 340 46% 54%;
 
-  --secondary-foreground: 222 84% 5%;
+  --secondary: 210 20% 23%;
 
-  --muted: 210 40% 94%;
+  --secondary-foreground: 0 0% 100%;
 
-  --muted-foreground: 215 16% 47%;
+  --secondary-hover: 211 20% 25%;
 
-  --accent: 210 40% 94%;
+  --muted: 210 20% 23%;
 
-  --accent-foreground: 222 84% 5%;
+  --muted-foreground: 0 0% 85%;
+
+  --accent: 340 46% 49%;
+
+  --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84% 60%;
 
   --destructive-foreground: 0 0% 98%;
 
-  --input: 214 32% 88%;
-  --ring: 329 47% 52%;
-  --chart-1: 329 47% 52%;
-  --chart-2: 329 55% 60%;
-  --chart-3: 329 65% 70%;
-  --chart-4: 329 35% 45%;
-  --chart-5: 329 75% 65%;
+  --input: 209 22% 19%;
+  --ring: 340 46% 49%;
+  --chart-1: 340 46% 49%;
+  --chart-2: 340 46% 59%;
+  --chart-3: 340 46% 69%;
+  --chart-4: 340 46% 39%;
+  --chart-5: 340 46% 75%;
 
   --font-sans: Open Sans, sans-serif;
   --font-serif: Georgia, serif;
@@ -127,91 +131,7 @@
 }
 
 .dark {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
-
-  --opaque-button-border-intensity: 9;  /* In terms of percentages */
-
-  /* Backgrounds applied on top of other backgrounds when hovered/active */
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
-
-  --background: 210 15% 8%;
-
-  --foreground: 0 0% 98%;
-
-  --border: 210 12% 16%;
-  
-  --accent-pink: 329 47% 52%;
-  --accent-lighter: 329 65% 72%;
-  --border-color: rgba(255, 255, 255, 0.1);
-
-  --card: 210 10% 12%;
-
-  --card-foreground: 0 0% 98%;
-
-  --card-border: 210 12% 16%;
-
-  --sidebar: 210 12% 10%;
-
-  --sidebar-foreground: 0 0% 98%;
-
-  --sidebar-border: 210 12% 16%;
-
-  --sidebar-primary: 329 47% 52%;
-
-  --sidebar-primary-foreground: 0 0% 98%;
-
-  --sidebar-accent: 210 12% 14%;
-
-  --sidebar-accent-foreground: 0 0% 98%;
-
-  --sidebar-ring: 329 47% 52%;
-
-  --popover: 210 10% 12%;
-
-  --popover-foreground: 0 0% 98%;
-
-  --popover-border: 210 12% 16%;
-
-  --primary: 329 47% 52%;
-
-  --primary-foreground: 0 0% 98%;
-
-  --secondary: 210 12% 16%;
-
-  --secondary-foreground: 0 0% 98%;
-
-  --muted: 210 12% 14%;
-
-  --muted-foreground: 210 5% 65%;
-
-  --accent: 210 12% 14%;
-
-  --accent-foreground: 0 0% 98%;
-
-  --destructive: 0 84% 60%;
-
-  --destructive-foreground: 0 0% 98%;
-
-  /* Used as the border around inputs. Dark mode: Should be a border that is light enough to have high contrast when rendered on a --card background. More contrast than standard --border */
-  --input: 210 12% 20%;
-  --ring: 329 47% 52%;
-  --chart-1: 320 85% 65%;
-  --chart-2: 280 75% 55%;
-  --chart-3: 210 40% 70%;
-  --chart-4: 260 65% 70%;
-  --chart-5: 340 75% 68%;
-
-  --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-sm: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-md: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 2px 4px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-lg: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 4px 6px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-xl: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 8px 10px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-2xl: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
-
+  color-scheme: dark;
 }
 
 @layer base {
@@ -225,6 +145,17 @@
   
   html {
     scroll-behavior: smooth;
+  }
+  
+  a {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  
+  a:hover, a:focus {
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary));
+    text-underline-offset: 2px;
   }
   
   .dark {
@@ -364,28 +295,28 @@
   }
 
   .hero-gradient {
-    background: linear-gradient(135deg, #2F3B47 0%, #3C4A57 100%);
+    background: hsl(var(--secondary));
   }
 
-  /* Custom gradient button styles - plastisch pink zu heller */
+  /* Token-based button styles */
   .button-gradient {
-    background: linear-gradient(135deg, #B8436A 0%, #E8719A 50%, #F5A1C1 100%);
-    color: white;
-    border: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(184, 67, 106, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    position: relative;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1px solid hsl(var(--primary-border));
+    box-shadow: none;
+    transition: none;
   }
   
   .button-gradient:hover {
-    background: linear-gradient(135deg, #C54C75 0%, #F5A1C1 50%, #FFCDE3 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(184, 67, 106, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: hsl(var(--primary));
+    box-shadow: none;
+    transform: none;
   }
   
   .button-gradient:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(184, 67, 106, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: hsl(var(--primary));
+    box-shadow: none;
+    transform: none;
   }
 
   .voice-pulse {
@@ -399,7 +330,7 @@
   }
 
   .gradient-text {
-    color: var(--accent-pink);
+    color: hsl(var(--primary));
   }
 
   .fade-in {

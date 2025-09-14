@@ -21,7 +21,7 @@
   --border: 209 22% 19%;
   
   --border-color: hsl(209 22% 19%);
-  --accent-pink: 340 46% 49%;
+  --accent-pink: 343 83% 61%;
   
 
   --card: 210 20% 23%;
@@ -36,7 +36,7 @@
 
   --sidebar-border: 209 22% 19%;
 
-  --sidebar-primary: 340 46% 49%;
+  --sidebar-primary: 343 83% 61%;
 
   --sidebar-primary-foreground: 0 0% 100%;
 
@@ -44,7 +44,7 @@
 
   --sidebar-accent-foreground: 0 0% 100%;
 
-  --sidebar-ring: 340 46% 49%;
+  --sidebar-ring: 343 83% 61%;
 
   --popover: 210 20% 23%;
 
@@ -52,11 +52,11 @@
 
   --popover-border: 209 22% 19%;
 
-  --primary: 340 46% 49%;
+  --primary: 343 83% 61%;
 
   --primary-foreground: 0 0% 100%;
 
-  --primary-hover: 340 46% 54%;
+  --primary-hover: 343 83% 66%;
 
   --secondary: 210 20% 23%;
 
@@ -68,7 +68,7 @@
 
   --muted-foreground: 0 0% 85%;
 
-  --accent: 340 46% 49%;
+  --accent: 343 83% 61%;
 
   --accent-foreground: 0 0% 100%;
 

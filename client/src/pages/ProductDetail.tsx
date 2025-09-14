@@ -10,7 +10,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
 const voicebotImage = "/images/voicebot.png";
@@ -271,7 +270,7 @@ export default function ProductDetail() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-to-r from-[#B8436A] to-[#E8719A] text-white"
+                  className="bg-gradient-to-r from-[#e63973] to-[#E8719A] text-white"
                   data-testid="product-demo-button"
                 >
                   Kostenlose Demo
@@ -401,7 +400,7 @@ export default function ProductDetail() {
                   <h3 className="text-xl font-semibold mb-4">Jetzt starten</h3>
                   <div className="space-y-4">
                     <Button 
-                      className="w-full bg-gradient-to-r from-[#B8436A] to-[#E8719A] text-white"
+                      className="w-full bg-gradient-to-r from-[#e63973] to-[#E8719A] text-white"
                       data-testid="sidebar-demo-button"
                     >
                       Kostenlose Demo
@@ -454,7 +453,6 @@ export default function ProductDetail() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

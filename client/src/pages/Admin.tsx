@@ -12,7 +12,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Shield, UserX, Plus, Trash2, Send, Eye } from "lucide-react";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import { apiRequest } from '@/lib/queryClient';
 
 // Admin login schema
@@ -247,10 +246,10 @@ export default function Admin() {
         <div className="min-h-screen bg-[#3C4A57] flex items-center justify-center p-4 pt-20">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
-              <div className="mx-auto mb-4 w-16 h-16 bg-[#B8436A] rounded-full flex items-center justify-center">
+              <div className="mx-auto mb-4 w-16 h-16 bg-[#e63973] rounded-full flex items-center justify-center">
                 <Shield className="w-8 h-8 text-white" />
               </div>
-              <CardTitle className="text-2xl font-bold text-[#B8436A]">
+              <CardTitle className="text-2xl font-bold text-[#e63973]">
                 Admin-Login
               </CardTitle>
             </CardHeader>
@@ -311,7 +310,7 @@ export default function Admin() {
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-[#B8436A]">
+                <h1 className="text-3xl font-bold text-[#e63973]">
                   Zoë's KI Service - Admin Dashboard
                 </h1>
                 <p className="text-[#D9D9D9] mt-2">
@@ -569,7 +568,7 @@ export default function Admin() {
                       data-testid={`testcode-card-${testCode.code}`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <code className="text-lg font-bold text-[#B8436A] dark:text-[#E8719A]">
+                        <code className="text-lg font-bold text-[#e63973] dark:text-[#E8719A]">
                           {testCode.code}
                         </code>
                         <div className="flex items-center gap-2">
@@ -624,7 +623,6 @@ export default function Admin() {
         </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

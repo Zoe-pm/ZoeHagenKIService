@@ -4,7 +4,6 @@ import { SimpleChatbot } from "@/components/SimpleChatbot";
 import { useLocation } from "wouter";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import ContactForm from "@/components/ContactForm";
 import ChatbotWidget from "@/components/ChatbotWidget";
 import VoicebotWidget from "@/components/VoicebotWidget";
@@ -119,7 +118,6 @@ export default function Kontakt() {
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
       <ChatbotWidget />
       
-      <Footer />
     </>
   );
 }

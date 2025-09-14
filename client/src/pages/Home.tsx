@@ -8,7 +8,6 @@ import ProductCard from "@/components/ProductCard";
 import ComparisonTable from "@/components/ComparisonTable";
 import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
-import Footer from "@/components/Footer";
 import SEOHelmet from "@/components/SEOHelmet";
 
 // Lazy load heavy components to optimize bundle size
@@ -25,7 +24,7 @@ const products = [
     description: "Kund:innen bekommen sofort die richtige Antwort – rund um die Uhr. Reduziert Ihre E-Mails und nimmt Ihnen Standardanfragen einfach ab.",
     features: ["Entlastet Telefon & Service-Team deutlich", "Sofortantworten 24/7", "Schafft Ihnen Zeit für Ihre eigentlichen Aufgaben", "Terminbuchung"],
     image: chatbotImage,
-    gradient: "bg-gradient-to-r from-[#B8436A] to-[#E8719A]",
+    gradient: "bg-gradient-to-r from-[#e63973] to-[#E8719A]",
     buttonText: "hier ausprobieren"
   },
   {
@@ -43,7 +42,7 @@ const products = [
     description: "Persönlicher als ein Chatbot: Kund:innen haben das Gefühl, mit einem Menschen zu sprechen. Sorgt für Vertrauen.",
     features: ["Menschliche Präsenz", "Vertrauensaufbau", "Starker Eindruck", "Schnelle, intelligente, freundliche Antworten auf Fragen Ihrer Kunden", "Jederzeit erreichbar"],
     image: avatarVideo,
-    gradient: "bg-gradient-to-r from-[#F5A1C1] to-[#B8436A]",
+    gradient: "bg-gradient-to-r from-[#F5A1C1] to-[#e63973]",
     buttonText: "Avatar erleben",
     mediaType: "video" as const
   },
@@ -53,7 +52,7 @@ const products = [
     description: "Hält internes Wissen verfügbar – auch bei Urlaub oder Teamwechsel. Erleichtert Onboarding und macht Prozesse stabil.",
     features: ["Internes Wissen", "Team-Stabilität", "Prozess-Kontinuität", "Onboarding leicht gemacht"],
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-    gradient: "bg-gradient-to-r from-[#B8436A] to-[#F5A1C1]",
+    gradient: "bg-gradient-to-r from-[#e63973] to-[#F5A1C1]",
     buttonText: "Gespräch vereinbaren"
   }
 ];
@@ -156,7 +155,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="relative group">
                     <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#e63973] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         1
                       </div>
                       <h3 className="font-bold text-white mb-3 text-center text-lg">Gespräch</h3>
@@ -169,7 +168,7 @@ export default function Home() {
                   
                   <div className="relative group">
                     <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#e63973] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         2
                       </div>
                       <h3 className="font-bold text-white mb-3 text-center text-lg">Pilot</h3>
@@ -182,7 +181,7 @@ export default function Home() {
                   
                   <div className="relative group">
                     <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#e63973] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         3
                       </div>
                       <h3 className="font-bold text-white mb-3 text-center text-lg">Rollout</h3>
@@ -195,7 +194,7 @@ export default function Home() {
                   
                   <div className="relative group">
                     <div className="glass p-6 rounded-lg hover-lift transition-all duration-300 h-full flex flex-col shadow-lg">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#B8436A] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-[#e63973] to-[#C54C75] text-white font-bold text-xl mx-auto mb-4 shadow-xl transform transition-transform duration-300 hover:scale-110">
                         4
                       </div>
                       <h3 className="font-bold text-white mb-3 text-center text-lg">Support</h3>
@@ -245,7 +244,6 @@ export default function Home() {
 
       {/* Bot Widgets werden jetzt in App.tsx gerendert für bessere Verfügbarkeit */}
       
-      <Footer />
     </div>
   );
 }

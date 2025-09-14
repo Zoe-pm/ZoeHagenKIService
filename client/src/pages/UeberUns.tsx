@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import ChatbotWidget from "@/components/ChatbotWidget";
 const zoeImage = "/images/zoe-image.jpg";
 
@@ -174,7 +173,6 @@ export default function UeberUns() {
       
       <ChatbotWidget />
       
-      <Footer />
     </>
   );
 }

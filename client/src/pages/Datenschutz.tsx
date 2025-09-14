@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import AccessibilityBanner from "@/components/AccessibilityBanner";
 import SEOHelmet from "@/components/SEOHelmet";
 
@@ -265,7 +264,6 @@ export default function Datenschutz() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

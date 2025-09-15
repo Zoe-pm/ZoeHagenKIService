@@ -1,5 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { Shield, Settings, Headphones, CheckCircle, Users, Zap } from "lucide-react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { Shield, Settings, Headphones, CheckCircle, Users, Zap, Volume2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
@@ -58,11 +58,19 @@ const products = [
 
 export default function Home() {
   const [, setLocation] = useLocation();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [showUnmute, setShowUnmute] = useState(true);
+  const [playedOnce, setPlayedOnce] = useState(false);
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  // Debug logging for video state
+  useEffect(() => {
+    console.log('Video state:', { showUnmute, playedOnce });
+  }, [showUnmute, playedOnce]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -82,6 +90,50 @@ export default function Home() {
       // For other products, navigate to contact page
       setLocation('/kontakt');
     }
+  };
+
+  const handleVideoUnmute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(console.error);
+      setShowUnmute(false);
+    }
+  };
+
+  const handleVideoLoadedMetadata = () => {
+    console.log('Video metadata loaded');
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+    }
+  };
+
+  const handleVideoCanPlay = () => {
+    console.log('Video can play');
+    if (videoRef.current && !playedOnce) {
+      videoRef.current.play().catch(() => {
+        console.log('Video autoplay blocked, showing unmute button');
+        setShowUnmute(true);
+      });
+    }
+  };
+
+  const handleVideoEnded = () => {
+    if (videoRef.current) {
+      videoRef.current.controls = true;
+      videoRef.current.removeAttribute('autoplay');
+      setPlayedOnce(true);
+      setShowUnmute(false);
+    }
+  };
+
+  const handleVideoWaiting = () => {
+    // Retry on stall
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.play().catch(console.error);
+      }
+    }, 1000);
   };
 
   return (
@@ -126,20 +178,39 @@ export default function Home() {
 
             {/* Video Section - Between Hero and Products */}
             <section className="py-16 px-4 sm:px-6 lg:px-8" data-testid="video-section">
-              <div className="max-w-4xl mx-auto text-center">
+              <div className="max-w-4xl mx-auto text-center relative">
                 <video
+                  ref={videoRef}
                   className="w-full h-auto aspect-video cursor-pointer"
-                  src="/videos/juna-video.mp4"
                   autoPlay
                   muted
                   playsInline
                   preload="auto"
-                  onEnded={(e) => {
-                    e.currentTarget.removeAttribute('autoplay');
-                    e.currentTarget.controls = true;
-                  }}
+                  onLoadedMetadata={handleVideoLoadedMetadata}
+                  onCanPlay={handleVideoCanPlay}
+                  onEnded={handleVideoEnded}
+                  onWaiting={handleVideoWaiting}
+                  onStalled={handleVideoWaiting}
                   data-testid="hero-video"
-                />
+                >
+                  <source src="/videos/juna-video.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" />
+                  <source src="/images/avatar.mp4" type="video/mp4" />
+                  <span className="sr-only">Video wird geladen...</span>
+                </video>
+                
+                {/* Sound Overlay Button */}
+                {showUnmute && !playedOnce && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+                    <Button
+                      onClick={handleVideoUnmute}
+                      className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
+                      data-testid="button-unmute"
+                    >
+                      <Volume2 className="w-5 h-5" />
+                      Mit Ton abspielen
+                    </Button>
+                  </div>
+                )}
               </div>
             </section>
 

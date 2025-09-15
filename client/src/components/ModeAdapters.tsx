@@ -162,12 +162,85 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
   
   private vapiPublicKey: string | null = null;
   private vapiAssistantId: string | null = null;
+  private vapi: any = null;
+  private isVapiLoaded: boolean = false;
+  private loadingPromise: Promise<void> | null = null;
 
   constructor() {
     // Get Vapi credentials from env
     if (typeof window !== 'undefined') {
       this.vapiPublicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || null;
       this.vapiAssistantId = import.meta.env.VITE_VAPI_ASSISTANT_ID || null;
+    }
+  }
+
+  /**
+   * Dynamically load Vapi SDK script
+   */
+  private async loadVapiSDK(): Promise<void> {
+    if (this.loadingPromise) {
+      return this.loadingPromise;
+    }
+
+    this.loadingPromise = new Promise((resolve, reject) => {
+      if (this.isVapiLoaded && this.vapi) {
+        resolve();
+        return;
+      }
+
+      // Check if Vapi is already loaded globally
+      if ((window as any).Vapi) {
+        this.vapi = (window as any).Vapi;
+        this.isVapiLoaded = true;
+        resolve();
+        return;
+      }
+
+      // Load Vapi SDK script dynamically
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/@vapi-ai/web@latest/dist/index.js';
+      script.crossOrigin = 'anonymous';
+      
+      script.onload = () => {
+        if ((window as any).Vapi) {
+          this.vapi = (window as any).Vapi;
+          this.isVapiLoaded = true;
+          resolve();
+        } else {
+          reject(new Error('Vapi SDK loaded but not available globally'));
+        }
+      };
+
+      script.onerror = () => {
+        reject(new Error('Failed to load Vapi SDK'));
+      };
+
+      document.head.appendChild(script);
+    });
+
+    return this.loadingPromise;
+  }
+
+  /**
+   * Initialize Vapi with credentials
+   */
+  private async initVapi(): Promise<void> {
+    if (!this.isAvailable()) {
+      throw new Error('Vapi credentials not available');
+    }
+
+    await this.loadVapiSDK();
+
+    if (!this.vapi) {
+      throw new Error('Vapi SDK not loaded');
+    }
+
+    // Initialize if not already done
+    if (!this.vapi._instance) {
+      this.vapi._instance = new this.vapi({
+        publicKey: this.vapiPublicKey,
+        assistantId: this.vapiAssistantId,
+      });
     }
   }
 
@@ -192,11 +265,56 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
       throw new Error('Vapi-Modus nicht verfügbar - API-Schlüssel fehlen');
     }
 
-    // TODO: Implement real Vapi API call
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    
-    const botName = config.activeBot === 'chatbot' ? config.chatbot.name : config.voicebot.name;
-    return `[VAPI-MODUS] ${botName}: Dies wird bald mit echter Vapi-KI beantwortet. Nachricht erhalten: "${message}"`;
+    try {
+      await this.initVapi();
+      
+      if (!this.vapi._instance) {
+        throw new Error('Vapi instance not initialized');
+      }
+
+      // Send message to Vapi assistant
+      const response = await new Promise((resolve, reject) => {
+        // Set up event listeners for response
+        const messageHandler = (event: any) => {
+          if (event.type === 'message' && event.message?.content) {
+            this.vapi._instance.off('message', messageHandler);
+            resolve(event.message.content);
+          }
+        };
+
+        const errorHandler = (event: any) => {
+          this.vapi._instance.off('error', errorHandler);
+          this.vapi._instance.off('message', messageHandler);
+          reject(new Error(`Vapi error: ${event.error || 'Unknown error'}`));
+        };
+
+        // Listen for events
+        this.vapi._instance.on('message', messageHandler);
+        this.vapi._instance.on('error', errorHandler);
+
+        // Send the message
+        this.vapi._instance.send({
+          type: 'add-message',
+          message: {
+            role: 'user',
+            content: message,
+          },
+        });
+
+        // Timeout after 10 seconds
+        setTimeout(() => {
+          this.vapi._instance.off('message', messageHandler);
+          this.vapi._instance.off('error', errorHandler);
+          reject(new Error('Vapi response timeout'));
+        }, 10000);
+      });
+
+      return response as string;
+    } catch (error) {
+      const botName = config.activeBot === 'chatbot' ? config.chatbot.name : config.voicebot.name;
+      console.warn('Vapi API Error:', error);
+      return `[VAPI-FEHLER] ${botName}: ${error instanceof Error ? error.message : 'Vapi-Service nicht erreichbar'}. Versuchen Sie es später erneut.`;
+    }
   }
 
   renderVoiceInterface(config: any, onClose: () => void): React.ReactNode {
@@ -220,8 +338,46 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
       throw new Error('Vapi-Modus nicht verfügbar - API-Schlüssel fehlen');
     }
 
-    // TODO: Implement Vapi voice input
-    throw new Error('Vapi Voice Input wird implementiert');
+    try {
+      await this.initVapi();
+      
+      if (!this.vapi._instance) {
+        throw new Error('Vapi instance not initialized');
+      }
+
+      // Start voice input session with Vapi
+      await new Promise((resolve, reject) => {
+        const voiceStartHandler = (event: any) => {
+          if (event.type === 'speech-start') {
+            this.vapi._instance.off('speech-start', voiceStartHandler);
+            resolve(void 0);
+          }
+        };
+
+        const errorHandler = (event: any) => {
+          this.vapi._instance.off('error', errorHandler);
+          this.vapi._instance.off('speech-start', voiceStartHandler);
+          reject(new Error(`Vapi voice input error: ${event.error || 'Unknown voice error'}`));
+        };
+
+        // Listen for voice session start
+        this.vapi._instance.on('speech-start', voiceStartHandler);
+        this.vapi._instance.on('error', errorHandler);
+
+        // Start voice input session
+        this.vapi._instance.start();
+
+        // Timeout after 15 seconds
+        setTimeout(() => {
+          this.vapi._instance.off('speech-start', voiceStartHandler);
+          this.vapi._instance.off('error', errorHandler);
+          reject(new Error('Vapi voice input timeout'));
+        }, 15000);
+      });
+    } catch (error) {
+      console.warn('Vapi Voice Input Error:', error);
+      throw error; // Re-throw to allow fallback handling
+    }
   }
 
   async handleTextToSpeech(text: string, config: any): Promise<void> {
@@ -229,8 +385,46 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
       throw new Error('Vapi-Modus nicht verfügbar - API-Schlüssel fehlen');
     }
 
-    // TODO: Implement Vapi TTS with ElevenLabs
-    throw new Error('Vapi TTS wird implementiert');
+    try {
+      await this.initVapi();
+      
+      if (!this.vapi._instance) {
+        throw new Error('Vapi instance not initialized');
+      }
+
+      // Use Vapi's built-in TTS capabilities
+      await new Promise((resolve, reject) => {
+        const speechHandler = (event: any) => {
+          if (event.type === 'speech-end') {
+            this.vapi._instance.off('speech-end', speechHandler);
+            resolve(void 0);
+          }
+        };
+
+        const errorHandler = (event: any) => {
+          this.vapi._instance.off('error', errorHandler);
+          this.vapi._instance.off('speech-end', speechHandler);
+          reject(new Error(`Vapi TTS error: ${event.error || 'Unknown TTS error'}`));
+        };
+
+        // Listen for speech completion
+        this.vapi._instance.on('speech-end', speechHandler);
+        this.vapi._instance.on('error', errorHandler);
+
+        // Trigger TTS
+        this.vapi._instance.say(text);
+
+        // Timeout after 30 seconds
+        setTimeout(() => {
+          this.vapi._instance.off('speech-end', speechHandler);
+          this.vapi._instance.off('error', errorHandler);
+          reject(new Error('Vapi TTS timeout'));
+        }, 30000);
+      });
+    } catch (error) {
+      console.warn('Vapi TTS Error:', error);
+      throw error; // Re-throw to allow fallback to Web Speech API
+    }
   }
 
   getBubbleButton(config: any, onClick: () => void, isVisible: boolean): React.ReactNode {
@@ -257,14 +451,25 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
 
   private renderUnavailableMessage(): React.ReactNode {
     const UnavailableMessage = () => (
-      <div className="p-6 text-center bg-yellow-50 border border-yellow-200 rounded-lg">
-        <h3 className="text-lg font-semibold text-yellow-800 mb-2">Vapi-Modus nicht verfügbar</h3>
-        <p className="text-sm text-yellow-700 mb-4">
-          Die erforderlichen API-Schlüssel (VITE_VAPI_PUBLIC_KEY, VITE_VAPI_ASSISTANT_ID) sind nicht konfiguriert.
-        </p>
-        <p className="text-xs text-yellow-600">
-          Wechseln Sie zum Lokal-Modus für Tests oder konfigurieren Sie die Vapi-Integration.
-        </p>
+      <div className="p-6 text-center bg-amber-50 border border-amber-200 rounded-lg shadow-sm">
+        <div className="mb-3">
+          <div className="w-12 h-12 mx-auto bg-amber-100 rounded-full flex items-center justify-center">
+            <span className="text-2xl text-amber-600">⚠️</span>
+          </div>
+        </div>
+        <h3 className="text-lg font-semibold text-amber-800 mb-3">Vapi-Modus nicht verfügbar</h3>
+        <div className="space-y-3 text-sm text-amber-700">
+          <p>Die erforderlichen API-Schlüssel sind nicht konfiguriert:</p>
+          <ul className="list-disc list-inside space-y-1">
+            <li><code className="bg-amber-100 px-1 rounded">VITE_VAPI_PUBLIC_KEY</code></li>
+            <li><code className="bg-amber-100 px-1 rounded">VITE_VAPI_ASSISTANT_ID</code></li>
+          </ul>
+        </div>
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
+          <p className="text-xs text-blue-700">
+            💡 <strong>Tipp:</strong> Wechseln Sie zum <strong>Lokal-Modus</strong> für sofortige Tests mit Browser-APIs.
+          </p>
+        </div>
       </div>
     );
     

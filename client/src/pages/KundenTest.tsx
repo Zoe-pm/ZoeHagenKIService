@@ -152,6 +152,15 @@ export default function KundenTest() {
   const [isSendingConfig, setIsSendingConfig] = useState(false);
   const { toast } = useToast();
 
+  // Configuration Mode State - Local vs Vapi Widget Mode
+  const [configMode, setConfigMode] = useState<'local' | 'vapi'>(() => {
+    try {
+      return (localStorage.getItem('playground-config-mode') as 'local' | 'vapi') || 'local';
+    } catch {
+      return 'local';
+    }
+  });
+
   // Check for existing session on mount
   useEffect(() => {
     const savedSession = localStorage.getItem('test-session');
@@ -400,6 +409,20 @@ export default function KundenTest() {
       ...prev,
       activeBot: bot
     }));
+  };
+
+  const handleConfigModeChange = (mode: 'local' | 'vapi') => {
+    setConfigMode(mode);
+    localStorage.setItem('playground-config-mode', mode);
+    
+    // Show feedback toast
+    toast({
+      title: `Modus gewechselt: ${mode === 'local' ? 'Lokal' : 'Vapi-Widget'}`,
+      description: mode === 'local' 
+        ? 'Nutzt lokale Web Speech API für Tests' 
+        : 'Nutzt echte Vapi-Widgets für professionelle Tests',
+      variant: "default",
+    });
   };
 
   const handleSendConfiguration = async () => {
@@ -736,6 +759,29 @@ export default function KundenTest() {
                 <fieldset disabled={!isAuthorized} className={!isAuthorized ? 'opacity-50' : ''}>
                 <CardContent className="space-y-6">
                   
+                  {/* 0. Configuration Mode Selector */}
+                  <div className="space-y-3 p-4 border border-primary/20 rounded-lg bg-primary/5">
+                    <div>
+                      <label className="block text-sm font-semibold mb-2 text-primary">🎮 Spielwiese-Modus</label>
+                      <Select value={configMode} onValueChange={(value: any) => handleConfigModeChange(value)} data-testid="select-mode">
+                        <SelectTrigger className="border-primary/30">
+                          <SelectValue placeholder="Modus wählen" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="local">🖥️ Lokal (Web Speech API)</SelectItem>
+                          <SelectItem value="vapi">🚀 Vapi-Widget (Professionell)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="text-xs text-muted-foreground bg-background/50 p-2 rounded">
+                      {configMode === 'local' ? (
+                        <span>💡 <strong>Lokal:</strong> Nutzt Browser-Speech API für schnelle Tests</span>
+                      ) : (
+                        <span>💡 <strong>Vapi-Widget:</strong> Echte Voice-AI für professionelle Tests</span>
+                      )}
+                    </div>
+                  </div>
+
                   {/* 1. Bot Type Switcher */}
                   <div>
                     <label className="block text-sm font-medium mb-2">Bot-Typ</label>

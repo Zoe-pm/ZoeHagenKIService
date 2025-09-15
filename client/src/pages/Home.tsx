@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
-import { Shield, Settings, Headphones, CheckCircle, Users, Zap, Volume2, Play, Pause } from "lucide-react";
+import { Shield, Settings, Headphones, CheckCircle, Users, Zap, Volume2, VolumeX, Play, Pause } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
@@ -59,47 +59,68 @@ const products = [
 export default function Home() {
   const [, setLocation] = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [showUnmute, setShowUnmute] = useState(true);
-  const [playedOnce, setPlayedOnce] = useState(false);
+  
+  // Video state management für UX-Spezifikation
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showPlayButton, setShowPlayButton] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [delayComplete, setDelayComplete] = useState(false);
+  const [playedOnce, setPlayedOnce] = useState(false);
+  const [startedWithSound, setStartedWithSound] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // 2-Sekunden Verzögerung vor Video-Start
+  // 2-Sekunden Verzögerung vor Video-Start (UX-Spezifikation)
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       setDelayComplete(true);
-      // Nach Delay automatisch abspielen wenn möglich
+      
       if (videoRef.current && !playedOnce) {
-        videoRef.current.play().then(() => {
-          // Autoplay erfolgreich
+        // Primärpfad: Autoplay mit Ton versuchen
+        try {
+          videoRef.current.muted = false;
+          await videoRef.current.play();
+          // Autoplay mit Ton erfolgreich
           setIsPlaying(true);
+          setIsMuted(false);
+          setStartedWithSound(true);
           setPlayedOnce(true);
-          setShowUnmute(false);
-          setShowPlayButton(false);
-        }).catch(() => {
-          console.log('Autoplay nach Delay blockiert');
-          setShowPlayButton(true);
-          setShowUnmute(false);
-        });
-      } else {
-        setShowPlayButton(true);
-        setShowUnmute(false);
+        } catch (error) {
+          // Fallback: Stumm starten
+          try {
+            videoRef.current.muted = true;
+            await videoRef.current.play();
+            setIsPlaying(true);
+            setIsMuted(true);
+            setStartedWithSound(false);
+            setPlayedOnce(true);
+            setAutoplayBlocked(false);
+          } catch (fallbackError) {
+            // Autoplay komplett blockiert
+            setAutoplayBlocked(true);
+          }
+        }
       }
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [playedOnce]);
 
-  // Debug logging for video state
+  // Debug logging für Video-Zustand
   useEffect(() => {
-    console.log('Video state:', { showUnmute, playedOnce });
-  }, [showUnmute, playedOnce]);
+    console.log('Video state:', { 
+      isPlaying, 
+      isMuted, 
+      delayComplete, 
+      playedOnce, 
+      startedWithSound,
+      autoplayBlocked 
+    });
+  }, [isPlaying, isMuted, delayComplete, playedOnce, startedWithSound, autoplayBlocked]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -121,34 +142,78 @@ export default function Home() {
     }
   };
 
-  const handleVideoUnmute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = false;
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(console.error);
-      setShowUnmute(false);
-      setIsPlaying(true);
-      setShowPlayButton(false);
-      setPlayedOnce(true); // Verhindert redundante Autoplay-Aufrufe
+  // Play/Pause Handler (UX-Spezifikation: unten rechts)
+  const handlePlayPause = async () => {
+    if (!videoRef.current) return;
+    
+    if (isPlaying) {
+      // Pausieren
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      // Erste Interaktion nach stummem Fallback oder blockiertem Autoplay?
+      const isFirstInteraction = autoplayBlocked || (!startedWithSound && playedOnce);
+      
+      if (isFirstInteraction) {
+        // Zurück auf 0:00 und mit Ton starten (UX-Spezifikation)
+        videoRef.current.currentTime = 0;
+        videoRef.current.muted = false;
+        setIsMuted(false);
+        
+        try {
+          await videoRef.current.play();
+          setIsPlaying(true);
+          setStartedWithSound(true);
+          setPlayedOnce(true);
+          setAutoplayBlocked(false);
+        } catch (error) {
+          console.error('First interaction play failed:', error);
+        }
+      } else {
+        // Normales Abspielen
+        try {
+          await videoRef.current.play();
+          setIsPlaying(true);
+          setPlayedOnce(true);
+        } catch (error) {
+          console.error('Play failed:', error);
+        }
+      }
     }
   };
 
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-        setShowPlayButton(true);
-      } else {
-        if (videoRef.current.muted) {
-          // Unmute and play
-          videoRef.current.muted = false;
+  // Ton-Handler (UX-Spezifikation: bei nachträglichem Einschalten auf 0:00 springen)
+  const handleMuteToggle = async () => {
+    if (!videoRef.current) return;
+    
+    if (isMuted) {
+      // Erste Interaktion nach blockiertem Autoplay oder stummem Fallback?
+      const isFirstInteraction = autoplayBlocked || (!startedWithSound && !playedOnce) || (!startedWithSound && playedOnce);
+      
+      if (isFirstInteraction) {
+        // Erste Interaktion: auf 0:00 springen und mit Ton starten (UX-Spezifikation)
+        videoRef.current.currentTime = 0;
+        videoRef.current.muted = false;
+        setIsMuted(false);
+        
+        try {
+          await videoRef.current.play();
+          setIsPlaying(true);
+          setStartedWithSound(true);
+          setPlayedOnce(true);
+          setAutoplayBlocked(false);
+        } catch (error) {
+          console.error('First interaction with sound failed:', error);
         }
-        videoRef.current.play().catch(console.error);
-        setIsPlaying(true);
-        setShowPlayButton(false);
-        setPlayedOnce(true);
+      } else {
+        // Normal unmuten (Video lief bereits mit Ton)
+        videoRef.current.muted = false;
+        setIsMuted(false);
       }
+    } else {
+      // Ton ausschalten
+      videoRef.current.muted = true;
+      setIsMuted(true);
     }
   };
 
@@ -161,22 +226,19 @@ export default function Home() {
 
   const handleVideoCanPlay = () => {
     console.log('Video can play');
-    // Nur Button-Zustand setzen, kein Play-Versuch hier
-    // Das Autoplay wird bereits im setTimeout-Handler behandelt
-    if (!delayComplete && !playedOnce) {
-      setShowPlayButton(false);
-      setShowUnmute(true);
-    }
+    // Video ist bereit - Controls können angezeigt werden wenn nötig
+    setShowControls(!autoplayBlocked && delayComplete);
   };
 
+  // Ende-Verhalten (UX-Spezifikation: zurück auf Startframe)
   const handleVideoEnded = () => {
     if (videoRef.current) {
-      videoRef.current.controls = true;
-      videoRef.current.removeAttribute('autoplay');
-      setPlayedOnce(true);
-      setShowUnmute(false);
+      // Sofort zurück auf Frame 0 und pausieren
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause();
       setIsPlaying(false);
-      setShowPlayButton(true);
+      // Ton bleibt eingeschaltet für nächstes Abspielen
+      setShowControls(true);
     }
   };
 
@@ -262,29 +324,32 @@ export default function Home() {
                   <span className="sr-only">Video wird geladen...</span>
                 </video>
                 
-                {/* Video Controls Overlay - only show when actually needed */}
-                {((showUnmute && !delayComplete) || (showPlayButton && !isPlaying)) && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
-                    {showUnmute && !delayComplete && (
-                      <Button
-                        onClick={handleVideoUnmute}
-                        className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
-                        data-testid="button-unmute"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                        Mit Ton abspielen
-                      </Button>
-                    )}
-                    {showPlayButton && !isPlaying && (
-                      <Button
-                        onClick={handlePlayPause}
-                        className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
-                        data-testid="button-play-pause"
-                      >
-                        <Play className="w-5 h-5" />
-                        Abspielen
-                      </Button>
-                    )}
+                {/* Dezente Controls unten rechts (UX-Spezifikation) */}
+                {(showControls || autoplayBlocked || (!isPlaying && delayComplete)) && (
+                  <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+                    {/* Ton-Button (klein, über Play/Pause) */}
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      onClick={handleMuteToggle}
+                      className="bg-black/50 hover:bg-black/70 text-white border-0 backdrop-blur-sm w-8 h-8"
+                      aria-label={isMuted ? "Ton einschalten" : "Ton ausschalten"}
+                      data-testid="button-mute-toggle"
+                    >
+                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                    </Button>
+                    
+                    {/* Play/Pause-Button (Hauptsteuerung) */}
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      onClick={handlePlayPause}
+                      className="bg-black/50 hover:bg-black/70 text-white border-0 backdrop-blur-sm w-10 h-10"
+                      aria-label={isPlaying ? "Video pausieren" : "Video abspielen"}
+                      data-testid="button-play-pause"
+                    >
+                      {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                    </Button>
                   </div>
                 )}
                 

@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { generateAdminToken, generateTestToken, verifyToken, extractTokenFromAuth, ADMIN_PASSWORD } from "./auth";
 import type { InsertTestCode, SendTestConfigRequest } from "@shared/schema";
 import { sendTestConfigSchema } from "@shared/schema";
+import { ELEVENLABS_VOICES } from "@shared/voices";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Admin Login Route
@@ -469,6 +470,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: 'Interner Server-Fehler' 
+      });
+    }
+  });
+
+  // ElevenLabs Voices API - Static voice list
+  app.get('/api/tts/elevenlabs/voices', async (req, res) => {
+    try {
+      res.json(ELEVENLABS_VOICES);
+    } catch (error) {
+      console.error('ElevenLabs voices error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Fehler beim Laden der Stimmen' 
       });
     }
   });

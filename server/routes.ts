@@ -477,7 +477,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ElevenLabs Voices API - Static voice list
   app.get('/api/tts/elevenlabs/voices', async (req, res) => {
     try {
-      res.json(ELEVENLABS_VOICES);
+      res.json({ 
+        success: true, 
+        voices: ELEVENLABS_VOICES 
+      });
     } catch (error) {
       console.error('ElevenLabs voices error:', error);
       res.status(500).json({ 

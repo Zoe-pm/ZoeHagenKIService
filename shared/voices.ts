@@ -6,6 +6,8 @@
 export interface ElevenLabsVoice {
   id: string;
   name: string;
+  category?: string;
+  labels?: string[];
 }
 
 export const ELEVENLABS_VOICES: ElevenLabsVoice[] = [

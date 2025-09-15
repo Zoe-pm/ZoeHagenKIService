@@ -56,7 +56,7 @@ export class MemStorage implements IStorage {
       customerName: "Test Customer",
       customerCompany: "Demo Company",
       createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year - much longer
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
       isActive: true,
       n8nWebhookUrl: "https://demo-webhook.example.com",
       n8nBotName: "Demo Assistant",
@@ -167,8 +167,11 @@ export class MemStorage implements IStorage {
   async getTestCode(code: string): Promise<TestCode | undefined> {
     const normalizedCode = code.trim().toUpperCase();
     const testCode = this.testCodes.get(normalizedCode);
-    // Don't delete expired codes - just return them as-is
-    // Let the calling code handle expiration logic
+    if (testCode && new Date(testCode.expiresAt) < new Date()) {
+      // Deactivate expired code instead of deleting it
+      testCode.isActive = false;
+      this.testCodes.set(normalizedCode, testCode);
+    }
     return testCode;
   }
 
@@ -210,9 +213,12 @@ export class MemStorage implements IStorage {
     const normalizedCode = code.trim().toUpperCase();
     const normalizedEmail = email.trim().toLowerCase();
     const testCode = this.testCodes.get(normalizedCode);
-    // Return the test code if it exists and email matches
-    // Don't delete expired codes - let the calling code handle expiration
     if (testCode && testCode.emails.includes(normalizedEmail)) {
+      if (new Date(testCode.expiresAt) < new Date()) {
+        // Deactivate expired code instead of deleting it
+        testCode.isActive = false;
+        this.testCodes.set(normalizedCode, testCode);
+      }
       return testCode;
     }
     return undefined;

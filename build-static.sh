@@ -2,5 +2,5 @@
 set -e
 rm -rf dist
 vite build --config vite.client.config.ts
-# Sicherheitsnetz: entferne versehentlich erzeugte Server-Files
+# Alles serverseitige aus dist entfernen, damit Static klappt
 rm -f dist/index.* dist/server.* || true

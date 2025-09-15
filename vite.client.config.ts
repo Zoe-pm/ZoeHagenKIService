@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   root: 'client',
-  build: { outDir: '../dist', emptyOutDir: true, assetsDir: 'assets' },
+  build: { outDir: '../dist/public', emptyOutDir: true, assetsDir: 'assets' },
   plugins: [react()],
   resolve: {
     alias: {

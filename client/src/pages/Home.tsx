@@ -193,7 +193,7 @@ export default function Home() {
                   onStalled={handleVideoWaiting}
                   data-testid="hero-video"
                 >
-                  <source src="/videos/juna-video.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" />
+                  <source src="/videos/new-video.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" />
                   <source src="/images/avatar.mp4" type="video/mp4" />
                   <span className="sr-only">Video wird geladen...</span>
                 </video>

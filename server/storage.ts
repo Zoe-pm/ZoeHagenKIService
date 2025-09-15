@@ -44,6 +44,27 @@ export class MemStorage implements IStorage {
     this.testSessions = new Map();
     this.testCodes = new Map();
     this.testConfigs = new Map();
+    
+    // Initialize with default test code for development/testing
+    this.initializeDefaultTestCode();
+  }
+
+  private initializeDefaultTestCode() {
+    const defaultTestCode: TestCode = {
+      code: "DEMO2024",
+      emails: ["test@example.com", "demo@example.com"],
+      customerName: "Test Customer",
+      customerCompany: "Demo Company",
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+      isActive: true,
+      n8nWebhookUrl: "https://demo-webhook.example.com",
+      n8nBotName: "Demo Assistant",
+      n8nBotGreeting: "Hallo! Ich bin Ihr Demo-Assistant. Wie kann ich Ihnen helfen?"
+    };
+    
+    this.testCodes.set("DEMO2024", defaultTestCode);
+    console.log("Default test code 'DEMO2024' initialized for testing");
   }
 
   async getUser(id: string): Promise<User | undefined> {

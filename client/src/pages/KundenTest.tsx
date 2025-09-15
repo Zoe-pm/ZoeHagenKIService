@@ -1394,10 +1394,18 @@ export default function KundenTest() {
                         try {
                           setIsValidating(true);
                           
-                          const response = await apiRequest('POST', '/api/test-config', {
-                            email: session.email,
-                            sessionToken: session.token,
-                            config: testConfig
+                          const response = await fetch('/api/test-config/send', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${session.token}`
+                            },
+                            body: JSON.stringify({
+                              testConfig,
+                              n8nWebhookUrl: session.n8nWebhookUrl,
+                              n8nBotName: session.n8nBotName,
+                              n8nBotGreeting: session.n8nBotGreeting
+                            })
                           });
 
                           const data = await response.json();

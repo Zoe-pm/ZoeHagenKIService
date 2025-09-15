@@ -28,6 +28,7 @@ function Router() {
       <Route path="/kontakt" component={Kontakt} />
       <Route path="/ueber-uns" component={UeberUns} />
       <Route path="/kunden-test" component={KundenTest} />
+      <Route path="/kundentest" component={KundenTest} />
       <Route path="/test" component={KundenTest} />
       <Route path="/admin" component={Admin} />
       <Route path="/datenschutz" component={Datenschutz} />
@@ -43,7 +44,7 @@ function App() {
   const [location] = useLocation();
   
   // Routes where Juna bubbles should NOT appear
-  const noJunaRoutes = ['/kunden-test', '/test', '/admin'];
+  const noJunaRoutes = ['/kunden-test', '/kundentest', '/test', '/admin'];
   const showJunaBubbles = !noJunaRoutes.includes(location);
 
   useEffect(() => {

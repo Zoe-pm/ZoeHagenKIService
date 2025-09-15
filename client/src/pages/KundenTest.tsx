@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import { TestChatbot } from "@/components/TestChatbot";
+import { TestChatBubbleButton } from "@/components/TestChatBubbleButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -148,6 +149,7 @@ export default function KundenTest() {
   const [availableVoices, setAvailableVoices] = useState<{id: string, name: string, category: string, labels: any}[]>([]);
   const [isLoadingVoices, setIsLoadingVoices] = useState(false);
   const [isSavingPreferences, setIsSavingPreferences] = useState(false);
+  const [isSendingConfig, setIsSendingConfig] = useState(false);
   const { toast } = useToast();
 
   // Check for existing session on mount
@@ -1524,6 +1526,30 @@ export default function KundenTest() {
                       </div>
                     </div>
                   )}
+                  
+                  {/* Speichern und senden Button */}
+                  <div className="mt-6 pt-6 border-t border-border/50">
+                    <div className="text-center">
+                      <Button
+                        onClick={handleSendConfiguration}
+                        disabled={isSendingConfig || !isAuthorized}
+                        className="button-gradient px-8 py-3 text-lg font-semibold"
+                        data-testid="button-save-send-config"
+                      >
+                        {isSendingConfig ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                            Wird gesendet...
+                          </>
+                        ) : (
+                          'Speichern und senden'
+                        )}
+                      </Button>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Ihre Konfiguration wird an Alex gesendet und gespeichert.
+                      </p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -1548,18 +1574,24 @@ export default function KundenTest() {
         </div>
       </main>
 
-      {/* TEST-Chatbot Widget */}
-      {isChatOpen && (
-        <TestChatbot
-          isOpen={isChatOpen}
-          onClose={() => setIsChatOpen(false)}
-          authToken={session?.token}
-          config={testConfig}
-          n8nWebhookUrl={session?.n8nWebhookUrl}
-          n8nBotName={session?.n8nBotName}
-          n8nBotGreeting={session?.n8nBotGreeting}
-        />
-      )}
+      {/* Live Test Chat Bubble - Only visible when authorized and chat closed */}
+      <TestChatBubbleButton
+        config={testConfig}
+        onClick={() => setIsChatOpen(true)}
+        isVisible={isAuthorized && !isChatOpen}
+      />
+
+      {/* TEST-Chatbot Widget - Fixed mode for floating chat */}
+      <TestChatbot
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        authToken={session?.token}
+        config={testConfig}
+        n8nWebhookUrl={session?.n8nWebhookUrl}
+        n8nBotName={session?.n8nBotName}
+        n8nBotGreeting={session?.n8nBotGreeting}
+        mode="fixed"
+      />
       
     </>
   );

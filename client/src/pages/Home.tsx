@@ -136,6 +136,15 @@ export default function Home() {
     }, 1000);
   };
 
+  const handleVideoError = (error: any) => {
+    console.log('Video error occurred:', error);
+    // Handle video error gracefully - could show fallback image or retry
+    if (videoRef.current) {
+      // Reset video to try again
+      videoRef.current.load();
+    }
+  };
+
   return (
     <div className="min-h-screen" data-testid="home-page">
       <SEOHelmet 
@@ -191,6 +200,7 @@ export default function Home() {
                   onEnded={handleVideoEnded}
                   onWaiting={handleVideoWaiting}
                   onStalled={handleVideoWaiting}
+                  onError={handleVideoError}
                   data-testid="hero-video"
                 >
                   <source src="/videos/new-video.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" />

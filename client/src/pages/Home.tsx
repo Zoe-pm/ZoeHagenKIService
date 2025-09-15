@@ -124,6 +124,51 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Video Section - Between Hero and Products */}
+            <section className="py-16 px-4 sm:px-6 lg:px-8" data-testid="video-section">
+              <div className="max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  {/* Video Kachel Links */}
+                  <div className="relative">
+                    <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-r from-[#e63973] to-[#E8719A] p-1">
+                      <div className="relative bg-black rounded-xl overflow-hidden">
+                        <video
+                          className="w-full h-auto aspect-video cursor-pointer"
+                          src="/attached_assets/Juna3_1757937094218.mp4"
+                          autoPlay
+                          muted
+                          playsInline
+                          onEnded={(e) => {
+                            e.currentTarget.removeAttribute('autoplay');
+                            e.currentTarget.controls = true;
+                          }}
+                          onLoadedData={(e) => {
+                            // Start playing once when loaded
+                            e.currentTarget.play().catch(() => {
+                              // If autoplay fails, show controls immediately
+                              e.currentTarget.controls = true;
+                            });
+                          }}
+                          data-testid="hero-video"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Text Rechts */}
+                  <div className="text-white space-y-6">
+                    <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
+                      Wir bauen Ihre Lösung und bleiben an Ihrer Seite.
+                    </h2>
+                    <p className="text-xl text-white/90 leading-relaxed">
+                      Von der ersten Idee bis zum erfolgreichen Betrieb – 
+                      wir begleiten Sie durch jeden Schritt Ihrer KI-Journey.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* Four Products Above-the-Fold */}
             <section id="produkte" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 mb-8" data-testid="products-section">
               {products.map((product) => (

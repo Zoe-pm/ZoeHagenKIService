@@ -70,11 +70,28 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // 3-Sekunden Verzögerung vor Video-Start
+  // 2-Sekunden Verzögerung vor Video-Start
   useEffect(() => {
     const timer = setTimeout(() => {
       setDelayComplete(true);
-    }, 3000);
+      // Nach Delay automatisch abspielen wenn möglich
+      if (videoRef.current && !playedOnce) {
+        videoRef.current.play().then(() => {
+          // Autoplay erfolgreich
+          setIsPlaying(true);
+          setPlayedOnce(true);
+          setShowUnmute(false);
+          setShowPlayButton(false);
+        }).catch(() => {
+          console.log('Autoplay nach Delay blockiert');
+          setShowPlayButton(true);
+          setShowUnmute(false);
+        });
+      } else {
+        setShowPlayButton(true);
+        setShowUnmute(false);
+      }
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -143,16 +160,11 @@ export default function Home() {
 
   const handleVideoCanPlay = () => {
     console.log('Video can play');
-    if (videoRef.current && !playedOnce && delayComplete) {
-      videoRef.current.play().catch(() => {
-        console.log('Video autoplay blocked, showing play button');
-        setShowPlayButton(true);
-        setShowUnmute(false);
-      });
-    } else if (!delayComplete) {
-      // Show play button after delay
-      setShowPlayButton(true);
-      setShowUnmute(false);
+    // Nur Button-Zustand setzen, kein Play-Versuch hier
+    // Das Autoplay wird bereits im setTimeout-Handler behandelt
+    if (!delayComplete && !playedOnce) {
+      setShowPlayButton(false);
+      setShowUnmute(true);
     }
   };
 
@@ -233,7 +245,8 @@ export default function Home() {
                   className="w-full h-auto aspect-video cursor-pointer"
                   muted
                   playsInline
-                  preload="auto"
+                  preload="metadata"
+                  poster="/images/zoe-image.jpg"
                   onClick={handlePlayPause}
                   onLoadedMetadata={handleVideoLoadedMetadata}
                   onCanPlay={handleVideoCanPlay}
@@ -248,8 +261,8 @@ export default function Home() {
                   <span className="sr-only">Video wird geladen...</span>
                 </video>
                 
-                {/* Video Controls Overlay */}
-                {(showUnmute || showPlayButton) && (
+                {/* Video Controls Overlay - only show when actually needed */}
+                {((showUnmute && !delayComplete) || (showPlayButton && !isPlaying)) && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
                     {showUnmute && !delayComplete && (
                       <Button
@@ -261,23 +274,14 @@ export default function Home() {
                         Mit Ton abspielen
                       </Button>
                     )}
-                    {showPlayButton && (
+                    {showPlayButton && !isPlaying && (
                       <Button
                         onClick={handlePlayPause}
                         className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
                         data-testid="button-play-pause"
                       >
-                        {isPlaying ? (
-                          <>
-                            <Pause className="w-5 h-5" />
-                            Pausieren
-                          </>
-                        ) : (
-                          <>
-                            <Play className="w-5 h-5" />
-                            Abspielen
-                          </>
-                        )}
+                        <Play className="w-5 h-5" />
+                        Abspielen
                       </Button>
                     )}
                   </div>
@@ -286,7 +290,7 @@ export default function Home() {
                 {/* Delay Countdown */}
                 {!delayComplete && (
                   <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-md text-sm backdrop-blur-sm">
-                    Video startet in 3s...
+                    Video startet in 2s...
                   </div>
                 )}
               </div>

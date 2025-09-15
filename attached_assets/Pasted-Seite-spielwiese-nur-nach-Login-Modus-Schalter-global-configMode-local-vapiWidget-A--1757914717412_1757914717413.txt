@@ -1,0 +1,51 @@
+Seite: /spielwiese (nur nach Login).
+Modus-Schalter (global): configMode ∈ {local, vapiWidget}.
+
+A) Local-Mode (Prototyping & Feinschliff)
+	•	Bot-Selector: {ChatBot, VoiceBot} → immer nur ein Panel aktiv, anderes überblendet.
+	•	VoiceBot-Konfiguration (lokal)
+	1.	Design: Bubble-Farbe, Hintergrund, Textfeld-Farbe, Headline, Subheadline; Live-Preview.
+	2.	Sprache & Stimme:
+	•	Dropdown Provider (Azure, ElevenLabs, Deepgram-TTS o. ä.).
+	•	voiceId Eingabe/Dropdown (10 Beispielstimmen + Freitext für Custom).
+	•	Default Deutsch: vorausgewählt z. B. Azure de-DE-KatjaNeural.  ￼
+	3.	Sprechstil (falls Provider kann): Rate, Pitch, Lautstärke/Emotion; Info-Tooltip wenn Stimme das nicht unterstützt.  ￼
+	4.	Timing/Flow (optional Tab „Erweitert“): Start/Stop speaking, Endpointing, Wait/Backoff-Sekunden; Defaults setzen.  ￼
+	5.	SSML (optional): Textarea, nur für Power-User.
+	6.	Demo-Text & Test: Textfeld + „Jetzt anhören“ → Rendern mit aktuellen Einstellungen.
+	7.	Backend-Hook: Feld für n8n-Webhook (Validate-Button, Response-Toast).
+	8.	Speichern: „Konfiguration speichern“ (Draft/Live Toggle, Versionshinweis).
+
+Akzeptanzkriterien (Local):
+	•	Deutsch-Ausgabe funktioniert mit der gewählten de-DE Stimme.
+	•	Demo-Playback reagiert <2 s nach Änderung (Zielwert; technisch „best effort“).
+	•	Ungespeicherte Änderungen werden klar angezeigt.
+	•	Webhook-URL wird validiert (200/timeout/Fehlermeldung).
+
+B) Vapi-Widget-Mode (Produktiv anfühlen, keine Doppel-Config)
+	•	Schalter configMode = vapiWidget deaktiviert alle lokalen Felder und blendet einen Hinweis ein:
+„Konfiguration wird aus Vapi geladen. Änderungen bitte im Vapi-Dashboard.“
+	•	Einbindung: Render des offiziellen Vapi Web/Voice Widgets mit assistantId + publicApiKey (Umgebungsvariablen).
+	•	Nur ein Bot aktiv (Chat oder Voice) – der jeweils andere bleibt gesperrt.
+	•	Testen direkt im Widget (Start/Stop, Mute, etc.).
+	•	Kein Konflikt: lokale Styles/Voices wirken nicht, solange Widget-Mode aktiv ist.  ￼
+
+Akzeptanzkriterien (Widget):
+	•	Widget lädt mit korrekter assistantId und läuft ohne lokale Overrides.
+	•	Positionierung als floating widget wie in den Vapi-Docs vorgesehen. (Wenn kundenseitig fest positioniert gewünscht, vorab prüfen – es gibt bekannte Besonderheiten bei der Platzierung.)  ￼
+
+⸻
+
+UX-Feinschliff (empfohlen)
+	•	Defaults deutschfreundlich: language=de-DE, Azure als Standard-TTS (breite Multilingual-Abdeckung, saubere de-Stimmen).  ￼
+	•	ASR-Provider-Picker mit Presets „Deutsch genau“ (Google/Deepgram-Profile) + kurzer Hinweis: „Beste Erkennung variiert je Use-Case – bitte testen.“  ￼
+	•	Zwei Tabs: „Basis“ (Stimme, Farbe, Texte, Demo) und „Erweitert“ (Timing, SSML).
+	•	Read-only Spiegel: Im Widget-Mode die aktiven Vapi-Werte (Stimme/Provider) nur anzeigen, nicht änderbar.
+
+⸻
+
+To-Dos für dich / den Architekten
+	•	Liste deutscher Beispielstimmen je Provider zusammentragen (mit voiceId), min. 10 (m/w, verschiedene Stile). Startpunkt: Azure de-DE-*Neural Stimmen; ElevenLabs deutschfähige Stimmen aus eurem Account.  ￼
+	•	Environment-Setup: VAPI_PUBLIC_API_KEY, VAPI_ASSISTANT_ID (Widget), ggf. VAPI_API_KEY (Server).  ￼
+	•	Config-Toggle implementieren (local vs vapiWidget) + UI-State-Management.
+	•	Webhook-Validator (Ping-Button + Status).

@@ -2,7 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateAdminToken, generateTestToken, verifyToken, extractTokenFromAuth, ADMIN_PASSWORD } from "./auth";
-import type { InsertTestCode } from "@shared/schema";
+import type { InsertTestCode, SendTestConfigRequest } from "@shared/schema";
+import { sendTestConfigSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Admin Login Route
@@ -400,6 +401,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('Delete test code error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Interner Server-Fehler' 
+      });
+    }
+  });
+
+  // Test Configuration Send Route
+  app.post('/api/test-config/send', async (req, res) => {
+    try {
+      const token = extractTokenFromAuth(req.headers.authorization);
+      
+      if (!token) {
+        return res.status(401).json({ 
+          success: false, 
+          message: 'Kein Token vorhanden' 
+        });
+      }
+      
+      const payload = verifyToken(token);
+      if (!payload || payload.type !== 'test') {
+        return res.status(401).json({ 
+          success: false, 
+          message: 'Ungültiger oder abgelaufener Token' 
+        });
+      }
+      
+      // Validate session exists
+      const session = await storage.getTestSession(token);
+      if (!session) {
+        return res.status(401).json({ 
+          success: false, 
+          message: 'Session nicht gefunden' 
+        });
+      }
+      
+      // Validate request body with Zod
+      const validation = sendTestConfigSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Ungültige Konfigurationsdaten',
+          errors: validation.error.errors
+        });
+      }
+      
+      const configData = validation.data;
+      
+      // Save configuration
+      await storage.saveTestConfig(session.email, configData);
+      
+      console.log(`Test configuration saved for ${session.email}:`, {
+        activeBot: configData.testConfig.activeBot,
+        botName: configData.testConfig.activeBot === 'chatbot' 
+          ? configData.testConfig.chatbot.name 
+          : configData.testConfig.voicebot.name,
+        hasN8nWebhook: !!configData.n8nWebhookUrl
+      });
+      
+      res.json({
+        success: true,
+        message: 'Konfiguration erfolgreich gespeichert und gesendet'
+      });
+    } catch (error) {
+      console.error('Test config send error:', error);
       res.status(500).json({ 
         success: false, 
         message: 'Interner Server-Fehler' 

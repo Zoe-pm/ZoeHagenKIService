@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type AdminSession, type TestSession, type TestCode, type InsertTestCode } from "@shared/schema";
+import { type User, type InsertUser, type AdminSession, type TestSession, type TestCode, type InsertTestCode, type SendTestConfigRequest } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 // modify the interface with any CRUD methods
@@ -25,6 +25,10 @@ export interface IStorage {
   getAllTestCodes(): Promise<TestCode[]>;
   deleteTestCode(code: string): Promise<void>;
   getTestCodeByEmail(email: string, code: string): Promise<TestCode | undefined>;
+  
+  // Test Configuration Management
+  saveTestConfig(email: string, config: SendTestConfigRequest): Promise<void>;
+  getTestConfig(email: string): Promise<SendTestConfigRequest | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -32,12 +36,14 @@ export class MemStorage implements IStorage {
   private adminSessions: Map<string, AdminSession>;
   private testSessions: Map<string, TestSession>;
   private testCodes: Map<string, TestCode>;
+  private testConfigs: Map<string, SendTestConfigRequest>;
 
   constructor() {
     this.users = new Map();
     this.adminSessions = new Map();
     this.testSessions = new Map();
     this.testCodes = new Map();
+    this.testConfigs = new Map();
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -206,6 +212,17 @@ export class MemStorage implements IStorage {
       return testCode;
     }
     return undefined;
+  }
+
+  // Test Configuration Management
+  async saveTestConfig(email: string, config: SendTestConfigRequest): Promise<void> {
+    const normalizedEmail = email.trim().toLowerCase();
+    this.testConfigs.set(normalizedEmail, config);
+  }
+
+  async getTestConfig(email: string): Promise<SendTestConfigRequest | undefined> {
+    const normalizedEmail = email.trim().toLowerCase();
+    return this.testConfigs.get(normalizedEmail);
   }
 }
 

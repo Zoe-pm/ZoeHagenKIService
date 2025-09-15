@@ -64,3 +64,60 @@ export interface InsertTestCode {
   n8nBotName?: string;
   n8nBotGreeting?: string;
 }
+
+// Test Configuration Types
+export const testConfigSchema = z.object({
+  activeBot: z.enum(["chatbot", "voicebot"]),
+  chatbot: z.object({
+    name: z.string(),
+    primaryColor: z.string(),
+    backgroundColor: z.string(),
+    textColor: z.string(),
+    textBackgroundColor: z.string(),
+    widgetSize: z.enum(["small", "medium", "large"]),
+    fontFamily: z.string(),
+    position: z.enum(["bottom-right", "bottom-left", "center"]),
+    greeting: z.string(),
+    title: z.string(),
+    subtitle: z.string(),
+    inputPlaceholder: z.string(),
+    messageToAlex: z.string(),
+    logoUrl: z.string(),
+    logoPosition: z.string(),
+    logoSize: z.string(),
+  }),
+  voicebot: z.object({
+    name: z.string(),
+    primaryColor: z.string(),
+    backgroundColor: z.string(),
+    textColor: z.string(),
+    textBackgroundColor: z.string(),
+    widgetSize: z.enum(["small", "medium", "large"]),
+    position: z.enum(["bottom-right", "bottom-left", "center"]),
+    voiceSpeed: z.array(z.number()),
+    voicePitch: z.array(z.number()),
+    elevenLabsVoiceId: z.string(),
+    elevenLabsVoiceName: z.string(),
+    stability: z.number(),
+    similarity: z.number(),
+    speakerBoost: z.boolean(),
+    greeting: z.string(),
+    title: z.string(),
+    subtitle: z.string(),
+    inputPlaceholder: z.string(),
+    messageToAlex: z.string(),
+    logoUrl: z.string(),
+    logoPosition: z.string(),
+    logoSize: z.string(),
+  }),
+});
+
+export const sendTestConfigSchema = z.object({
+  testConfig: testConfigSchema,
+  n8nWebhookUrl: z.string().optional(),
+  n8nBotName: z.string().optional(),
+  n8nBotGreeting: z.string().optional(),
+});
+
+export type TestConfig = z.infer<typeof testConfigSchema>;
+export type SendTestConfigRequest = z.infer<typeof sendTestConfigSchema>;

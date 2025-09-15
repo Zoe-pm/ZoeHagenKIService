@@ -402,6 +402,56 @@ export default function KundenTest() {
     }));
   };
 
+  const handleSendConfiguration = async () => {
+    if (!session?.token) {
+      toast({
+        title: "Fehler",
+        description: "Keine gültige Session gefunden. Bitte loggen Sie sich erneut ein.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSendingConfig(true);
+
+    try {
+      const response = await fetch('/api/test-config/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.token}`
+        },
+        body: JSON.stringify({
+          testConfig,
+          n8nWebhookUrl: session.n8nWebhookUrl,
+          n8nBotName: session.n8nBotName,
+          n8nBotGreeting: session.n8nBotGreeting
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: "Erfolgreich gesendet! 🎉",
+          description: "Ihre Konfiguration wurde gespeichert und an Alex gesendet.",
+          variant: "default",
+        });
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Unbekannter Fehler');
+      }
+    } catch (error) {
+      console.error('Configuration send error:', error);
+      toast({
+        title: "Fehler beim Senden",
+        description: error instanceof Error ? error.message : "Die Konfiguration konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSendingConfig(false);
+    }
+  };
+
   const resetConfig = () => {
     setTestConfig({
       activeBot: "chatbot",

@@ -56,7 +56,7 @@ export class MemStorage implements IStorage {
       customerName: "Test Customer",
       customerCompany: "Demo Company",
       createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+      expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year - much longer
       isActive: true,
       n8nWebhookUrl: "https://demo-webhook.example.com",
       n8nBotName: "Demo Assistant",
@@ -167,29 +167,15 @@ export class MemStorage implements IStorage {
   async getTestCode(code: string): Promise<TestCode | undefined> {
     const normalizedCode = code.trim().toUpperCase();
     const testCode = this.testCodes.get(normalizedCode);
-    if (testCode && new Date(testCode.expiresAt) < new Date()) {
-      // Delete expired code instead of just marking it inactive
-      this.testCodes.delete(normalizedCode);
-      return undefined;
-    }
+    // Don't delete expired codes - just return them as-is
+    // Let the calling code handle expiration logic
     return testCode;
   }
 
   async getAllTestCodes(): Promise<TestCode[]> {
-    const codes = Array.from(this.testCodes.values());
-    const validCodes: TestCode[] = [];
-    
-    // Clean up expired codes and return only valid ones
-    codes.forEach(code => {
-      if (new Date(code.expiresAt) < new Date()) {
-        // Delete expired code
-        this.testCodes.delete(code.code);
-      } else {
-        validCodes.push(code);
-      }
-    });
-    
-    return validCodes;
+    // Return all codes (including expired ones)
+    // Let the admin panel show expiration status
+    return Array.from(this.testCodes.values());
   }
 
   async deleteTestCode(code: string): Promise<void> {
@@ -224,12 +210,9 @@ export class MemStorage implements IStorage {
     const normalizedCode = code.trim().toUpperCase();
     const normalizedEmail = email.trim().toLowerCase();
     const testCode = this.testCodes.get(normalizedCode);
+    // Return the test code if it exists and email matches
+    // Don't delete expired codes - let the calling code handle expiration
     if (testCode && testCode.emails.includes(normalizedEmail)) {
-      if (new Date(testCode.expiresAt) < new Date()) {
-        // Delete expired code instead of just marking it inactive
-        this.testCodes.delete(normalizedCode);
-        return undefined;
-      }
       return testCode;
     }
     return undefined;

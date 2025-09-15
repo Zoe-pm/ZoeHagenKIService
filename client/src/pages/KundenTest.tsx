@@ -762,22 +762,22 @@ export default function KundenTest() {
                   {/* 0. Configuration Mode Selector */}
                   <div className="space-y-3 p-4 border border-primary/20 rounded-lg bg-primary/5">
                     <div>
-                      <label className="block text-sm font-semibold mb-2 text-primary">🎮 Spielwiese-Modus</label>
-                      <Select value={configMode} onValueChange={(value: any) => handleConfigModeChange(value)} data-testid="select-mode">
+                      <label className="block text-sm font-semibold mb-2 text-primary">Spielwiese-Modus</label>
+                      <Select value={configMode} onValueChange={(value: 'local' | 'vapi') => handleConfigModeChange(value)} data-testid="select-mode">
                         <SelectTrigger className="border-primary/30">
                           <SelectValue placeholder="Modus wählen" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="local">🖥️ Lokal (Web Speech API)</SelectItem>
-                          <SelectItem value="vapi">🚀 Vapi-Widget (Professionell)</SelectItem>
+                          <SelectItem value="local">Lokal (Web Speech API)</SelectItem>
+                          <SelectItem value="vapi">Vapi-Widget (Professionell)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="text-xs text-muted-foreground bg-background/50 p-2 rounded">
                       {configMode === 'local' ? (
-                        <span>💡 <strong>Lokal:</strong> Nutzt Browser-Speech API für schnelle Tests</span>
+                        <span><strong>Lokal:</strong> Nutzt Browser-Speech API für schnelle Tests</span>
                       ) : (
-                        <span>💡 <strong>Vapi-Widget:</strong> Echte Voice-AI für professionelle Tests</span>
+                        <span><strong>Vapi-Widget:</strong> Echte Voice-AI für professionelle Tests</span>
                       )}
                     </div>
                   </div>

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import type { IModeAdapter } from './ModeAdapters';
 
 interface Message {
   id: string;
@@ -55,15 +56,18 @@ interface TestChatbotProps {
   onClose: () => void;
   authToken?: string;
   config: TestConfig;
+  modeAdapter?: IModeAdapter;
   // n8n Integration
   n8nWebhookUrl?: string;
   n8nBotName?: string;
   n8nBotGreeting?: string;
   // Display mode
   mode?: 'fixed' | 'inline';
+  // Processing mode for message handling
+  processingMode?: 'local' | 'vapi';
 }
 
-export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl, n8nBotName, n8nBotGreeting, mode = 'fixed' }: TestChatbotProps) {
+export function TestChatbot({ isOpen, onClose, authToken, config, modeAdapter, n8nWebhookUrl, n8nBotName, n8nBotGreeting, mode = 'fixed', processingMode }: TestChatbotProps) {
   // Stable session ID for Test Chatbots (per webhook/authToken)
   const getTestSessionId = () => {
     const sessionKey = `testSessionId-${authToken || 'default'}`;
@@ -122,12 +126,24 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
     }
   }, [messages, voiceEnabled, config.activeBot]);
 
-  const speakText = (text: string) => {
+  const speakText = async (text: string) => {
     // Safe guards for TTS functionality
-    if (!('speechSynthesis' in window) || 
-        typeof window.SpeechSynthesisUtterance === 'undefined' || 
-        config.activeBot !== "voicebot" ||
-        !voiceEnabled) {
+    if (config.activeBot !== "voicebot" || !voiceEnabled) {
+      return;
+    }
+
+    try {
+      // 🚀 NEW: Use mode adapter for TTS if available
+      if (modeAdapter) {
+        await modeAdapter.handleTextToSpeech(text, config);
+        return;
+      }
+    } catch (modeError) {
+      console.warn('Mode adapter TTS failed, falling back to Web Speech API:', modeError);
+    }
+
+    // Fallback: Local Web Speech API
+    if (!('speechSynthesis' in window) || typeof window.SpeechSynthesisUtterance === 'undefined') {
       return;
     }
     
@@ -183,8 +199,12 @@ export function TestChatbot({ isOpen, onClose, authToken, config, n8nWebhookUrl,
     try {
       let botResponse: string;
       
+      // 🚀 NEW: Use mode adapter if available for processing
+      if (modeAdapter) {
+        botResponse = await modeAdapter.handleSendMessage(messageToSend, config);
+      } 
       // Use real n8n chatbot if configured, otherwise fallback to demo responses
-      if (n8nWebhookUrl) {
+      else if (n8nWebhookUrl) {
         // Real n8n API Call
         try {
           const testSessionId = getTestSessionId();

@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SEOHelmet from "@/components/SEOHelmet";
 import Navigation from "@/components/Navigation";
 import { TestChatbot } from "@/components/TestChatbot";
 import { TestChatBubbleButton } from "@/components/TestChatBubbleButton";
+import { useModeAdapter, type ConfigMode } from "@/components/ModeAdapters";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -160,6 +161,12 @@ export default function KundenTest() {
       return 'local';
     }
   });
+
+  // Mode Adapter Hook - provides the correct adapter based on configMode (memoized to prevent instance churn)
+  const modeAdapter = useMemo(() => {
+    const { createModeAdapter } = require('@/components/ModeAdapters');
+    return createModeAdapter(configMode);
+  }, [configMode]);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -1649,6 +1656,7 @@ export default function KundenTest() {
         config={testConfig}
         onClick={() => setIsChatOpen(true)}
         isVisible={isAuthorized && !isChatOpen}
+        modeAdapter={modeAdapter}
       />
 
       {/* TEST-Chatbot Widget - Fixed mode for floating chat */}
@@ -1657,6 +1665,8 @@ export default function KundenTest() {
         onClose={() => setIsChatOpen(false)}
         authToken={session?.token}
         config={testConfig}
+        modeAdapter={modeAdapter}
+        processingMode={configMode}
         n8nWebhookUrl={session?.n8nWebhookUrl}
         n8nBotName={session?.n8nBotName}
         n8nBotGreeting={session?.n8nBotGreeting}

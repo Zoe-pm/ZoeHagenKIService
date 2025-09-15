@@ -1,4 +1,5 @@
 import { MessageCircle, Volume2 } from 'lucide-react';
+import type { IModeAdapter } from './ModeAdapters';
 
 interface TestConfig {
   activeBot: "chatbot" | "voicebot";
@@ -44,9 +45,10 @@ interface TestChatBubbleButtonProps {
   config: TestConfig;
   onClick: () => void;
   isVisible: boolean;
+  modeAdapter?: IModeAdapter;
 }
 
-export function TestChatBubbleButton({ config, onClick, isVisible }: TestChatBubbleButtonProps) {
+export function TestChatBubbleButton({ config, onClick, isVisible, modeAdapter }: TestChatBubbleButtonProps) {
   if (!isVisible) return null;
 
   const currentConfig = config.activeBot === "chatbot" ? config.chatbot : config.voicebot;

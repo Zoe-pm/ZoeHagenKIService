@@ -114,8 +114,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Check if test code exists and is valid for this email
-      const testCode = await storage.getTestCodeByEmail(email.trim(), accessCode.trim());
+      // Check if test code exists and is valid for this email (normalize inputs)
+      const normalizedEmail = email.trim().toLowerCase();
+      const normalizedCode = accessCode.trim().toUpperCase();
+      const testCode = await storage.getTestCodeByEmail(normalizedEmail, normalizedCode);
       
       if (!testCode) {
         return res.status(401).json({ 
@@ -132,11 +134,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Generate test token
-      const token = generateTestToken(email.trim());
+      const token = generateTestToken(normalizedEmail);
       const expiresAt = new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString();
       
       // Store test session with n8n configuration
-      await storage.createTestSession(token, email.trim(), expiresAt, {
+      await storage.createTestSession(token, normalizedEmail, expiresAt, {
         webhookUrl: testCode.n8nWebhookUrl,
         botName: testCode.n8nBotName, 
         botGreeting: testCode.n8nBotGreeting
@@ -318,8 +320,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Check if code already exists
-      const existingCode = await storage.getTestCode(code);
+      // Check if code already exists (normalize to uppercase)
+      const existingCode = await storage.getTestCode(code.trim().toUpperCase());
       if (existingCode) {
         return res.status(400).json({ 
           success: false, 
@@ -328,8 +330,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const insertTestCode: InsertTestCode = {
-        code: code.toUpperCase(),
-        emails,
+        code: code.trim().toUpperCase(),
+        emails: emails.map(email => email.trim().toLowerCase()),
         customerName,
         customerCompany,
         expiresInHours: expiresInHours || 72,
@@ -382,7 +384,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const { code } = req.params;
       
-      const existingCode = await storage.getTestCode(code);
+      const existingCode = await storage.getTestCode(code.trim().toUpperCase());
       if (!existingCode) {
         return res.status(404).json({ 
           success: false, 
@@ -390,7 +392,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      await storage.deleteTestCode(code);
+      await storage.deleteTestCode(code.trim().toUpperCase());
       
       res.json({
         success: true,

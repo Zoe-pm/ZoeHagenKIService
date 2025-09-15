@@ -117,9 +117,12 @@ export class MemStorage implements IStorage {
     const now = new Date();
     const expiresAt = new Date(now.getTime() + insertTestCode.expiresInHours * 60 * 60 * 1000);
     
+    const normalizedCode = insertTestCode.code.trim().toUpperCase();
+    const normalizedEmails = insertTestCode.emails.map(email => email.trim().toLowerCase());
+    
     const testCode: TestCode = {
-      code: insertTestCode.code,
-      emails: insertTestCode.emails,
+      code: normalizedCode,
+      emails: normalizedEmails,
       customerName: insertTestCode.customerName,
       customerCompany: insertTestCode.customerCompany,
       createdAt: now.toISOString(),
@@ -130,15 +133,16 @@ export class MemStorage implements IStorage {
       n8nBotGreeting: insertTestCode.n8nBotGreeting
     };
     
-    this.testCodes.set(insertTestCode.code, testCode);
+    this.testCodes.set(normalizedCode, testCode);
     return testCode;
   }
 
   async getTestCode(code: string): Promise<TestCode | undefined> {
-    const testCode = this.testCodes.get(code);
+    const normalizedCode = code.trim().toUpperCase();
+    const testCode = this.testCodes.get(normalizedCode);
     if (testCode && new Date(testCode.expiresAt) < new Date()) {
       // Delete expired code instead of just marking it inactive
-      this.testCodes.delete(code);
+      this.testCodes.delete(normalizedCode);
       return undefined;
     }
     return testCode;
@@ -162,11 +166,12 @@ export class MemStorage implements IStorage {
   }
 
   async deleteTestCode(code: string): Promise<void> {
+    const normalizedCode = code.trim().toUpperCase();
     // Get the test code before deleting to know which emails were associated
-    const testCode = this.testCodes.get(code);
+    const testCode = this.testCodes.get(normalizedCode);
     
     // Delete the test code
-    this.testCodes.delete(code);
+    this.testCodes.delete(normalizedCode);
     
     // If the code existed and had associated emails, delete sessions for those emails
     if (testCode && testCode.emails && testCode.emails.length > 0) {
@@ -184,16 +189,18 @@ export class MemStorage implements IStorage {
         this.testSessions.delete(token);
       });
       
-      console.log(`Deleted ${sessionsToDelete.length} sessions for test code: ${code}`);
+      console.log(`Deleted ${sessionsToDelete.length} sessions for test code: ${normalizedCode}`);
     }
   }
 
   async getTestCodeByEmail(email: string, code: string): Promise<TestCode | undefined> {
-    const testCode = this.testCodes.get(code);
-    if (testCode && testCode.emails.includes(email)) {
+    const normalizedCode = code.trim().toUpperCase();
+    const normalizedEmail = email.trim().toLowerCase();
+    const testCode = this.testCodes.get(normalizedCode);
+    if (testCode && testCode.emails.includes(normalizedEmail)) {
       if (new Date(testCode.expiresAt) < new Date()) {
         // Delete expired code instead of just marking it inactive
-        this.testCodes.delete(code);
+        this.testCodes.delete(normalizedCode);
         return undefined;
       }
       return testCode;

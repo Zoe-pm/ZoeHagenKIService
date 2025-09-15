@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
-import { Shield, Settings, Headphones, CheckCircle, Users, Zap, Volume2 } from "lucide-react";
+import { Shield, Settings, Headphones, CheckCircle, Users, Zap, Volume2, Play, Pause } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
@@ -61,10 +61,22 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showUnmute, setShowUnmute] = useState(true);
   const [playedOnce, setPlayedOnce] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(false);
+  const [delayComplete, setDelayComplete] = useState(false);
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // 3-Sekunden Verzögerung vor Video-Start
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDelayComplete(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Debug logging for video state
@@ -98,6 +110,27 @@ export default function Home() {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(console.error);
       setShowUnmute(false);
+      setIsPlaying(true);
+      setShowPlayButton(false);
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+        setShowPlayButton(true);
+      } else {
+        if (videoRef.current.muted) {
+          // Unmute and play
+          videoRef.current.muted = false;
+        }
+        videoRef.current.play().catch(console.error);
+        setIsPlaying(true);
+        setShowPlayButton(false);
+        setPlayedOnce(true);
+      }
     }
   };
 
@@ -110,11 +143,16 @@ export default function Home() {
 
   const handleVideoCanPlay = () => {
     console.log('Video can play');
-    if (videoRef.current && !playedOnce) {
+    if (videoRef.current && !playedOnce && delayComplete) {
       videoRef.current.play().catch(() => {
-        console.log('Video autoplay blocked, showing unmute button');
-        setShowUnmute(true);
+        console.log('Video autoplay blocked, showing play button');
+        setShowPlayButton(true);
+        setShowUnmute(false);
       });
+    } else if (!delayComplete) {
+      // Show play button after delay
+      setShowPlayButton(true);
+      setShowUnmute(false);
     }
   };
 
@@ -124,6 +162,8 @@ export default function Home() {
       videoRef.current.removeAttribute('autoplay');
       setPlayedOnce(true);
       setShowUnmute(false);
+      setIsPlaying(false);
+      setShowPlayButton(true);
     }
   };
 
@@ -191,10 +231,10 @@ export default function Home() {
                 <video
                   ref={videoRef}
                   className="w-full h-auto aspect-video cursor-pointer"
-                  autoPlay
                   muted
                   playsInline
                   preload="auto"
+                  onClick={handlePlayPause}
                   onLoadedMetadata={handleVideoLoadedMetadata}
                   onCanPlay={handleVideoCanPlay}
                   onEnded={handleVideoEnded}
@@ -208,17 +248,45 @@ export default function Home() {
                   <span className="sr-only">Video wird geladen...</span>
                 </video>
                 
-                {/* Sound Overlay Button */}
-                {showUnmute && !playedOnce && (
+                {/* Video Controls Overlay */}
+                {(showUnmute || showPlayButton) && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
-                    <Button
-                      onClick={handleVideoUnmute}
-                      className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
-                      data-testid="button-unmute"
-                    >
-                      <Volume2 className="w-5 h-5" />
-                      Mit Ton abspielen
-                    </Button>
+                    {showUnmute && !delayComplete && (
+                      <Button
+                        onClick={handleVideoUnmute}
+                        className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
+                        data-testid="button-unmute"
+                      >
+                        <Volume2 className="w-5 h-5" />
+                        Mit Ton abspielen
+                      </Button>
+                    )}
+                    {showPlayButton && (
+                      <Button
+                        onClick={handlePlayPause}
+                        className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
+                        data-testid="button-play-pause"
+                      >
+                        {isPlaying ? (
+                          <>
+                            <Pause className="w-5 h-5" />
+                            Pausieren
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-5 h-5" />
+                            Abspielen
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                )}
+                
+                {/* Delay Countdown */}
+                {!delayComplete && (
+                  <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-md text-sm backdrop-blur-sm">
+                    Video startet in 3s...
                   </div>
                 )}
               </div>

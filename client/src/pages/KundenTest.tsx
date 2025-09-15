@@ -1447,42 +1447,8 @@ export default function KundenTest() {
               </Card>
             </div>
 
-            {/* Live TestChatbot - Interactive Preview - Always visible while scrolling */}
+            {/* Configuration Overview */}
             <div className="lg:col-span-2">
-              <Card className="glass lg:sticky lg:top-24 lg:z-40 lg:max-h-[calc(100vh-6rem)] lg:overflow-auto">
-                <CardHeader>
-                  <CardTitle>🤖 Interaktiver Test-Bot</CardTitle>
-                  <p className="text-muted-foreground">
-                    Testen Sie Ihren Bot direkt - alle Änderungen werden sofort angewendet:
-                  </p>
-                </CardHeader>
-                <CardContent className={`min-h-[500px] relative ${!isAuthorized ? 'opacity-50' : ''}`}>
-                  {isAuthorized ? (
-                    <div className="relative h-[500px] bg-gradient-to-br from-background via-muted/20 to-background rounded-lg overflow-hidden border border-border/50">
-                      <TestChatbot
-                        isOpen={true}
-                        onClose={() => {}} // No close in embedded mode
-                        authToken={session?.token}
-                        config={testConfig}
-                        n8nWebhookUrl={session?.n8nWebhookUrl}
-                        n8nBotName={session?.n8nBotName}
-                        n8nBotGreeting={session?.n8nBotGreeting}
-                        mode="inline"
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-[500px] flex items-center justify-center bg-gradient-to-br from-background via-muted/20 to-background rounded-lg border border-border/50">
-                      <div className="text-center text-muted-foreground p-8">
-                        <div className="text-6xl mb-4">🔒</div>
-                        <h3 className="text-xl font-semibold mb-2">Testcode erforderlich</h3>
-                        <p className="text-sm">Melden Sie sich mit Ihrem Testcode an, um den interaktiven Bot zu testen.</p>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Configuration Overview */}
               <Card className="glass mt-6">
                 <CardHeader>
                   <CardTitle>📊 Konfiguration im Überblick</CardTitle>

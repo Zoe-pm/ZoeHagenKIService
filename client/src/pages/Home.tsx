@@ -208,9 +208,6 @@ export default function Home() {
           </div>
         </section>
 
-        <Suspense fallback={<div className="h-32 bg-muted animate-pulse rounded-lg"></div>}>
-          <VoiceDemo />
-        </Suspense>
 
         {/* Central Call-to-Action */}
         <section className="py-12 px-4 sm:px-6 lg:px-8" data-testid="central-cta-section">

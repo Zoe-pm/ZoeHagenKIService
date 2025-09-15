@@ -474,6 +474,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Production Chatbot Route
+  app.post('/api/prod-chatbot', async (req, res) => {
+    try {
+      const { message, botName, sessionId } = req.body;
+      
+      if (!message || !sessionId) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Nachricht und Session-ID sind erforderlich' 
+        });
+      }
+      
+      // Demo responses for Juna
+      const demoResponses = [
+        "Hallo! Ich bin Juna von Zoë's KI Service. Wie kann ich Ihnen heute helfen?",
+        "Unsere KI-Assistenten können Ihrem Unternehmen 24/7 zur Verfügung stehen. Möchten Sie mehr über unsere Lösungen erfahren?",
+        "Wir bieten maßgeschneiderte Chatbots, Voicebots und KI-Avatare. Welcher Bereich interessiert Sie am meisten?",
+        "Gerne vereinbare ich einen Termin für Sie. Soll ich Ihnen unseren Kalender zeigen?",
+        "Unsere KI-Lösungen helfen dabei, Kundenanfragen automatisch zu bearbeiten und Ihr Team zu entlasten.",
+        "Haben Sie Fragen zu unseren Preisen oder möchten Sie eine individuelle Beratung?"
+      ];
+      
+      // Simple response logic based on message content
+      let response = demoResponses[0]; // Default
+      
+      if (message.toLowerCase().includes('preis') || message.toLowerCase().includes('kosten')) {
+        response = "Unsere Preise richten sich nach Ihren individuellen Anforderungen. Gerne erstelle ich Ihnen ein kostenloses Angebot. Soll ich einen Beratungstermin für Sie buchen?";
+      } else if (message.toLowerCase().includes('termin') || message.toLowerCase().includes('beratung')) {
+        response = "Sehr gerne! Ich kann Ihnen direkt einen Termin anbieten. Klicken Sie auf 'Termin buchen' und wählen Sie einen passenden Zeitpunkt.";
+      } else if (message.toLowerCase().includes('chatbot') || message.toLowerCase().includes('bot')) {
+        response = "Unsere Chatbots sind perfekt für die Kundenbetreuung geeignet. Sie arbeiten 24/7, sprechen mehrere Sprachen und lernen ständig dazu. Möchten Sie eine Demo sehen?";
+      } else if (message.toLowerCase().includes('voice') || message.toLowerCase().includes('sprache')) {
+        response = "Unsere Voicebots können telefonische Anfragen automatisch bearbeiten. Sie klingen natürlich und verstehen komplexe Anliegen. Sehr praktisch für Support und Terminbuchungen!";
+      } else if (message.toLowerCase().includes('hallo') || message.toLowerCase().includes('hi')) {
+        response = "Hallo! Schön, dass Sie da sind. Ich bin Juna und berate Sie gerne zu unseren KI-Lösungen. Was interessiert Sie am meisten?";
+      } else {
+        // Random response from array
+        response = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+      }
+      
+      // Simulate response delay
+      await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+      
+      res.json({
+        success: true,
+        response: response,
+        sessionId: sessionId
+      });
+      
+    } catch (error) {
+      console.error('Production chatbot error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Fehler beim Verarbeiten der Nachricht' 
+      });
+    }
+  });
+
   // ElevenLabs Voices API - Static voice list
   app.get('/api/tts/elevenlabs/voices', async (req, res) => {
     try {

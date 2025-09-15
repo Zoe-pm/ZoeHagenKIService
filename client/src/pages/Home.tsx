@@ -129,6 +129,7 @@ export default function Home() {
       setShowUnmute(false);
       setIsPlaying(true);
       setShowPlayButton(false);
+      setPlayedOnce(true); // Verhindert redundante Autoplay-Aufrufe
     }
   };
 

@@ -163,10 +163,7 @@ export default function KundenTest() {
   });
 
   // Mode Adapter Hook - provides the correct adapter based on configMode (memoized to prevent instance churn)
-  const modeAdapter = useMemo(() => {
-    const { createModeAdapter } = require('@/components/ModeAdapters');
-    return createModeAdapter(configMode);
-  }, [configMode]);
+  const modeAdapter = useModeAdapter(configMode);
 
   // Check for existing session on mount
   useEffect(() => {

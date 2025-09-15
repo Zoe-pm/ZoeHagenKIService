@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react';
+import { TestChatbot } from './TestChatbot';
+import { TestChatBubbleButton } from './TestChatBubbleButton';
 
 /**
  * Configuration Mode for the Playground System
@@ -54,7 +56,7 @@ export class LocalModeAdapter implements IModeAdapter {
 
   renderChatInterface(config: any, onClose: () => void): React.ReactNode {
     // Return existing TestChatbot with local processing
-    const { TestChatbot } = require('./TestChatbot');
+
     return <TestChatbot 
       isOpen={true}
       onClose={onClose}
@@ -76,7 +78,7 @@ export class LocalModeAdapter implements IModeAdapter {
 
   renderVoiceInterface(config: any, onClose: () => void): React.ReactNode {
     // Return existing TestChatbot configured for voice with local processing
-    const { TestChatbot } = require('./TestChatbot');
+
     return <TestChatbot 
       isOpen={true}
       onClose={onClose}
@@ -132,7 +134,7 @@ export class LocalModeAdapter implements IModeAdapter {
 
   getBubbleButton(config: any, onClick: () => void, isVisible: boolean): React.ReactNode {
     // Return existing TestChatBubbleButton
-    const { TestChatBubbleButton } = require('./TestChatBubbleButton');
+
     return <TestChatBubbleButton 
       config={config}
       onClick={onClick}
@@ -250,7 +252,7 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
     }
     
     // Return Vapi-powered interface (placeholder for now)
-    const { TestChatbot } = require('./TestChatbot');
+
     return <TestChatbot 
       isOpen={true}
       onClose={onClose}
@@ -323,7 +325,7 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
     }
 
     // TODO: Implement Vapi Voice Widget
-    const { TestChatbot } = require('./TestChatbot');
+
     return <TestChatbot 
       isOpen={true}
       onClose={onClose}
@@ -428,7 +430,7 @@ export class VapiWidgetModeAdapter implements IModeAdapter {
   }
 
   getBubbleButton(config: any, onClick: () => void, isVisible: boolean): React.ReactNode {
-    const { TestChatBubbleButton } = require('./TestChatBubbleButton');
+
     return <TestChatBubbleButton 
       config={config}
       onClick={onClick}

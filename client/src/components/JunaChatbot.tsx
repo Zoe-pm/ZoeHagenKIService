@@ -344,7 +344,7 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
             >
               {message.sender === 'calendly_button' ? (
                 <div className="max-w-[80%] rounded-lg p-3 bg-muted mr-4 space-y-3">
-                  <p className="text-sm">{message.text}</p>
+                  <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
                   <CalendlyButton 
                     onClick={() => setShowCalendly(true)}
                     text="Termin vereinbaren"
@@ -361,7 +361,14 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
                   }`}
                   data-testid={`message-${message.sender}-${message.id}`}
                 >
-                  <p className="text-sm">{message.text}</p>
+                  {message.sender === 'bot' ? (
+                    <div 
+                      className="text-sm prose prose-sm max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>ol]:mb-2 [&>li]:mb-1"
+                      dangerouslySetInnerHTML={{ __html: renderMarkdownSafe(message.text) }}
+                    />
+                  ) : (
+                    <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
+                  )}
                   <p className={`text-xs mt-1 opacity-70 ${
                     message.sender === 'user' ? 'text-white/70' : 'text-muted-foreground'
                   }`}>

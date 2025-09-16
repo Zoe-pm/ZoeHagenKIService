@@ -37,17 +37,29 @@ function showBanner(msg: string) {
   }, 5000);
 }
 
-// Juna chat function - uses server proxy for N8N communication
+// Juna chat function - secure server proxy call
 async function askJuna(payload: any) {
   try {
+    // Call the secure server proxy endpoint
     const res = await fetch('/api/juna/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     
-    if (!res.ok) throw new Error('Server error ' + res.status);
-    return await res.json();
+    if (!res.ok) {
+      throw new Error(`Server proxy error ${res.status}`);
+    }
+    
+    const data = await res.json();
+    
+    // Check if server returned an error
+    if (data.error) {
+      throw new Error(data.message || 'Server error');
+    }
+    
+    // Return the response from the server proxy
+    return { response: data.response };
   } catch (e) {
     console.error('[JUNA_ERROR]', e);
     showBanner('🛠️ Ich werde kurz gewartet – bin gleich wieder da.');
@@ -153,11 +165,10 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
       }
 
       // Process successful response
-      const botResponse = result.response || result.message || 'Entschuldigung, ich konnte keine Antwort generieren.';
+      const botResponse = result.response || 'Entschuldigung, ich konnte keine Antwort generieren.';
       
-      // Check if bot suggests appointment booking
-      const shouldShowCalendly = result.showCalendly || 
-        botResponse.toLowerCase().includes('termin') || 
+      // Check if bot suggests appointment booking (based on response content or user input)
+      const shouldShowCalendly = botResponse.toLowerCase().includes('termin') || 
         botResponse.toLowerCase().includes('beratung') || 
         botResponse.toLowerCase().includes('gespräch') ||
         botResponse.toLowerCase().includes('demo') ||

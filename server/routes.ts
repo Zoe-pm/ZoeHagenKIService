@@ -474,73 +474,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Production Juna Chatbot Proxy - handles N8N communication server-side
+
+  // Juna Chat Proxy Route - Secure N8N webhook proxy
   app.post('/api/juna/chat', async (req, res) => {
     try {
-      const { message, sessionId } = req.body;
-      
-      if (!message || !sessionId) {
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Nachricht und Session-ID sind erforderlich' 
-        });
-      }
-
       const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
-      const botTimeout = parseInt(process.env.BOT_TIMEOUT_MS || '12000', 10);
+      const timeoutMs = parseInt(process.env.BOT_TIMEOUT_MS || '30000');
       
       if (!n8nWebhookUrl) {
+        console.error('N8N webhook URL not configured');
         return res.status(500).json({ 
-          success: false, 
-          message: 'N8N Webhook URL not configured' 
+          error: true,
+          message: 'Bot service not available' 
         });
       }
 
-      // Create abort controller for timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), botTimeout);
+      // Create timeout promise
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
+      });
 
-      try {
-        const n8nResponse = await fetch(n8nWebhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: message,
-            sessionId: sessionId,
-            botName: "Juna",
-            timestamp: new Date().toISOString()
-          }),
-          signal: controller.signal
-        });
+      // Create fetch promise
+      const fetchPromise = fetch(n8nWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body)
+      });
 
-        clearTimeout(timeoutId);
-
-        if (!n8nResponse.ok) {
-          throw new Error('N8N request failed');
-        }
-
-        const n8nData = await n8nResponse.json();
-        
-        res.json({
-          success: true,
-          response: n8nData.response || n8nData.message || n8nData.output || 'Entschuldigung, keine Antwort erhalten.',
-          showCalendly: n8nData.showCalendly || false
-        });
-
-      } catch (fetchError) {
-        clearTimeout(timeoutId);
-        console.error('N8N API Error:', fetchError);
-        res.status(500).json({ 
-          success: false, 
-          message: 'Juna ist momentan nicht verfügbar' 
-        });
+      // Race timeout vs fetch
+      const n8nResponse = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+      
+      if (!n8nResponse.ok) {
+        throw new Error(`N8N webhook error ${n8nResponse.status}`);
       }
-
+      
+      const data = await n8nResponse.json();
+      
+      // Handle N8N response format - normalize to expected format
+      const response = typeof data === 'string' ? data : 
+                      data.response || data.message || data.output || 
+                      JSON.stringify(data);
+      
+      res.json({ response });
     } catch (error) {
-      console.error('Juna chat error:', error);
+      console.error('[JUNA_PROXY_ERROR]', error);
       res.status(500).json({ 
-        success: false, 
-        message: 'Fehler beim Verarbeiten der Nachricht' 
+        error: true,
+        message: 'Bot service temporarily unavailable' 
       });
     }
   });

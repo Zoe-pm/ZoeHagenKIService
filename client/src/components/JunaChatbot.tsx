@@ -17,7 +17,7 @@ interface JunaChatbotProps {
 }
 
 // Banner/toast system for error messages with Calendly fallback
-function showBanner(msg: string) {
+function showBanner(msg: string, onCalendlyClick: () => void) {
   // Create enhanced error popup with Calendly booking option
   const banner = document.createElement('div');
   banner.className = 'fixed top-4 right-4 bg-black/90 text-white px-4 py-3 rounded-lg shadow-lg z-[99999] max-w-sm';
@@ -43,8 +43,15 @@ function showBanner(msg: string) {
   calendlyButton.textContent = '📅 Termin vereinbaren';
   calendlyButton.className = 'w-full bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-3 rounded-md text-sm transition-colors cursor-pointer border border-white/20 hover:border-white/40';
   calendlyButton.onclick = () => {
-    // Open Calendly in new tab using the same URL as the widget
-    window.open('https://calendly.com/zoeskistudio?embed_domain=' + window.location.hostname, '_blank');
+    // Use the CalendlyWidget component instead of opening new tab
+    onCalendlyClick();
+    // Remove banner after clicking
+    banner.style.animation = 'slideOutRight 0.3s ease-in';
+    setTimeout(() => {
+      if (banner.parentNode) {
+        banner.parentNode.removeChild(banner);
+      }
+    }, 300);
   };
   content.appendChild(calendlyButton);
   
@@ -124,6 +131,7 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showCalendly, setShowCalendly] = useState(false);
+  const [showCalendlyError, setShowCalendlyError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Session ID for Juna

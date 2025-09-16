@@ -119,6 +119,14 @@ function renderMarkdownSafe(text: string): string {
 // Juna chat function - secure server proxy call
 async function askJuna(payload: any) {
   try {
+    // Static deployment check - show Calendly directly if in static mode
+    if (import.meta.env.VITE_STATIC === 'true') {
+      showBanner('🎯 Gerne verbinden wir Sie direkt mit unserem Terminbuchungssystem.', () => {
+        window.open('https://calendly.com/zoeskistudio?embed_domain=' + window.location.hostname, '_blank');
+      });
+      return { error: true };
+    }
+    
     // Call the secure server proxy endpoint
     const res = await fetch('/api/juna/chat', {
       method: 'POST',

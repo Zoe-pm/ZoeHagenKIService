@@ -71,7 +71,8 @@ export function CalendlyWidget({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className="fixed inset-0 flex items-center justify-center bg-black/50"
+      style={{ zIndex: 2147483651 }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="calendly-title"
@@ -80,19 +81,23 @@ export function CalendlyWidget({
     >
       <div 
         ref={dialogRef}
-        className="relative w-full max-w-4xl h-[80vh] max-h-[600px] m-4 bg-white dark:bg-black text-black dark:text-white rounded-lg shadow-xl overflow-hidden"
+        className="relative w-full max-w-4xl h-[90vh] max-h-[700px] m-2 sm:m-4 bg-white dark:bg-black text-black dark:text-white rounded-lg shadow-xl overflow-hidden"
+        style={{ 
+          maxWidth: 'calc(100vw - 1rem)',
+          maxHeight: 'calc(100vh - 1rem)'
+        }}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-primary to-primary/80 text-white">
-          <div className="flex items-center space-x-2">
-            <Calendar className="h-5 w-5" />
-            <h3 id="calendly-title" className="font-semibold">Termin vereinbaren</h3>
+        <div className="flex justify-between items-center p-3 sm:p-4 border-b bg-gradient-to-r from-primary to-primary/80 text-white">
+          <div className="flex items-center space-x-2 min-w-0">
+            <Calendar className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <h3 id="calendly-title" className="font-semibold text-sm sm:text-base truncate">Termin vereinbaren</h3>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="text-white hover:bg-white/20 dark:text-white dark:hover:bg-white/20"
+            className="text-white hover:bg-white/20 dark:text-white dark:hover:bg-white/20 flex-shrink-0"
             data-testid="button-close-calendly"
             autoFocus
             aria-label="Schließen"
@@ -102,7 +107,7 @@ export function CalendlyWidget({
         </div>
 
         {/* Calendly Embed */}
-        <div className="h-[calc(100%-4rem)]">
+        <div className="h-[calc(100%-3.5rem)] sm:h-[calc(100%-4rem)]">
           <iframe
             src={`${calendlyUrl}?embed_domain=${window.location.hostname}&embed_type=Inline`}
             width="100%"

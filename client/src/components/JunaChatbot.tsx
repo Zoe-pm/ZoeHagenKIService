@@ -166,6 +166,7 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showCalendly, setShowCalendly] = useState(false);
   const [showCalendlyError, setShowCalendlyError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const isAtBottomRef = useRef(true);
@@ -181,6 +182,28 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
     }
     return sessionId;
   };
+
+  // Check if mobile viewport using matchMedia
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 640px)');
+    
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+    
+    // Set initial value
+    setIsMobile(mediaQuery.matches);
+    
+    // Listen for changes with fallback for older browsers
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleMediaChange);
+      return () => mediaQuery.removeEventListener('change', handleMediaChange);
+    } else if (mediaQuery.addListener) {
+      // Fallback for older browsers
+      mediaQuery.addListener(handleMediaChange);
+      return () => mediaQuery.removeListener(handleMediaChange);
+    }
+  }, []);
 
   // Reset chat function
   const resetChat = () => {
@@ -201,7 +224,6 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
 
   const handleCalendlyClose = () => {
     setShowCalendly(false);
-    resetChat(); // Reset chat after Calendly closes
   };
 
   const scrollToBottom = () => {
@@ -371,11 +393,15 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
       />
       <div 
         id="juna-chat"
-        className="fixed bottom-20 right-4 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] h-[32rem] max-h-[calc(100vh-10rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col"
+        className={`fixed bottom-20 right-4 w-80 sm:w-80 w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] h-[32rem] max-h-[calc(100vh-10rem)] glass rounded-lg shadow-xl border border-primary/20 overflow-hidden flex flex-col transition-opacity duration-300 ${
+          showCalendly && isMobile ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
         style={{
           maxWidth: 'min(320px, calc(100vw - 2rem))',
-          zIndex: 2147483650  // Above everything including voice widget
+          zIndex: showCalendly ? 2147483649 : 2147483650  // Lower z-index when Calendly is open
         }}
+        aria-hidden={showCalendly}
+        {...(showCalendly && { inert: '' })}  // TypeScript-friendly conditional inert
         data-testid="container-juna-chat"
       >
         {/* Header */}

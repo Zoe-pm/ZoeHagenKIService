@@ -363,7 +363,7 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
                 >
                   {message.sender === 'bot' ? (
                     <div 
-                      className="text-sm prose prose-sm max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>ol]:mb-2 [&>li]:mb-1"
+                      className="text-sm text-foreground [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-2 [&>ol]:mb-2 [&>li]:mb-1 [&>p]:text-current [&>ul]:text-current [&>ol]:text-current [&>li]:text-current"
                       dangerouslySetInnerHTML={{ __html: renderMarkdownSafe(message.text) }}
                     />
                   ) : (

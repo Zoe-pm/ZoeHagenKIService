@@ -140,6 +140,9 @@ export default function Home() {
         setIsPlaying(false);
         setShowPlayButton(true);
       } else {
+        // Always jump to beginning when playing
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
         if (videoRef.current.muted) {
           // Unmute and play
           videoRef.current.muted = false;
@@ -264,28 +267,30 @@ export default function Home() {
                 
                 {/* Video Controls Overlay - only show when actually needed */}
                 {((showUnmute && !delayComplete) || (showPlayButton && !isPlaying)) && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+                  <>
                     {showUnmute && !delayComplete && (
-                      <Button
-                        onClick={handleVideoUnmute}
-                        className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
-                        data-testid="button-unmute"
-                      >
-                        <Volume2 className="w-5 h-5" />
-                        Mit Ton abspielen
-                      </Button>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+                        <Button
+                          onClick={handleVideoUnmute}
+                          className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
+                          data-testid="button-unmute"
+                        >
+                          <Volume2 className="w-5 h-5" />
+                          Mit Ton abspielen
+                        </Button>
+                      </div>
                     )}
                     {showPlayButton && !isPlaying && (
                       <Button
                         onClick={handlePlayPause}
-                        className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
+                        className="absolute right-3 bottom-3 bg-black/55 hover:bg-black/70 text-white font-medium px-3 py-2 rounded-lg shadow-lg backdrop-blur-sm border-none cursor-pointer flex items-center gap-2"
                         data-testid="button-play-pause"
                       >
-                        <Play className="w-5 h-5" />
+                        <Play className="w-4 h-4" />
                         Abspielen
                       </Button>
                     )}
-                  </div>
+                  </>
                 )}
                 
                 {/* Delay Countdown */}

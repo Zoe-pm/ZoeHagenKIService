@@ -474,10 +474,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Production Chatbot Route
-  app.post('/api/prod-chatbot', async (req, res) => {
+  // Production Juna Chatbot Proxy - handles N8N communication server-side
+  app.post('/api/juna/chat', async (req, res) => {
     try {
-      const { message, botName, sessionId } = req.body;
+      const { message, sessionId } = req.body;
       
       if (!message || !sessionId) {
         return res.status(400).json({ 
@@ -485,46 +485,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: 'Nachricht und Session-ID sind erforderlich' 
         });
       }
+
+      const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+      const botTimeout = parseInt(process.env.BOT_TIMEOUT_MS || '12000', 10);
       
-      // Demo responses for Juna
-      const demoResponses = [
-        "Hallo! Ich bin Juna von Zoë's KI Service. Wie kann ich Ihnen heute helfen?",
-        "Unsere KI-Assistenten können Ihrem Unternehmen 24/7 zur Verfügung stehen. Möchten Sie mehr über unsere Lösungen erfahren?",
-        "Wir bieten maßgeschneiderte Chatbots, Voicebots und KI-Avatare. Welcher Bereich interessiert Sie am meisten?",
-        "Gerne vereinbare ich einen Termin für Sie. Soll ich Ihnen unseren Kalender zeigen?",
-        "Unsere KI-Lösungen helfen dabei, Kundenanfragen automatisch zu bearbeiten und Ihr Team zu entlasten.",
-        "Haben Sie Fragen zu unseren Preisen oder möchten Sie eine individuelle Beratung?"
-      ];
-      
-      // Simple response logic based on message content
-      let response = demoResponses[0]; // Default
-      
-      if (message.toLowerCase().includes('preis') || message.toLowerCase().includes('kosten')) {
-        response = "Unsere Preise richten sich nach Ihren individuellen Anforderungen. Gerne erstelle ich Ihnen ein kostenloses Angebot. Soll ich einen Beratungstermin für Sie buchen?";
-      } else if (message.toLowerCase().includes('termin') || message.toLowerCase().includes('beratung')) {
-        response = "Sehr gerne! Ich kann Ihnen direkt einen Termin anbieten. Klicken Sie auf 'Termin buchen' und wählen Sie einen passenden Zeitpunkt.";
-      } else if (message.toLowerCase().includes('chatbot') || message.toLowerCase().includes('bot')) {
-        response = "Unsere Chatbots sind perfekt für die Kundenbetreuung geeignet. Sie arbeiten 24/7, sprechen mehrere Sprachen und lernen ständig dazu. Möchten Sie eine Demo sehen?";
-      } else if (message.toLowerCase().includes('voice') || message.toLowerCase().includes('sprache')) {
-        response = "Unsere Voicebots können telefonische Anfragen automatisch bearbeiten. Sie klingen natürlich und verstehen komplexe Anliegen. Sehr praktisch für Support und Terminbuchungen!";
-      } else if (message.toLowerCase().includes('hallo') || message.toLowerCase().includes('hi')) {
-        response = "Hallo! Schön, dass Sie da sind. Ich bin Juna und berate Sie gerne zu unseren KI-Lösungen. Was interessiert Sie am meisten?";
-      } else {
-        // Random response from array
-        response = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+      if (!n8nWebhookUrl) {
+        return res.status(500).json({ 
+          success: false, 
+          message: 'N8N Webhook URL not configured' 
+        });
       }
-      
-      // Simulate response delay
-      await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
-      
-      res.json({
-        success: true,
-        response: response,
-        sessionId: sessionId
-      });
-      
+
+      // Create abort controller for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), botTimeout);
+
+      try {
+        const n8nResponse = await fetch(n8nWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: message,
+            sessionId: sessionId,
+            botName: "Juna",
+            timestamp: new Date().toISOString()
+          }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!n8nResponse.ok) {
+          throw new Error('N8N request failed');
+        }
+
+        const n8nData = await n8nResponse.json();
+        
+        res.json({
+          success: true,
+          response: n8nData.response || n8nData.message || n8nData.output || 'Entschuldigung, keine Antwort erhalten.',
+          showCalendly: n8nData.showCalendly || false
+        });
+
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        console.error('N8N API Error:', fetchError);
+        res.status(500).json({ 
+          success: false, 
+          message: 'Juna ist momentan nicht verfügbar' 
+        });
+      }
+
     } catch (error) {
-      console.error('Production chatbot error:', error);
+      console.error('Juna chat error:', error);
       res.status(500).json({ 
         success: false, 
         message: 'Fehler beim Verarbeiten der Nachricht' 

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
-import { SimpleChatbot, ChatbotButton } from "./SimpleChatbot";
+import { JunaChatbot, JunaChatButton } from "./JunaChatbot";
 import VoicebotWidget, { VoiceButton } from "./VoicebotWidget";
 
 export default function ChatbotWidget() {
@@ -76,6 +76,7 @@ export default function ChatbotWidget() {
     };
   }, []);
 
+
   // Listen for custom events from homepage product buttons
   useEffect(() => {
     const handleOpenChat = () => {
@@ -119,7 +120,7 @@ export default function ChatbotWidget() {
   return (
     <>
       {/* Juna Chat - Text Chatbot */}
-      <SimpleChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <JunaChatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       
       {/* Juna Voice - Voice Assistant */}
       <VoicebotWidget isOpen={isVoiceOpen} onClose={() => setIsVoiceOpen(false)} />
@@ -131,7 +132,7 @@ export default function ChatbotWidget() {
             setIsVoiceOpen(true);
             setIsChatOpen(false); // Close chat when opening voice
           }} />
-          <ChatbotButton onClick={() => {
+          <JunaChatButton onClick={() => {
             setIsChatOpen(true);
             setIsVoiceOpen(false); // Close voice when opening chat
           }} />

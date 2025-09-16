@@ -16,25 +16,66 @@ interface JunaChatbotProps {
   onClose: () => void;
 }
 
-// Banner/toast system for error messages
+// Banner/toast system for error messages with Calendly fallback
 function showBanner(msg: string) {
-  // Create a simple banner notification
+  // Create enhanced error popup with Calendly booking option
   const banner = document.createElement('div');
-  banner.className = 'fixed top-4 right-4 bg-black/90 text-white px-4 py-2 rounded-lg shadow-lg z-[99999] max-w-sm';
+  banner.className = 'fixed top-4 right-4 bg-black/90 text-white px-4 py-3 rounded-lg shadow-lg z-[99999] max-w-sm';
   banner.style.animation = 'slideInRight 0.3s ease-out';
-  banner.textContent = msg;
   
-  document.body.appendChild(banner);
+  // Create content container
+  const content = document.createElement('div');
+  content.className = 'space-y-3';
   
-  // Auto remove after 5 seconds
-  setTimeout(() => {
+  // Original error message
+  const errorText = document.createElement('div');
+  errorText.textContent = msg;
+  content.appendChild(errorText);
+  
+  // Additional sentence for Calendly option
+  const calendlyText = document.createElement('div');
+  calendlyText.textContent = 'Hier können Sie alternativ einen Termin buchen:';
+  calendlyText.className = 'text-sm opacity-90';
+  content.appendChild(calendlyText);
+  
+  // Calendly button
+  const calendlyButton = document.createElement('button');
+  calendlyButton.textContent = '📅 Termin vereinbaren';
+  calendlyButton.className = 'w-full bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-3 rounded-md text-sm transition-colors cursor-pointer border border-white/20 hover:border-white/40';
+  calendlyButton.onclick = () => {
+    // Open Calendly in new tab using the same URL as the widget
+    window.open('https://calendly.com/zoeskistudio?embed_domain=' + window.location.hostname, '_blank');
+  };
+  content.appendChild(calendlyButton);
+  
+  // Close button
+  const closeButton = document.createElement('button');
+  closeButton.innerHTML = '×';
+  closeButton.className = 'absolute top-1 right-2 text-white/70 hover:text-white text-lg font-bold cursor-pointer';
+  closeButton.onclick = () => {
     banner.style.animation = 'slideOutRight 0.3s ease-in';
     setTimeout(() => {
       if (banner.parentNode) {
         banner.parentNode.removeChild(banner);
       }
     }, 300);
-  }, 5000);
+  };
+  
+  banner.appendChild(content);
+  banner.appendChild(closeButton);
+  document.body.appendChild(banner);
+  
+  // Auto remove after 10 seconds (increased due to additional content)
+  setTimeout(() => {
+    if (banner.parentNode) {
+      banner.style.animation = 'slideOutRight 0.3s ease-in';
+      setTimeout(() => {
+        if (banner.parentNode) {
+          banner.parentNode.removeChild(banner);
+        }
+      }, 300);
+    }
+  }, 10000);
 }
 
 // Juna chat function - secure server proxy call

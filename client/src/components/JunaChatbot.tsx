@@ -167,6 +167,10 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
   const [showCalendly, setShowCalendly] = useState(false);
   const [showCalendlyError, setShowCalendlyError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [userHasScrolled, setUserHasScrolled] = useState(false);
+  const [lastBotMessageId, setLastBotMessageId] = useState<string | null>(null);
+  const botMessageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // Session ID for Juna
   const getSessionId = () => {
@@ -200,6 +204,26 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Scroll to beginning of a specific bot message
+  const scrollToBotMessage = (messageId: string) => {
+    if (userHasScrolled) return; // Respect user scroll
+    
+    const messageElement = botMessageRefs.current.get(messageId);
+    if (messageElement) {
+      messageElement.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "start" // Show beginning of the message
+      });
+    }
+  };
+
+  // Track user scroll activity
+  const handleScroll = () => {
+    setUserHasScrolled(true);
+    // Reset user scroll flag after 3 seconds of no activity
+    setTimeout(() => setUserHasScrolled(false), 3000);
+  };
+
   // Reset chat when component opens
   useEffect(() => {
     if (isOpen) {
@@ -207,9 +231,27 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
     }
   }, [isOpen]);
 
+  // Smart scroll logic for new messages
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (messages.length === 0) return;
+    
+    const lastMessage = messages[messages.length - 1];
+    
+    // For new bot messages, scroll to their beginning
+    if (lastMessage.sender === 'bot' && lastMessage.id !== lastBotMessageId) {
+      setLastBotMessageId(lastMessage.id);
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        scrollToBotMessage(lastMessage.id);
+      }, 100);
+    }
+    // For user messages or when user hasn't scrolled, scroll to bottom
+    else if (lastMessage.sender === 'user' || !userHasScrolled) {
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    }
+  }, [messages, lastBotMessageId, userHasScrolled]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
@@ -336,7 +378,12 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 min-h-0 p-4 overflow-y-auto space-y-3 relative z-0" data-testid="juna-chat-messages">
+        <div 
+          ref={messagesContainerRef}
+          className="flex-1 min-h-0 p-4 overflow-y-auto space-y-3 relative z-0" 
+          data-testid="juna-chat-messages"
+          onScroll={handleScroll}
+        >
           {messages.map((message) => (
             <div
               key={message.id}
@@ -354,6 +401,11 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
                 </div>
               ) : (
                 <div
+                  ref={(el) => {
+                    if (el && message.sender === 'bot') {
+                      botMessageRefs.current.set(message.id, el);
+                    }
+                  }}
                   className={`max-w-[80%] rounded-lg p-3 ${
                     message.sender === 'user'
                       ? 'button-gradient text-white ml-4'

@@ -168,8 +168,8 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
   const [showCalendlyError, setShowCalendlyError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const [userHasScrolled, setUserHasScrolled] = useState(false);
-  const [lastBotMessageId, setLastBotMessageId] = useState<string | null>(null);
+  const isAtBottomRef = useRef(true);
+  const pendingBotScrollIdRef = useRef<string | null>(null);
   const botMessageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // Session ID for Juna
@@ -188,6 +188,10 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
     setInputText('');
     setIsLoading(false);
     setShowCalendly(false);
+    // Clean up refs
+    botMessageRefs.current.clear();
+    isAtBottomRef.current = true;
+    pendingBotScrollIdRef.current = null;
   };
 
   const handleClose = () => {
@@ -204,10 +208,18 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Check if user is at bottom of messages
+  const checkIsAtBottom = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return true;
+    
+    const threshold = 10; // pixels from bottom
+    const { scrollHeight, scrollTop, clientHeight } = container;
+    return scrollHeight - (scrollTop + clientHeight) <= threshold;
+  };
+
   // Scroll to beginning of a specific bot message
   const scrollToBotMessage = (messageId: string) => {
-    if (userHasScrolled) return; // Respect user scroll
-    
     const messageElement = botMessageRefs.current.get(messageId);
     if (messageElement) {
       messageElement.scrollIntoView({ 
@@ -217,11 +229,11 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
     }
   };
 
-  // Track user scroll activity
+  // Track user scroll activity with bottom proximity
   const handleScroll = () => {
-    setUserHasScrolled(true);
-    // Reset user scroll flag after 3 seconds of no activity
-    setTimeout(() => setUserHasScrolled(false), 3000);
+    requestAnimationFrame(() => {
+      isAtBottomRef.current = checkIsAtBottom();
+    });
   };
 
   // Reset chat when component opens
@@ -235,23 +247,24 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
   useEffect(() => {
     if (messages.length === 0) return;
     
+    // Check if there's a pending bot message to scroll to
+    if (pendingBotScrollIdRef.current && isAtBottomRef.current) {
+      setTimeout(() => {
+        scrollToBotMessage(pendingBotScrollIdRef.current!);
+        pendingBotScrollIdRef.current = null;
+      }, 100);
+      return;
+    }
+    
     const lastMessage = messages[messages.length - 1];
     
-    // For new bot messages, scroll to their beginning
-    if (lastMessage.sender === 'bot' && lastMessage.id !== lastBotMessageId) {
-      setLastBotMessageId(lastMessage.id);
-      // Small delay to ensure DOM is updated
-      setTimeout(() => {
-        scrollToBotMessage(lastMessage.id);
-      }, 100);
-    }
-    // For user messages or when user hasn't scrolled, scroll to bottom
-    else if (lastMessage.sender === 'user' || !userHasScrolled) {
+    // For user messages, scroll to bottom if user was at bottom
+    if (lastMessage.sender === 'user' && isAtBottomRef.current) {
       setTimeout(() => {
         scrollToBottom();
       }, 100);
     }
-  }, [messages, lastBotMessageId, userHasScrolled]);
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
@@ -285,6 +298,7 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
           sender: 'bot',
           timestamp: new Date()
         };
+        pendingBotScrollIdRef.current = errorMessage.id;
         setMessages(prev => [...prev, errorMessage]);
         return;
       }
@@ -308,6 +322,9 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
         timestamp: new Date()
       };
       
+      // Set pending scroll to new bot message
+      pendingBotScrollIdRef.current = botMessage.id;
+      
       if (shouldShowCalendly) {
         const calendlyMessage: Message = {
           id: (Date.now() + 2).toString(),
@@ -330,6 +347,7 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
         sender: 'bot',
         timestamp: new Date()
       };
+      pendingBotScrollIdRef.current = errorMessage.id;
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
@@ -402,8 +420,12 @@ export function JunaChatbot({ isOpen, onClose }: JunaChatbotProps) {
               ) : (
                 <div
                   ref={(el) => {
-                    if (el && message.sender === 'bot') {
-                      botMessageRefs.current.set(message.id, el);
+                    if (message.sender === 'bot') {
+                      if (el) {
+                        botMessageRefs.current.set(message.id, el);
+                      } else {
+                        botMessageRefs.current.delete(message.id);
+                      }
                     }
                   }}
                   className={`max-w-[80%] rounded-lg p-3 ${

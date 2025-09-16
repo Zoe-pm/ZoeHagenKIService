@@ -24,28 +24,6 @@ marked.setOptions({
   breaks: true
 });
 
-// Safe Markdown renderer function
-function renderMarkdownSafe(text: string): string {
-  // Normalize line endings
-  const normalizedText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  
-  // Parse markdown to HTML
-  const html = marked.parse(normalizedText);
-  
-  // Sanitize HTML with DOMPurify
-  const sanitized = DOMPurify.sanitize(html, { 
-    USE_PROFILES: { html: true },
-    ADD_ATTR: ['target', 'rel']
-  });
-  
-  // Post-process to ensure links open in new tab with security attributes
-  const processedHtml = sanitized.replace(
-    /<a([^>]*?)href=["']([^"']*?)["']([^>]*?)>/gi,
-    '<a$1href="$2"$3 target="_blank" rel="noopener noreferrer">'
-  );
-  
-  return processedHtml;
-}
 
 // Banner/toast system for error messages with Calendly fallback
 function showBanner(msg: string, onCalendlyClick?: () => void) {
@@ -124,16 +102,9 @@ function showBanner(msg: string, onCalendlyClick?: () => void) {
 function renderMarkdownSafe(text: string): string {
   if (!text) return '';
   
-  // Configure marked for GitHub-flavored markdown with line breaks
-  marked.setOptions({
-    gfm: true,
-    breaks: true,
-    silent: true
-  });
-  
   // Normalize line endings and render markdown
   const normalizedText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const html = marked(normalizedText) as string;
+  const html = marked.parse(normalizedText) as string;
   
   // Sanitize with DOMPurify and configure links to open in new tab
   const sanitized = DOMPurify.sanitize(html, {

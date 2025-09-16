@@ -1,0 +1,53 @@
+Build Output:
+	•	Statisches Bundle nach dist/.
+	•	Keine Server Runtime (Node/Express) im Static-Deploy.
+	•	Republish-Guard:
+	•	Pre-publish Checkscript (npm script prepublishOnly):
+	•	Prüft, ob mode === static; wenn nicht → build fail.
+	•	Prüft, ob N8N_WEBHOOK_URL gesetzt & erreichbar (HEAD 200/204).
+
+7) CI-Checks (lokal reicht, wenn kein CI)
+	•	npm run prepublishOnly:
+	1.	Lint/Build.
+	2.	Verify N8N_WEBHOOK_URL erreichbar.
+	3.	Blockt Deploy, wenn Replit Environment „Autoscale“ detektiert.
+
+8) Logs & Debug
+	•	Client: console.error('[BOT_ERROR]', ...) + User-freundliche Fehlermeldung.
+	•	Network Tab reproduzierbar: 1 Testsequenz dokumentieren (s.u.).
+	•	Optional: leichter Telemetry-Ping (ohne PII) für Error-Rate.
+
+⸻
+
+Testplan (manuell, vor Go-Live)
+	1.	Cold Load (Desktop/Mobil): Seite laden → kein Replit-Default sichtbar. UI zeigt unseren Chat.
+	2.	Happy Path: Frage senden → Antwort von n8n ≤ 3s (oder wie vereinbart).
+	3.	Webhook down (simuliert): n8n stoppen oder URL temporär falsch → Banner erscheint, kein Replit-Default.
+	4.	CORS Test: Zugriff von Staging-Domain → OK; von fremder Domain → geblockt.
+	5.	Republish: „Republish“ klicken → Deploy bleibt Static. (Screenshot + Deploy-Log sichern.)
+	6.	Refresh/Retry: Nach Fehler „Erneut versuchen“ → wenn n8n wieder up, klappt’s.
+
+⸻
+
+Akzeptanzkriterien (DoD)
+	•	Nie erscheint der Replit-Default-Bot – weder bei Erfolg noch bei Fehlern.
+	•	Fehlerfälle zeigen unser Banner + kein ungewollter Fallback.
+	•	Zwei aufeinanderfolgende Publishes bleiben Static (Nachweis: Screenshots/Logs).
+	•	Health-Check dokumentiert, Alert getestet (Test-Alert vor Abschluss).
+	•	Testplan Punkte 1–6 bestehen.
+
+⸻
+
+Rollback-Plan
+	•	Falls nach Publish Fehlerquote > 10% in 30 Min:
+	•	Sofort Rollback auf letzte stabile Static-Version (Link/ID anlegen).
+	•	Fehlerursache isolieren (Webhook, CORS, Timeout, Frontend).
+	•	Erst nach erfolgreichem Test erneut publishen.
+
+⸻
+
+Ownership & Handover
+	•	Env-Variablen sauber in Replit Secrets hinterlegt (N8N_WEBHOOK_URL, BOT_TIMEOUT_MS).
+	•	Kurze README_DEPLOY.md im Repo:
+	•	Deploy-Schritte, „Static“-Fix, Testplan, Notfall-Rollback.
+	•	Screenshots/Video vom erfolgreichen Durchlauf (inkl. Republish-Test).

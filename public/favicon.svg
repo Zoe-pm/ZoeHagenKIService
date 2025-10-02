@@ -1,0 +1,18 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="z-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D81B60"/>
+      <stop offset="50%" stop-color="#EC407A"/>
+      <stop offset="100%" stop-color="#D81B60"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Dark background circle -->
+  <circle cx="50" cy="50" r="45" fill="#2F3B47"/>
+  
+  <!-- Pink border ring -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#D81B60" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Z letter -->
+  <path d="M 30 30 L 70 30 L 70 38 L 42 38 L 70 62 L 70 70 L 30 70 L 30 62 L 58 62 L 30 38 Z" fill="url(#z-grad)"/>
+</svg>

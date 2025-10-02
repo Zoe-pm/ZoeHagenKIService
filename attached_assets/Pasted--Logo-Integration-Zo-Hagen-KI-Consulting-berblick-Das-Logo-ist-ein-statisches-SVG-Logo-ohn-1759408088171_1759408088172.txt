@@ -1,0 +1,154 @@
+📋 Logo-Integration: Zoë Hagen KI Consulting
+🎯 Überblick
+Das Logo ist ein statisches SVG-Logo ohne Animationen. Es gibt zwei Varianten:
+
+Hero-Version: Großes Logo für Landing Page
+Compact-Version: Kleines Logo für Header/Navigation
+✅ Schritt 1: Schriftarten laden
+1.1 Google Fonts & Alan Sans
+In client/index.html im <head>-Bereich einfügen (falls noch nicht vorhanden):
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alan-sans" rel="stylesheet">
+1.2 CSS-Variablen definieren
+In client/src/index.css unter den Font-Variablen hinzufügen:
+
+--font-alan: 'Alan Sans', sans-serif;
+--font-inter-tight: 'Inter Tight', sans-serif;
+✅ Schritt 2: Favicon erstellen
+2.1 SVG-Favicon
+Erstelle public/favicon.svg:
+
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="z-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D81B60"/>
+      <stop offset="50%" stop-color="#EC407A"/>
+      <stop offset="100%" stop-color="#D81B60"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Dark background circle -->
+  <circle cx="50" cy="50" r="45" fill="#2F3B47"/>
+  
+  <!-- Pink border ring -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#D81B60" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Z letter -->
+  <path d="M 30 30 L 70 30 L 70 38 L 42 38 L 70 62 L 70 70 L 30 70 L 30 62 L 58 62 L 30 38 Z" fill="url(#z-grad)"/>
+</svg>
+2.2 Favicon in HTML einbinden
+In client/index.html im <head> hinzufügen:
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#2F3B47">
+✅ Schritt 3: Logo-Component verwenden
+Das Logo-Component ist bereits fertig in client/src/components/AnimatedLogo.tsx.
+
+3.1 Hero-Logo (Landing Page)
+Für die große Version (Home-Page):
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+<AnimatedLogo />
+3.2 Compact-Logo (Header)
+Für die kleine Version (Header/Navigation):
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+<AnimatedLogo compact={true} />
+✅ Schritt 4: Header-Integration
+4.1 Header-Component erstellen (falls noch nicht vorhanden)
+Erstelle client/src/components/Header.tsx:
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+import { Link } from 'wouter';
+export default function Header() {
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between px-4">
+        <Link href="/">
+          <AnimatedLogo compact={true} />
+        </Link>
+        
+        <nav className="flex items-center gap-6">
+          <Link href="/services" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Services
+          </Link>
+          <Link href="/contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Kontakt
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+4.2 Header in App einbinden
+In client/src/App.tsx:
+
+import Header from '@/components/Header';
+function Router() {
+  return (
+    <>
+      <Header />
+      <Switch>
+        <Route path="/" component={Home}/>
+        {/* Andere Routen */}
+        <Route component={NotFound} />
+      </Switch>
+    </>
+  );
+}
+✅ Schritt 5: Home-Page optimieren
+In client/src/pages/Home.tsx:
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Hero Section mit großem Logo */}
+      <section className="container mx-auto px-4 py-12 md:py-20">
+        <AnimatedLogo />
+      </section>
+      
+      {/* Content Section */}
+      <section className="container mx-auto px-4 py-12">
+        {/* Dein Content hier */}
+      </section>
+    </div>
+  );
+}
+🎨 Design-Spezifikationen
+Farben (Corporate Design)
+Kreis-Hintergrund: #2F3B47 (Card-Farbe)
+Pink-Gradient: #D81B60 → #EC407A → #D81B60 → #C2185B
+Border-Ring: #D81B60 (opacity: 0.4-0.5)
+Text "Zoë Hagen": #D81B60
+Text "KI CONSULTING": #D9D9D9
+Schriftarten
+"Zoë Hagen": Alan Sans (via CSS-Variable --font-alan)
+"KI CONSULTING": Inter Tight (via CSS-Variable --font-inter-tight)
+Logo-Varianten
+Hero (Landing Page)
+Größe: max-w-md, responsive mit max-height: 60vh
+Container: 65vh Höhe, min-height 400px
+Text unter dem Logo mit negativem Margin (-8vh)
+Compact (Header)
+SVG-Größe: w-12 h-12 (md: w-14 h-14)
+Text daneben: Verschwindet auf Mobile (<640px) mit hidden sm:flex
+Horizontal angeordnet mit gap-3
+📝 Wichtige Hinweise
+Keine Animationen: Das Logo ist statisch, keine Animationen oder Hover-Effekte
+Responsive: Beide Varianten sind vollständig responsive
+Performance: SVG-basiert, lädt sofort, keine externen Dependencies
+Corporate Design: Alle Farben entsprechen dem definierten Corporate Design
+Accessibility: Alle text-IDs sind mit data-testid versehen
+✅ Checklist für Agent
+ Alan Sans & Inter Tight Schriftarten geladen
+ CSS-Variablen --font-alan und --font-inter-tight definiert
+ public/favicon.svg erstellt
+ Favicon in client/index.html eingebunden
+ Header-Component mit Compact-Logo erstellt
+ Header in App.tsx integriert
+ Home-Page mit Hero-Logo aktualisiert
+ Alle Farben entsprechen Corporate Design (#D81B60, #2F3B47, #D9D9D9)

@@ -9,7 +9,6 @@ import ComparisonTable from "@/components/ComparisonTable";
 import Timeline from "@/components/Timeline";
 import ContactForm from "@/components/ContactForm";
 import SEOHelmet from "@/components/SEOHelmet";
-import AnimatedLogo from "@/components/AnimatedLogo";
 
 // Lazy load heavy components to optimize bundle size
 // Using public images for better build performance
@@ -226,19 +225,14 @@ export default function Home() {
       <main id="main-content">
         <section className="hero-gradient pt-24 pb-12 px-4 sm:px-6 lg:px-8" data-testid="hero-section">
           <div className="max-w-7xl mx-auto">
-            {/* Hero Logo */}
-            <div className="mb-12">
-              <AnimatedLogo />
-            </div>
-
             <div className="text-center mb-12">
               <div>
-                <h2 className="text-4xl md:text-6xl font-bold mb-6 fade-in text-center" data-testid="hero-title">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 fade-in text-left" data-testid="hero-title">
                   <span className="text-white">
                     KI mit Herz & Hirn
                   </span>
                   <br />
-                </h2>
+                </h1>
                 <p className="text-xl text-white/90 mb-8 fade-in" data-testid="hero-subtitle">
                   Ihr Service wird schneller, persönlicher und verlässlicher. Kein technisches Wissen nötig – wir übernehmen Einrichtung und Support.
                 </p>

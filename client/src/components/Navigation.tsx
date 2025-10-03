@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import AnimatedLogo from "@/components/AnimatedLogo";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -52,13 +51,6 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Logo Header */}
-      <div className="fixed top-4 left-4 z-40">
-        <Link href="/" data-testid="logo-link">
-          <AnimatedLogo compact={true} />
-        </Link>
-      </div>
-
       <nav className="fixed top-4 right-4 z-40" role="navigation" aria-label="Hauptnavigation">
         <div className="hidden md:block">
           <div className="bg-[#2F3B47] rounded-lg shadow-lg px-4 py-2">

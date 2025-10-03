@@ -34,27 +34,24 @@ export default function ChatbotWidget() {
 
     const el = containerRef.current;
     const set = (p: string, v: string) => el.style.setProperty(p, v, "important");
-    const unset = (p: string) => el.style.removeProperty(p);
     
-    // Base positioning
+    // Base positioning - FORCE RIGHT SIDE
     set("position","fixed");
     set("bottom","calc(16px + env(safe-area-inset-bottom))");
+    set("right","16px");
+    set("left","auto");
     set("z-index","2147483647");
     set("display","flex");
     set("gap","12px");
     set("pointer-events","none"); // Prevent dock from blocking input
     
     if (isMobile) {
-      // Mobile: horizontal layout, always right (no jumping)
+      // Mobile: horizontal layout
       set("flex-direction","row");
-      set("right","16px");
-      unset("left");
       set("align-items","flex-end");
     } else {
-      // Desktop: vertical layout, always right
+      // Desktop: vertical layout
       set("flex-direction","column");
-      set("right","16px");
-      unset("left");
       set("align-items","flex-end");
     }
   }, [isMobile, isChatOpen]);

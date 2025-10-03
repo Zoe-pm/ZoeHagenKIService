@@ -35,16 +35,19 @@ export default function ChatbotWidget() {
     const el = containerRef.current;
     const set = (p: string, v: string) => el.style.setProperty(p, v, "important");
     
-    // Base positioning - FORCE RIGHT SIDE
+    // Base positioning - FORCE RIGHT SIDE COMPLETELY
     set("position","fixed");
     set("bottom","calc(16px + env(safe-area-inset-bottom))");
     set("right","16px");
     set("left","auto");
+    set("margin-left","auto");
+    set("margin-right","0");
     set("z-index","2147483647");
     set("display","flex");
     set("flex-direction","row"); // Always horizontal (side by side)
     set("gap","12px");
     set("align-items","center");
+    set("justify-content","flex-end");
     set("pointer-events","none"); // Prevent dock from blocking input
   }, [isMobile, isChatOpen]);
 

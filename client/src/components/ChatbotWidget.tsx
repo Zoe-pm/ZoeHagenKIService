@@ -42,18 +42,10 @@ export default function ChatbotWidget() {
     set("left","auto");
     set("z-index","2147483647");
     set("display","flex");
+    set("flex-direction","row"); // Always horizontal (side by side)
     set("gap","12px");
+    set("align-items","center");
     set("pointer-events","none"); // Prevent dock from blocking input
-    
-    if (isMobile) {
-      // Mobile: horizontal layout
-      set("flex-direction","row");
-      set("align-items","flex-end");
-    } else {
-      // Desktop: vertical layout
-      set("flex-direction","column");
-      set("align-items","flex-end");
-    }
   }, [isMobile, isChatOpen]);
 
   useEffect(() => {

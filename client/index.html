@@ -12,6 +12,10 @@
     <link href="https://fonts.cdnfonts.com/css/alan-sans" rel="stylesheet">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <meta name="theme-color" content="#2F3B47">
+    
+    <!-- CSP for n8n webhook integration -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://replit.com; connect-src 'self' https://zoebahati.app.n8n.cloud wss://zoebahati.app.n8n.cloud https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.cdnfonts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com; font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com data:; img-src 'self' data: https: blob:; frame-src 'self' https://calendly.com;">
+    
     <meta property="og:title" content="Zoë's KI Service - AI Assistenten für Ihr Unternehmen">
     <meta property="og:description" content="Professionelle KI-Assistenten: Chatbots, Voicebots und Avatare. Entlasten Sie Ihr Team mit intelligenten Lösungen.">
     <meta property="og:type" content="website">
@@ -20,6 +24,17 @@
   <body class="dark">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- n8n Chat Widget Integration -->
+    <script>
+      // n8n Webhook Chat Widget for Production
+      window.n8nChatConfig = {
+        webhookUrl: 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-7f60-409a-ae7d-e9974b6e807c/chat',
+        botName: 'Juna',
+        greeting: 'Hallo! Ich bin Juna, Ihre KI-Assistentin. Wie kann ich Ihnen helfen?'
+      };
+    </script>
+    
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>

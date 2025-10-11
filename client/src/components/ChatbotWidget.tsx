@@ -48,7 +48,6 @@ export default function ChatbotWidget() {
     set("gap","12px");
     set("align-items","center");
     set("justify-content","flex-end");
-    set("pointer-events","none"); // Prevent dock from blocking input
   }, [isMobile, isChatOpen]);
 
   useEffect(() => {
@@ -56,6 +55,20 @@ export default function ChatbotWidget() {
     if (!containerRef.current) {
       containerRef.current = document.createElement("div");
       containerRef.current.id = "floating-dock";
+      
+      // FORCE right positioning with inline styles - NO pointer-events blocking!
+      containerRef.current.style.cssText = `
+        position: fixed !important;
+        right: 16px !important;
+        bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+        left: auto !important;
+        z-index: 2147483647 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 12px !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+      `;
     }
 
     const el = containerRef.current;

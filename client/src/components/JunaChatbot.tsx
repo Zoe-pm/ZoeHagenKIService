@@ -116,9 +116,36 @@ function renderMarkdownSafe(text: string): string {
   return sanitized.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
 }
 
-// Juna chat function - secure server proxy call
+// Juna chat function - supports both server proxy and n8n webhook
 async function askJuna(payload: any) {
   try {
+    // Check for n8n webhook configuration (Production static deployment)
+    const n8nConfig = (window as any).n8nChatConfig;
+    
+    if (n8nConfig && n8nConfig.webhookUrl) {
+      // Use n8n webhook directly
+      console.log('[JUNA] Using n8n webhook:', n8nConfig.webhookUrl);
+      const res = await fetch(n8nConfig.webhookUrl, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId: payload.sessionId,
+          chatInput: payload.message,
+          action: 'sendMessage'
+        })
+      });
+      
+      if (!res.ok) {
+        throw new Error(`n8n webhook error ${res.status}`);
+      }
+      
+      const data = await res.json();
+      return { response: data.output || data.response || 'Entschuldigung, ich konnte keine Antwort generieren.' };
+    }
+    
     // Static deployment check - show Calendly directly if in static mode
     if (import.meta.env.VITE_STATIC === 'true') {
       showBanner('🎯 Gerne verbinden wir Sie direkt mit unserem Terminbuchungssystem.', () => {
@@ -127,7 +154,7 @@ async function askJuna(payload: any) {
       return { error: true };
     }
     
-    // Call the secure server proxy endpoint
+    // Call the secure server proxy endpoint (Development/Dynamic deployment)
     const res = await fetch('/api/juna/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -1,8 +1,13 @@
 # n8n Workflow Setup Anleitung
 
-## ⚠️ WICHTIG: Workflow muss aktiviert sein!
+## ⚠️ KRITISCH: Workflow muss aktiviert UND konfiguriert sein!
 
-Der n8n Webhook funktioniert **nur** wenn der Workflow **aktiv** ist.
+Der n8n Webhook funktioniert **nur** wenn:
+1. ✅ Der Workflow **aktiviert** ist (Toggle oben rechts)
+2. ✅ Der Workflow **korrekt konfiguriert** ist
+3. ✅ Der Webhook die richtigen Parameter akzeptiert
+
+**Aktueller Status:** ❌ Webhook gibt `{"message":"Error in workflow"}` zurück
 
 ## 🔧 Workflow aktivieren
 
@@ -18,7 +23,15 @@ Der n8n Webhook funktioniert **nur** wenn der Workflow **aktiv** ist.
 https://zoebahati.app.n8n.cloud/webhook/fd03b457-7f60-409a-ae7d-e9974b6e807c/chat
 ```
 
-**Request Format:**
+**Request Format (Development - Server Proxy):**
+```json
+{
+  "sessionId": "juna-1234567890-abc123",
+  "message": "Hallo, wer bist du?"
+}
+```
+
+**Request Format (Production - Direct n8n):**
 ```json
 {
   "sessionId": "juna-1234567890-abc123",
@@ -37,21 +50,37 @@ https://zoebahati.app.n8n.cloud/webhook/fd03b457-7f60-409a-ae7d-e9974b6e807c/cha
 
 ## 🧪 Webhook testen
 
+### Test via Development Server
+```bash
+curl -X POST "http://localhost:5000/api/juna/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"sessionId":"test-123","message":"Hallo Juna"}'
+```
+
+### Test via n8n direkt
 ```bash
 curl -X POST "https://zoebahati.app.n8n.cloud/webhook/fd03b457-7f60-409a-ae7d-e9974b6e807c/chat" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -d '{"sessionId":"test-123","chatInput":"Hallo","action":"sendMessage"}'
+  -d '{"sessionId":"test-123","message":"Hallo"}'
 ```
 
-**Erwartete Antwort (wenn aktiv):**
+**Erwartete Antwort (wenn RICHTIG konfiguriert):**
 ```json
 {
-  "output": "Hallo! Ich bin Juna..."
+  "output": "Hallo! Ich bin Juna...",
+  "response": "..."
 }
 ```
 
-**Error 404 (wenn NICHT aktiv):**
+**Error 500 (wenn Workflow FEHLERHAFT):**
+```json
+{
+  "message": "Error in workflow"
+}
+```
+
+**Error 404 (wenn Workflow NICHT aktiv):**
 ```json
 {
   "code": 404,
@@ -76,13 +105,22 @@ curl -X POST "https://zoebahati.app.n8n.cloud/webhook/fd03b457-7f60-409a-ae7d-e9
 
 ### Problem: "Entschuldigung, ich bin momentan nicht verfügbar"
 
-**Ursache:** n8n Workflow ist nicht aktiv
+**Ursache 1:** n8n Workflow ist **nicht aktiv**
+- **Error**: `404 - webhook not registered`
+- **Lösung**: Workflow aktivieren (Toggle oben rechts)
 
-**Lösung:**
-1. n8n Dashboard öffnen
-2. Workflow aktivieren (Toggle oben rechts)
-3. Testen mit curl command oben
-4. Wenn erfolgreich: Website neu laden
+**Ursache 2:** n8n Workflow hat **Fehler** (AKTUELL!)
+- **Error**: `500 - Error in workflow`
+- **Lösung**: 
+  1. n8n Dashboard öffnen
+  2. Workflow-Execution logs prüfen
+  3. Fehler beheben (z.B. fehlende Nodes, falsche Parameter)
+  4. Workflow speichern und aktivieren
+  5. Mit curl testen (siehe oben)
+
+**Ursache 3:** Falsche Request-Parameter
+- **Error**: Workflow empfängt keine/falsche Daten
+- **Lösung**: Request Format prüfen (siehe oben)
 
 ### Problem: CORS Fehler
 

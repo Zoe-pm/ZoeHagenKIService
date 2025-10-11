@@ -183,7 +183,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       if (assistantId) {
         // Use pre-configured assistant from Vapi dashboard
         console.log('JUNA: Using configured assistant:', assistantId);
-        await vapi.start(assistantId);
+        await vapi.start(assistantId as string);
       } else {
         // Fallback to inline configuration
         console.log('JUNA: Using inline configuration (no assistant ID provided)');
@@ -214,6 +214,8 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
       }
     } catch (err) {
       console.error('JUNA: Failed to start call:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler';
+      console.error('JUNA: Error details:', errorMessage);
       setError('Anruf konnte nicht gestartet werden. Prüfen Sie Ihr Mikrofon.');
       setCallState(prev => ({ ...prev, isConnecting: false }));
     }
@@ -322,12 +324,12 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
             {!callState.isConnected ? (
               <Button
                 onClick={startCall}
-                disabled={callState.isConnecting || !!error}
+                disabled={callState.isConnecting}
                 className="button-gradient px-6"
                 data-testid="button-start-voice"
               >
                 <Phone className="h-4 w-4 mr-2" />
-                {callState.isConnecting ? 'Verbinde...' : 'Anrufen'}
+                {callState.isConnecting ? 'Verbinde...' : error ? 'Erneut versuchen' : 'Anrufen'}
               </Button>
             ) : (
               <>

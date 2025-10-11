@@ -119,12 +119,13 @@ function renderMarkdownSafe(text: string): string {
 // Juna chat function - supports both server proxy and n8n webhook
 async function askJuna(payload: any) {
   try {
-    // Check for n8n webhook configuration (Production static deployment)
+    // Check for n8n webhook configuration (Production static deployment ONLY)
     const n8nConfig = (window as any).n8nChatConfig;
+    const isProduction = import.meta.env.PROD;
     
-    if (n8nConfig && n8nConfig.webhookUrl) {
-      // Use n8n webhook directly
-      console.log('[JUNA] Using n8n webhook:', n8nConfig.webhookUrl);
+    // Use n8n webhook ONLY in production mode (static deployment)
+    if (n8nConfig && n8nConfig.webhookUrl && isProduction) {
+      console.log('[JUNA] Using n8n webhook (Production):', n8nConfig.webhookUrl);
       const res = await fetch(n8nConfig.webhookUrl, {
         method: 'POST',
         headers: { 
@@ -139,22 +140,17 @@ async function askJuna(payload: any) {
       });
       
       if (!res.ok) {
-        throw new Error(`n8n webhook error ${res.status}`);
+        const errorData = await res.json().catch(() => ({}));
+        console.error('[JUNA] n8n webhook error:', res.status, errorData);
+        throw new Error(`n8n webhook error ${res.status}: ${errorData.message || 'Unknown error'}`);
       }
       
       const data = await res.json();
       return { response: data.output || data.response || 'Entschuldigung, ich konnte keine Antwort generieren.' };
     }
     
-    // Static deployment check - show Calendly directly if in static mode
-    if (import.meta.env.VITE_STATIC === 'true') {
-      showBanner('🎯 Gerne verbinden wir Sie direkt mit unserem Terminbuchungssystem.', () => {
-        window.open('https://calendly.com/zoeskistudio?embed_domain=' + window.location.hostname, '_blank');
-      });
-      return { error: true };
-    }
-    
-    // Call the secure server proxy endpoint (Development/Dynamic deployment)
+    // Development mode OR no n8n config: Use server proxy
+    console.log('[JUNA] Using server proxy (Development)');
     const res = await fetch('/api/juna/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

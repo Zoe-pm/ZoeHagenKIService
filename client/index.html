@@ -26,8 +26,11 @@
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- n8n Chat Widget Integration -->
+    <!-- NOTE: This config is for PRODUCTION deployment only -->
+    <!-- In development, the app uses the server proxy at /api/juna/chat -->
     <script>
       // n8n Webhook Chat Widget for Production
+      // IMPORTANT: The n8n workflow must be ACTIVE for this to work!
       window.n8nChatConfig = {
         webhookUrl: 'https://zoebahati.app.n8n.cloud/webhook/fd03b457-7f60-409a-ae7d-e9974b6e807c/chat',
         botName: 'Juna',

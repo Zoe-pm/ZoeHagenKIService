@@ -8,16 +8,17 @@ app.use(express.urlencoded({ extended: false }));
 
 // Security headers for n8n webhook integration
 app.use((req, res, next) => {
-  // CSP headers for n8n and Vapi
+  // CSP headers for n8n, Vapi and Daily.co (Vapi's voice provider)
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://replit.com; " +
-    "connect-src 'self' https://zoebahati.app.n8n.cloud wss://zoebahati.app.n8n.cloud https://api.vapi.ai wss://api.vapi.ai https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.cdnfonts.com; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://replit.com https://c.daily.co; " +
+    "connect-src 'self' https://zoebahati.app.n8n.cloud wss://zoebahati.app.n8n.cloud https://api.vapi.ai wss://api.vapi.ai https://api.daily.co wss://*.daily.co https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.cdnfonts.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.cdnfonts.com; " +
     "font-src 'self' https://fonts.gstatic.com https://fonts.cdnfonts.com data:; " +
     "img-src 'self' data: https: blob:; " +
     "media-src 'self' https: blob:; " +
+    "worker-src 'self' blob:; " +
     "frame-src 'self' https://calendly.com;"
   );
   

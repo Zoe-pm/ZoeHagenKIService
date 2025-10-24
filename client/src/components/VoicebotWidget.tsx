@@ -127,7 +127,18 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
         console.error('JUNA: Error type:', error?.type);
         console.error('JUNA: Error message:', error?.error || error?.msg || error?.message);
         console.error('JUNA: Full error object:', JSON.stringify(error, null, 2));
-        setError('Verbindungsfehler. Bitte versuchen Sie es erneut.');
+        
+        // Show detailed error message in UI - handle nested objects
+        let errorMsg = error?.error || error?.msg || error?.message || error;
+        
+        // If error is an object, try to extract meaningful info or stringify it
+        if (typeof errorMsg === 'object' && errorMsg !== null) {
+          errorMsg = errorMsg.message || errorMsg.error || errorMsg.msg || JSON.stringify(errorMsg);
+        }
+        
+        const errorType = error?.type || 'connection';
+        setError(`Vapi Fehler (${errorType}): ${String(errorMsg)}`);
+        
         setCallState(prev => ({ 
           ...prev, 
           isConnected: false, 
@@ -193,7 +204,7 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
         await vapi.start({
           model: {
             provider: "openai",
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o-mini",
             messages: [
               {
                 role: "system",
@@ -211,15 +222,16 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
           },
           voice: {
             provider: "11labs", 
-            voiceId: "sarah" // Friendly female voice
+            voiceId: "rachel"
           }
         });
       }
     } catch (err) {
       console.error('JUNA: Failed to start call:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler';
+      const errorMessage = err instanceof Error ? err.message : String(err);
       console.error('JUNA: Error details:', errorMessage);
-      setError('Anruf konnte nicht gestartet werden. Prüfen Sie Ihr Mikrofon.');
+      console.error('JUNA: Error stack:', err instanceof Error ? err.stack : 'no stack');
+      setError(`Start-Fehler: ${errorMessage}`);
       setCallState(prev => ({ ...prev, isConnecting: false }));
     }
   }, [vapi]);

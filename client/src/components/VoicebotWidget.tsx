@@ -124,6 +124,9 @@ const VoicebotWidget = ({ isOpen, onClose }: VoicebotWidgetProps) => {
 
       vapiClient.on('error', (error) => {
         console.error('JUNA: Voice call error:', error);
+        console.error('JUNA: Error type:', error?.type);
+        console.error('JUNA: Error message:', error?.error || error?.msg || error?.message);
+        console.error('JUNA: Full error object:', JSON.stringify(error, null, 2));
         setError('Verbindungsfehler. Bitte versuchen Sie es erneut.');
         setCallState(prev => ({ 
           ...prev, 

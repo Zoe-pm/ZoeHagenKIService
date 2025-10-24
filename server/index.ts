@@ -22,6 +22,9 @@ app.use((req, res, next) => {
     "frame-src 'self' https://calendly.com;"
   );
   
+  // Permissions-Policy for microphone access (required by Vapi)
+  res.setHeader('Permissions-Policy', 'microphone=(self)');
+  
   // CORS headers for n8n webhook
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');

@@ -59,47 +59,13 @@ const products = [
 export default function Home() {
   const [, setLocation] = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [showUnmute, setShowUnmute] = useState(true);
-  const [playedOnce, setPlayedOnce] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showPlayButton, setShowPlayButton] = useState(false);
-  const [delayComplete, setDelayComplete] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(true);
 
   // Automatisch zum Seitenbeginn scrollen beim Laden der Startseite
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
-
-  // 2-Sekunden Verzögerung vor Video-Start
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDelayComplete(true);
-      // Nach Delay automatisch abspielen wenn möglich
-      if (videoRef.current && !playedOnce) {
-        videoRef.current.play().then(() => {
-          // Autoplay erfolgreich
-          setIsPlaying(true);
-          setPlayedOnce(true);
-          setShowUnmute(false);
-          setShowPlayButton(false);
-        }).catch(() => {
-          console.log('Autoplay nach Delay blockiert');
-          setShowPlayButton(true);
-          setShowUnmute(false);
-        });
-      } else {
-        setShowPlayButton(true);
-        setShowUnmute(false);
-      }
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Debug logging for video state
-  useEffect(() => {
-    console.log('Video state:', { showUnmute, playedOnce });
-  }, [showUnmute, playedOnce]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -121,18 +87,6 @@ export default function Home() {
     }
   };
 
-  const handleVideoUnmute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = false;
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(console.error);
-      setShowUnmute(false);
-      setIsPlaying(true);
-      setShowPlayButton(false);
-      setPlayedOnce(true); // Verhindert redundante Autoplay-Aufrufe
-    }
-  };
-
   const handlePlayPause = () => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -140,64 +94,19 @@ export default function Home() {
         setIsPlaying(false);
         setShowPlayButton(true);
       } else {
-        // Always jump to beginning when playing
-        videoRef.current.pause();
+        // Start from beginning with sound
         videoRef.current.currentTime = 0;
-        if (videoRef.current.muted) {
-          // Unmute and play
-          videoRef.current.muted = false;
-        }
+        videoRef.current.muted = false;
         videoRef.current.play().catch(console.error);
         setIsPlaying(true);
         setShowPlayButton(false);
-        setPlayedOnce(true);
       }
     }
   };
 
   const handleVideoLoadedMetadata = () => {
-    console.log('Video metadata loaded');
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-    }
-  };
-
-  const handleVideoCanPlay = () => {
-    console.log('Video can play');
-    // Nur Button-Zustand setzen, kein Play-Versuch hier
-    // Das Autoplay wird bereits im setTimeout-Handler behandelt
-    if (!delayComplete && !playedOnce) {
-      setShowPlayButton(false);
-      setShowUnmute(true);
-    }
-  };
-
-  const handleVideoEnded = () => {
-    if (videoRef.current) {
-      videoRef.current.controls = true;
-      videoRef.current.removeAttribute('autoplay');
-      setPlayedOnce(true);
-      setShowUnmute(false);
-      setIsPlaying(false);
-      setShowPlayButton(true);
-    }
-  };
-
-  const handleVideoWaiting = () => {
-    // Retry on stall
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.play().catch(console.error);
-      }
-    }, 1000);
-  };
-
-  const handleVideoError = (error: any) => {
-    console.log('Video error occurred:', error);
-    // Handle video error gracefully - could show fallback image or retry
-    if (videoRef.current) {
-      // Reset video to try again
-      videoRef.current.load();
     }
   };
 
@@ -253,11 +162,6 @@ export default function Home() {
                   poster="/images/zoe-image.jpg"
                   onClick={handlePlayPause}
                   onLoadedMetadata={handleVideoLoadedMetadata}
-                  onCanPlay={handleVideoCanPlay}
-                  onEnded={handleVideoEnded}
-                  onWaiting={handleVideoWaiting}
-                  onStalled={handleVideoWaiting}
-                  onError={handleVideoError}
                   data-testid="hero-video"
                 >
                   <source src="/videos/new-video.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" />
@@ -265,38 +169,17 @@ export default function Home() {
                   <span className="sr-only">Video wird geladen...</span>
                 </video>
                 
-                {/* Video Controls Overlay - only show when actually needed */}
-                {((showUnmute && !delayComplete) || (showPlayButton && !isPlaying)) && (
-                  <>
-                    {showUnmute && !delayComplete && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
-                        <Button
-                          onClick={handleVideoUnmute}
-                          className="bg-white/90 hover:bg-white text-black font-medium px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 backdrop-blur-sm"
-                          data-testid="button-unmute"
-                        >
-                          <Volume2 className="w-5 h-5" />
-                          Mit Ton abspielen
-                        </Button>
-                      </div>
-                    )}
-                    {showPlayButton && !isPlaying && (
-                      <Button
-                        onClick={handlePlayPause}
-                        className="absolute right-3 bottom-3 bg-black/55 hover:bg-black/70 text-white font-medium px-3 py-2 rounded-lg shadow-lg backdrop-blur-sm border-none cursor-pointer flex items-center gap-2"
-                        data-testid="button-play-pause"
-                      >
-                        <Play className="w-4 h-4" />
-                        Abspielen
-                      </Button>
-                    )}
-                  </>
-                )}
-                
-                {/* Delay Countdown */}
-                {!delayComplete && (
-                  <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-md text-sm backdrop-blur-sm">
-                    Video startet in 2s...
+                {/* Play Button Overlay */}
+                {showPlayButton && !isPlaying && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Button
+                      onClick={handlePlayPause}
+                      className="bg-white/90 hover:bg-white text-black font-medium px-8 py-4 rounded-lg shadow-xl flex items-center gap-3 backdrop-blur-sm"
+                      data-testid="button-play-pause"
+                    >
+                      <Play className="w-6 h-6" />
+                      Video abspielen
+                    </Button>
                   </div>
                 )}
               </div>
